@@ -15,11 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BInaryIO.cpp">
+    <ClCompile Include="TestVec2D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="u07s04.cpp">
+    <ClCompile Include="Vec2D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Vec2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BInaryIO.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="u07s04.cpp">
+    <ClCompile Include="RandomAccess.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

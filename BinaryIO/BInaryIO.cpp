@@ -12,6 +12,10 @@ int main() {
 	std::fstream out{ p,io::out | io::app };
 
 	//判断流是否成功打开
+	if (!out) {
+		std::cout << "error" << std::endl;
+		return (0);
+	}
 
 	//将一个整型数组的内容输出到二进制文件中
 	std::array a{ 21,42,63 };

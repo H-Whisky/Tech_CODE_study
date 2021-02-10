@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{96a86bc9-6a15-4721-894e-b065ebfeacad}</ProjectGuid>
-    <RootNamespace>BinaryIO</RootNamespace>
+    <ProjectGuid>{b0fb3d81-7427-46cc-bd96-628cfe3a8542}</ProjectGuid>
+    <RootNamespace>RandomAccess</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -140,8 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BInaryIO.cpp" />
-    <ClCompile Include="u07s04.cpp" />
+    <ClCompile Include="RandomAccess.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
