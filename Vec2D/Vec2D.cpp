@@ -83,7 +83,7 @@ Vec2D& Vec2D::decrease()
 // 向量方向
 double Vec2D::direction()
 {
-	return 0.0;
+	return atan(y_ / x_);
 }
 
 
@@ -95,7 +95,7 @@ int Vec2D::dot(Vec2D secondVec2D)
 
 double Vec2D::magnitude()
 {
-	return 0.0;
+	return sqrt(x_ * x_ + y_ * y_);
 }
 
 // 向量数乘

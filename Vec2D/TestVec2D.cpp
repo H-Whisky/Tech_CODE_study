@@ -44,4 +44,9 @@ int main() {
 
 	//比较两个向量
 	cout << "v1 compare v2 :" << v1.compareTo(v2) << endl;
+
+	//左移运算符
+	int a = 1, b = 2;
+	int c = a << b;
+	cout << "左移:" << c << endl;
 }
