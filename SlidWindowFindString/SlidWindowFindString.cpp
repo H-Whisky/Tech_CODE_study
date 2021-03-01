@@ -57,10 +57,16 @@ vector<int> findAnagrams(string s, string p) {
 
 
 int main() {
-	string s = "cbaebabacd";
-	string p = "abc";
-	vector<int> answer;
-	answer = findAnagrams(s, p);
-	cin.get();
-	return (0);
+	//string s = "cbaebabacd";
+	//string p = "abc";
+	//vector<int> answer;
+	//answer = findAnagrams(s, p);
+	//cin.get();
+	//return (0);
+	int a = 1;
+	int b = 1;
+	a += b++;
+	b += ++a;
+	cout << a << endl;
+	cout << b << endl;
 }
