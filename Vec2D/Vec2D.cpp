@@ -39,6 +39,12 @@ Vec2D Vec2D::operator+ (const double numeral) {
 	return this->add(numeral);
 }
 
+Vec2D& Vec2D::operator+= (const Vec2D& secondVec2D) {
+	x_ += secondVec2D.x_;
+	y_ += secondVec2D.y_;
+	return (*this);
+}
+
 // 向量减法
 Vec2D Vec2D::substract(const Vec2D& secondVec2D)
 {
@@ -55,6 +61,12 @@ Vec2D Vec2D::operator-(const Vec2D& secondVec2D) {
 
 Vec2D Vec2D::operator- (const double numeral) {
 	return this->substract(numeral);
+}
+
+Vec2D& Vec2D::operator-= (const Vec2D& secondVec2D) {
+	x_ -= secondVec2D.x_;
+	y_ -= secondVec2D.y_;
+	return (*this);
 }
 // 向量点积
 int Vec2D::dot(const Vec2D& secondVec2D)

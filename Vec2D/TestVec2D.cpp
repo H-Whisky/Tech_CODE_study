@@ -29,6 +29,11 @@ int main() {
 	cout << "v3 * 2.1 =" << (v3 * 2.1).toString() << endl;
 	cout << "2.1 * v3 =" << v7.toString() << endl;
 
+	Vec2D va1{ 10,12 }, va2{ 1,2 };
+	cout << "va1 += va2" <<(va1+=va2).toString()<< endl;
+	cout << "va1 -= va2" <<(va1-=va2).toString()<< endl;
+
+
 	//向量求负值
 	Vec2D v8 = v2.negative();
 	cout << "-v2 = " << v8.toString() << endl;

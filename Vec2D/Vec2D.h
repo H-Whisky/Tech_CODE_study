@@ -20,11 +20,13 @@ public:
 	Vec2D add(double numeral);
 	Vec2D operator+ (const Vec2D& secondVec2D);
 	Vec2D operator+ (const double numeral);
+	Vec2D& operator+= (const Vec2D& secondVec2D);//v1+=3.0+=v2不考虑
 	// 向量减法
 	Vec2D substract(const Vec2D& secondVec2D);
 	Vec2D substract(double numeral);
 	Vec2D operator- (const Vec2D& secondVec2D);
 	Vec2D operator- (const double numeral);
+	Vec2D& operator-=(const Vec2D& secondVec2D);
 	// 向量点积
 	int dot(const Vec2D& secondVec2D);
 	// 向量数乘
