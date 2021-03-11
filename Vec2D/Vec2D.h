@@ -38,6 +38,7 @@ public:
 	int compareTo(Vec2D secondVec2D);
 	// 读取或者修改向量元素
 	double& at(const int index);
+	double& operator[] (const int& index);
 	// 向量方向
 	double direction();
 	// 向量求负值

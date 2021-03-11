@@ -121,6 +121,10 @@ double& Vec2D::at(const int index)
 	}
 }
 
+double& Vec2D::operator[] (const int& index) {
+	return at(index);
+}
+
 // 向量自增1
 Vec2D& Vec2D::increase()
 {

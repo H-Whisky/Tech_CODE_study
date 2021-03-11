@@ -45,6 +45,10 @@ int main() {
 	//读取或者修改向量元素
 	cout << "v1.x_ = " << v1.at(0) << endl;
 	cout << "v1.y_ = " << v1.at(1) << endl;
+	v1[0] = 31.1;
+	cout << "v1[0] = " << v1[0] << endl;
+	cout << "v1[1] = " << v1[1] << endl;
+	//v1[8] = 2;//越界 需要异常处理
 
 	//向量的长度magnitude 和角度direction
 	cout << "v1.magnitude = " << v1.magnitude() << endl;
