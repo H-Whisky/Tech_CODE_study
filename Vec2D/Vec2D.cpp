@@ -22,7 +22,7 @@ std::string Vec2D::toString()
 }
 
 // 向量加法
-Vec2D Vec2D::add(Vec2D secondVec2D)
+Vec2D Vec2D::add(const Vec2D& secondVec2D)
 {
 	return Vec2D(x_ + secondVec2D.x_ , y_ + secondVec2D.y_);
 }
@@ -31,10 +31,54 @@ Vec2D Vec2D::add(double numeral) {
 	return Vec2D(this->x_ + numeral, this->y_ + numeral);
 }
 
+Vec2D Vec2D::operator+(const Vec2D& secondVec2D) {
+	return this->add(secondVec2D);
+}
+
+Vec2D Vec2D::operator+ (const double numeral) {
+	return this->add(numeral);
+}
+
 // 向量减法
-Vec2D Vec2D::substract(Vec2D secondVec2D)
+Vec2D Vec2D::substract(const Vec2D& secondVec2D)
 {
 	return Vec2D(x_ - secondVec2D.x_, y_ - secondVec2D.y_);
+}
+
+Vec2D Vec2D::substract(double numeral) {
+	return Vec2D(this->x_ - numeral, this->y_ - numeral);
+}
+
+Vec2D Vec2D::operator-(const Vec2D& secondVec2D) {
+	return this->substract(secondVec2D);
+}
+
+Vec2D Vec2D::operator- (const double numeral) {
+	return this->substract(numeral);
+}
+// 向量点积
+int Vec2D::dot(const Vec2D& secondVec2D)
+{
+	return (x_ * secondVec2D.x_ + y_ * secondVec2D.y_);
+}
+
+// 向量数乘
+Vec2D Vec2D::multiply(double multiplier)
+{
+	return Vec2D(x_ * multiplier, y_ * multiplier);
+}
+
+double Vec2D::operator*(const Vec2D& secondVec2D) {
+	return this->dot(secondVec2D);
+}
+
+Vec2D Vec2D::operator*(double multiplier) {
+	return this->multiply(multiplier);
+}
+
+Vec2D operator*(double multiplier, Vec2D vec2d)
+{
+	return vec2d.multiply(multiplier);
 }
 
 // 比较两个向量的长度。如果firstVec2D小于secondVec2D，返回-1，若大于则返回1，若相等则返回0
@@ -87,21 +131,9 @@ double Vec2D::direction()
 }
 
 
-// 向量点积
-int Vec2D::dot(Vec2D secondVec2D)
-{
-	return (x_ * secondVec2D.x_+y_ * secondVec2D.y_);
-}
-
 double Vec2D::magnitude()
 {
 	return sqrt(x_ * x_ + y_ * y_);
-}
-
-// 向量数乘
-Vec2D Vec2D::multiply(double multiplier)
-{
-	return Vec2D(x_ * multiplier , y_ * multiplier);
 }
 
 // 向量求负值
@@ -109,5 +141,3 @@ Vec2D Vec2D::negative()
 {
 	return Vec2D(x_ * -1, y_ * -1);
 }
-
-

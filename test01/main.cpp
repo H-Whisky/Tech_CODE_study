@@ -86,8 +86,8 @@ struct B :A {
 	}
 };
 
-int main() {
-	B b(1);
-	std::cin.get();
-	return (0);
-}
+//int main() {
+//	B b(1);
+//	std::cin.get();
+//	return (0);
+//}

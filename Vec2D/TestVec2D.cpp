@@ -13,18 +13,21 @@ int main() {
 	cout << "v2 = " << v2.toString() << endl;
 
 	//向量加法：向量+向量
-	Vec2D v3 = v1.add(v2);
-	Vec2D v4 = v3.add(10.0);
+	//Vec2D v3 = v1.add(v2);
+	Vec2D v3 = v1 + v2;
+	//Vec2D v4 = v3.add(10.0);
+	Vec2D v4 = v3 + 10.0;
 	cout << "v3 = " << v3.toString() << endl;
 	cout << "v4 = " << v4.toString() << endl;
 	
 	//向量减法，向量电积，向量数乘
-	Vec2D v5 = v2.substract(v1);
-	double v6 = v2.dot(v1);
-	Vec2D v7 = v3.multiply(2.1);
+	Vec2D v5 = v2- v1;
+	double v6 = v2 * v1;
+	Vec2D v7 = 2.1 * v3;
 	cout << "v2 - v1 = " << v5.toString() << endl;
 	cout << "v2 . v1 = " << v6 <<endl;
-	cout << "v3 * 2.1 =" << v7.toString() << endl;
+	cout << "v3 * 2.1 =" << (v3 * 2.1).toString() << endl;
+	cout << "2.1 * v3 =" << v7.toString() << endl;
 
 	//向量求负值
 	Vec2D v8 = v2.negative();
