@@ -37,10 +37,18 @@ int main() {
 	//向量求负值
 	Vec2D v8 = v2.negative();
 	cout << "-v2 = " << v8.toString() << endl;
+	cout << "-v2 = " << (-v2).toString() << endl;
 
 	//向量自增/自减
-	cout << "v8 ++ =" << v8.increase().toString() << endl;
-	cout << "v2 -- =" << v2.decrease().toString() << endl;
+	cout << "v8 increase =" << v8.increase().toString() << endl;
+	cout << "++ v8 =" << (++v8).toString() << endl;
+	cout << "v8 ++ =" << (v8++).toString() << endl;
+	cout << "v8=" << v8.toString() << endl;
+
+	cout << "v2 decrease =" << v2.decrease().toString() << endl;
+	cout << "-- v2 =" << (--v2).toString() << endl;
+	cout << "v2 -- =" << (v2 --).toString() << endl;
+	cout << "v2 =" << v2.toString() << endl;
 
 	//读取或者修改向量元素
 	cout << "v1.x_ = " << v1.at(0) << endl;

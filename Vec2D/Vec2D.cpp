@@ -93,6 +93,52 @@ Vec2D operator*(double multiplier, Vec2D vec2d)
 	return vec2d.multiply(multiplier);
 }
 
+// 向量求负值
+Vec2D Vec2D::negative()
+{
+	return Vec2D(x_ * -1, y_ * -1);
+}
+
+Vec2D Vec2D::operator-() {
+	return Vec2D(-this->x_, -this->y_);
+}
+
+// 向量自增1
+Vec2D& Vec2D::increase()
+{
+	x_++; y_++;
+	return *this;
+}
+
+Vec2D& Vec2D::operator++() {
+	x_++; y_++;
+	return *this;
+}
+
+Vec2D Vec2D::operator++(int dummy) {
+	Vec2D temp{ *this };
+	x_++, y_++;
+	return temp;
+}
+
+// 向量自减1
+Vec2D& Vec2D::decrease()
+{
+	x_--; y_--;
+	return *this;
+}
+
+Vec2D& Vec2D::operator--() {
+	x_--, y_--;
+	return *this;
+}
+
+Vec2D Vec2D::operator--(int dummy){
+	Vec2D temp{ *this };
+	x_--, y_--;
+	return temp;
+}
+
 // 比较两个向量的长度。如果firstVec2D小于secondVec2D，返回-1，若大于则返回1，若相等则返回0
 int Vec2D::compareTo(Vec2D secondVec2D)
 {
@@ -125,21 +171,6 @@ double& Vec2D::operator[] (const int& index) {
 	return at(index);
 }
 
-// 向量自增1
-Vec2D& Vec2D::increase()
-{
-	x_++; y_++;
-	return *this;
-}
-
-// 向量自减1
-Vec2D& Vec2D::decrease()
-{
-	x_--; y_--;
-	return *this;
-}
-
-
 // 向量方向
 double Vec2D::direction()
 {
@@ -150,10 +181,4 @@ double Vec2D::direction()
 double Vec2D::magnitude()
 {
 	return sqrt(x_ * x_ + y_ * y_);
-}
-
-// 向量求负值
-Vec2D Vec2D::negative()
-{
-	return Vec2D(x_ * -1, y_ * -1);
 }

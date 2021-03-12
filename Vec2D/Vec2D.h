@@ -34,6 +34,17 @@ public:
 	double operator* (const Vec2D& secondVec2D);
 	Vec2D operator* (double multiplier);
 	friend Vec2D operator* (double multiplier, Vec2D vec2d);
+	// 向量求负值
+	Vec2D negative();
+	Vec2D operator- ();
+	// 向量自增1
+	Vec2D& increase();
+	Vec2D& operator++();
+	Vec2D operator++(int dummy);
+	// 向量自减1
+	Vec2D& decrease();
+	Vec2D& operator--();
+	Vec2D operator--(int dummy);
 	// 向量比较
 	int compareTo(Vec2D secondVec2D);
 	// 读取或者修改向量元素
@@ -41,12 +52,6 @@ public:
 	double& operator[] (const int& index);
 	// 向量方向
 	double direction();
-	// 向量求负值
-	Vec2D negative();
-	// 向量自增1
-	Vec2D& increase();
-	// 向量自减1
-	Vec2D& decrease();
 	double magnitude();
 };
 
