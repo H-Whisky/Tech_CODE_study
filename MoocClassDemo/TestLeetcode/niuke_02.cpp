@@ -3,6 +3,7 @@
 //#include <>
 using namespace std;
 
+#ifdef DEBUG
 int main() {
 	const char* p = { "abcdefgh" }, * r;
 	long* q;
@@ -17,3 +18,5 @@ int main() {
 	cin.get();
 	return (0);
 }
+#endif // DEBUG
+
