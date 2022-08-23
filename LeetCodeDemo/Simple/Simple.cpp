@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
 
 using namespace std;
 
@@ -111,6 +114,7 @@ int main() {
 }
 #endif // DEBUG
 
+#ifdef DEBUG
 // 计算32位二进制的汉明重量
 int32_t swar(int32_t i)
 {
@@ -138,6 +142,31 @@ void main() {
 	std::cout << (1 << 0) << std::endl;
 	std::cout << (1 << 1) << std::endl;
 	std::cout << (1 << 2) << std::endl;
+}
+#endif // DEBUG
+
+int majorityElement(vector<int>& nums) {
+	unordered_map<int, int> counts;
+	int majority = 0, cnt = 0;
+	for (int num : nums) {
+		++counts[num];
+		if (counts[num] > cnt) {
+			majority = num;
+			cnt = counts[num];
+		}
+	}
+	return majority;
+}
+
+void main() {
+	vector<int> nums(3);
+	//for (int i = 0; i < nums.size(); i++) {
+	//	nums[i] = 1;
+	//}
+	nums[0] = 3;
+	nums[1] = 2;
+	nums[2] = 3;
+	std::cout << majorityElement(nums)<<std::endl;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
