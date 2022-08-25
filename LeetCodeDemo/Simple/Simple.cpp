@@ -5,6 +5,8 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
+#include <stack>
+#include <set>
 
 using namespace std;
 
@@ -207,7 +209,7 @@ void main() {
 }
 #endif // DEBUG
 
-#if 1
+#if 0
 struct ListNode {
 	int val;
 	ListNode* next;
@@ -230,3 +232,84 @@ void main() {
 	std::cout << removeElements(tmp, 1);
 }
 #endif
+
+#if 0
+bool isIsomorphic(string s, string t) {
+	unordered_map<char, char> s2t;
+	unordered_map<char, char> t2s;
+	int len = s.length();
+	for (int i = 0; i < len; ++i) {
+		char x = s[i], y = t[i];
+		if ((s2t.count(x) && s2t[x] != y) || (t2s.count(y) && t2s[y] != x)) {
+			return false;
+		}
+		s2t[x] = y;
+		t2s[y] = x;
+	}
+	return true;
+}
+
+void main() {
+	std::cout << isIsomorphic("add", "egg") << std::endl;
+}
+#endif // 1
+
+#if 0
+//反转链表：通过栈的先进后出
+struct ListNode {
+	int val;
+	ListNode* next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
+
+ListNode* reverseList(ListNode* head) {
+	if (head == nullptr) {
+		return head;
+	}
+	stack<ListNode*> sk;
+	ListNode* cur = head;
+	// cur = cur->next;
+	while (cur != nullptr) {
+		sk.push(cur);
+		cur = cur->next;
+	}
+	if (sk.empty()) {
+		return nullptr;
+	}
+
+	ListNode* cur_ = sk.top();
+	head = cur_;
+	sk.pop();
+	while (!sk.empty()) {
+		ListNode* tmp = sk.top();
+		cur_->next = tmp;
+		cur_ = cur_->next;
+		sk.pop();
+	}
+	cur_->next = nullptr;
+	return head;
+}
+#endif
+
+#if 1
+bool containsDuplicate(vector<int>& nums) {
+	set<int> st;
+	for (int num : nums) {
+		st.insert(num);
+	}
+	if (st.size() != nums.size()) {
+		return true;
+	}
+	return false;
+
+}
+
+void main() {
+	vector<int> nums{ 1,2,3,4,1 };
+	std::cout << containsDuplicate(nums) << std::endl;
+}
+
+#endif
+
