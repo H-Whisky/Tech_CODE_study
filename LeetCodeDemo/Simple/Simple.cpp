@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <stack>
 #include <set>
+#include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -293,8 +295,8 @@ ListNode* reverseList(ListNode* head) {
 }
 #endif
 
-#if 1
-bool containsDuplicate(vector<int>& nums) {
+#if 0
+bool containsDuplicate_0(vector<int>& nums) {
 	set<int> st;
 	for (int num : nums) {
 		st.insert(num);
@@ -306,10 +308,119 @@ bool containsDuplicate(vector<int>& nums) {
 
 }
 
-void main() {
-	vector<int> nums{ 1,2,3,4,1 };
-	std::cout << containsDuplicate(nums) << std::endl;
+bool containsDuplicate_1(vector<int>& nums) {
+	sort(nums.begin(), nums.end());
+	int nums_length = nums.size();
+	for (int i = 0; i < nums_length - 1; ++i) {
+		if (nums[i] == nums[i + 1]) {
+			return true;
+		}
+	}
+	return false;
 }
 
+bool containsDuplicate_2(vector<int>& nums) {
+	unordered_set<int> nums_set;
+	for (int x : nums) {
+		if (nums_set.find(x) != nums_set.end()) {
+			return true;
+		}
+		nums_set.insert(x);
+	}
+	return false;
+}
+
+bool containsNearbyDuplicate(vector<int>& nums, int k) {
+	unordered_map<int, int> nums_map;
+	int nums_length = nums.size();
+	for (int i = 0; i < nums_length; ++i) {
+		int num = nums[i];
+		if (nums_map.count(num) && i - nums_map[num] <= k) {
+			return true;
+		}
+		nums_map[num] = i;
+	}
+	return false;
+}
+
+void main() {
+	vector<int> nums{ 1,2,3,1, 2, 3 };
+	int k = 2;
+	/*std::cout << containsDuplicate_0(nums) << std::endl;
+	std::cout << containsDuplicate_1(nums) << std::endl;
+	std::cout << containsDuplicate_2(nums) << std::endl;*/
+	std::cout << containsNearbyDuplicate(nums,k) << std::endl;
+}
 #endif
 
+#if 0
+class MyStack_0 {
+public:
+	queue <int> queue1;
+	queue <int> queue2;
+
+	MyStack_0(){};
+
+	void push(int x) {
+		queue2.push(x);
+		while (!queue1.empty()) {
+			queue1.push(queue1.front());
+			queue1.pop();
+		}
+		swap(queue1, queue2);
+	}
+
+	int pop() {
+		int tmp = queue1.front();
+		queue1.pop();
+		return tmp;
+	}
+
+	int top() {
+		int tmp = queue1.front();
+		return tmp;
+	}
+
+	bool empty() {
+		return queue1.empty();
+	}
+};
+
+void main() {
+	MyStack_0* obj = new MyStack_0();
+	obj->push(1);
+	int param_2 = obj->top();
+	std::cout << param_2 << std::endl;
+	//obj->pop();
+	//int param_3 = obj->top();
+	//std::cout << param_3 << std::endl;
+	//bool param_4 = obj->empty();
+}
+#endif
+
+#if 1
+struct TreeNode {
+	int val;
+	TreeNode* left;
+	TreeNode* right;
+	TreeNode() : val(0),left(nullptr),right(nullptr) {}
+	TreeNode(int x) : val(x),left(nullptr),right(nullptr){}
+	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(nullptr),right(nullptr){}
+};
+TreeNode* invertTree(TreeNode* root) {
+	if (root == nullptr) {
+		return nullptr;
+	}
+
+	TreeNode* left = invertTree(root->left);
+	TreeNode* right = invertTree(root->right);
+	root->left = right;
+	root->right = left;
+	return root;
+}
+
+void main() {
+	TreeNode root = (4,2,7,1,3,6,9 );
+	std::cout << invertTree(&root)->val << std::endl;
+}
+#endif
