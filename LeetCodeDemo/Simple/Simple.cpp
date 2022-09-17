@@ -9,6 +9,7 @@
 #include <set>
 #include <algorithm>
 #include <queue>
+#include <sstream>
 
 using namespace std;
 
@@ -398,7 +399,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 struct TreeNode {
 	int val;
 	TreeNode* left;
@@ -423,4 +424,100 @@ void main() {
 	TreeNode root = (4,2,7,1,3,6,9 );
 	std::cout << invertTree(&root)->val << std::endl;
 }
+#endif
+
+#if 0
+class Solution {
+public:
+	bool wordPattern_0(string pattern, string str) {
+		unordered_map<string, char> str2ch;
+		unordered_map<char, string> ch2str;
+		int str_len = str.length();
+		int i = 0;
+		for (auto ch : pattern) {
+			if (i >= str_len) {
+				return false;
+			}
+			int j = i;
+			while (j < str_len && str[j] != ' ') j++;
+			const string& tmp = str.substr(i, j - i);
+			if (str2ch.count(tmp) && str2ch[tmp] != ch) {
+				return false;
+			}
+			if (ch2str.count(ch) && ch2str[ch] != tmp) {
+				return false;
+			}
+			str2ch[tmp] = ch;
+			ch2str[ch] = tmp;
+			i = j + 1;
+		}
+		return i >= str_len;
+	}
+
+	bool wordPattern_1(string pattern, string s) {
+		vector<string> str;
+		// 直接截取字符串的函数
+		stringstream iss(s);
+		std::cout << "iss: "<<iss.str() << std::endl;
+		string word;
+		// 把字符串放入
+		while (iss >> word) {
+			std::cout << word << std::endl;
+			str.push_back(word);
+		}
+		// 判断是不是满射
+		if (str.size() != pattern.size()) {
+			return false;
+		}
+		// 判断是不是单射
+		unordered_map<char, string> pw;
+		// 判断是不是映射
+		unordered_map<string, char> wp;
+		for (int i = 0; i < pattern.size(); i++) {
+			auto a = pattern[i];
+			auto b = str[i];
+			// 如果存在该字母对应的字符串不一致，则返回false
+			if (pw.count(a) && pw[a] != b) {
+				return false;
+			}
+			// 存入哈希表
+			pw[a] = b;
+			// 如果存在该字符串对应的单词有多个（不一致），返回false
+			if (wp.count(b) && wp[b] != a) {
+				return false;
+			}
+			// 存入哈希表
+			wp[b] = a;
+		}
+		return true;
+	}
+};
+
+void main() {
+	std::string pattern = "abba";
+	std::string s = "dog cat cat dog";
+	Solution* obj = new Solution();
+	std::cout << obj->wordPattern_0(pattern, s) << std::endl;
+	std::cout << obj->wordPattern_1(pattern, s) << std::endl;
+}
+
+#endif
+
+#if 0
+class NumArray {
+public:
+	vector<int> sums;
+
+	NumArray(vector<int>& nums) {
+		int n = nums.size();
+		sums.resize(n + 1);
+		for (int i = 0; i < n; i++) {
+			sums[i + 1] = sums[i] + nums[i];
+		}
+	}
+
+	int sumRange(int left, int right) {
+		return sums[right + 1] - sums[left];
+	}
+};
 #endif
