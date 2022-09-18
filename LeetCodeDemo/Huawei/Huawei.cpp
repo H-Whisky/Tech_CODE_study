@@ -279,8 +279,35 @@ public:
 	}
 
 	// 分治法
-	int majorityElement_2(vector<int>& nums) {
+	int count_in_range(vector<int>& nums, int target, int lo, int hi) {
+		int count = 0;
+		for (int i = lo; i <= hi; ++i) {
+			if (nums[i] == target) {
+				++count;
+			}
+		}
+		return count;
+	}
 
+	int majority_element_rec(vector<int>& nums, int lo, int hi) {
+		if (lo == hi) {
+			return nums[lo];
+		}
+		int mid = (lo + hi) / 2;
+		int left_majority = majority_element_rec(nums, lo, mid);
+		int right_majority = majority_element_rec(nums, mid + 1, hi);
+		if (count_in_range(nums, left_majority, lo, hi) > (hi - lo + 1)/2) {
+			return left_majority;
+		}		
+		if (count_in_range(nums, right_majority, lo, hi) > (hi - lo + 1)/2) {
+			return right_majority;
+		}
+		return -1;
+
+	}
+
+	int majorityElement_2(vector<int>& nums) {
+		return majority_element_rec(nums, 0, nums.size() - 1);
 	}
 
 };
@@ -289,7 +316,8 @@ void main() {
 	Solution_169* sol_169 = new Solution_169();
 	vector<int> nums = { 1,3,1,2 };
 	//std::cout << sol_169->majorityElement_0(nums) << std::endl;
-	std::cout << sol_169->majorityElement_1(nums) << std::endl;
+	//std::cout << sol_169->majorityElement_1(nums) << std::endl;
+	std::cout << sol_169->majorityElement_2(nums) << std::endl;
 }
 #endif
 
