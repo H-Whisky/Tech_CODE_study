@@ -155,7 +155,7 @@ void main() {
 #endif
 
 // 二、分治问题
-#if 1
+#if 0
 class Solution_23 {
 public:
 	// 暴力解法
@@ -189,8 +189,7 @@ public:
 		return res->next;
 	}
 
-	// 顺序合并
-	ListNode* mergeTwoLists_1(ListNode* a, ListNode* b) {
+	ListNode* mergeTwoLists(ListNode* a, ListNode* b) {
 		if ((!a) || (!b)) {
 			return a ? a : b;
 		}
@@ -210,18 +209,88 @@ public:
 		return head.next;
 	}
 
-	ListNode* mergeKlists(vector<ListNode*>& lists) {
+	// 顺序合并 不理解
+	ListNode* mergeKlists_1(vector<ListNode*>& lists) {
 		ListNode* ans = nullptr;
 		for (size_t i = 0; i < lists.size(); ++i) {
-			ans = mergeTwoLists_1(ans, lists[i]);
+			ans = mergeTwoLists(ans, lists[i]);
 		}
 		return ans;
+	}	
+
+	// 分治合并
+	ListNode* merge(vector <ListNode*>& lists, int l, int r) {
+		if (l == r) {
+			return lists[1];
+		}
+
+		if (l > r) {
+			return nullptr;
+		}
+		int mid = (l + r) >> 1;
+		return mergeTwoLists(merge(lists, l, mid), merge(lists, mid + 1, r));
+	}
+
+	ListNode* mergeKLists_2(vector<ListNode*>& lists) {
+		return merge(lists, 0, lists.size() - 1);
+	}
+
+	void main() {
+
+	}
+};
+#endif
+
+#if 1
+class Solution_169 {
+public:
+	// 排序法
+	int majorityElement_0(vector<int>& nums) {
+		sort(nums.begin(), nums.end());
+		return nums[nums.size() / 2];
+	}
+
+	// 摩尔投票法
+	int majorityElement_1(vector<int>& nums) {
+		if (nums.size() == 0) {
+			return 0;
+		}
+		int targetNum = nums[0];
+		int cnt = 0;
+
+		for (auto n : nums) {
+
+			if (targetNum == n) {
+				cnt += 1;
+			}
+			else {
+				cnt -= 1;
+			}
+			std::cout << "n = " << n << std::endl;
+			std::cout << "targetNum = " << targetNum << std::endl;
+			std::cout << "cnt = " << cnt << std::endl;
+			std::cout  << std::endl;
+			if (cnt == -1) {
+				targetNum = n;
+				cnt = 0;
+			}
+		}
+		return targetNum;
+	}
+
+	// 分治法
+	int majorityElement_2(vector<int>& nums) {
+
 	}
 
 };
 
-
-
+void main() {
+	Solution_169* sol_169 = new Solution_169();
+	vector<int> nums = { 1,3,1,2 };
+	//std::cout << sol_169->majorityElement_0(nums) << std::endl;
+	std::cout << sol_169->majorityElement_1(nums) << std::endl;
+}
 #endif
 
 
