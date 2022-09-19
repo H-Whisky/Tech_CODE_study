@@ -241,7 +241,7 @@ public:
 };
 #endif
 
-#if 1
+#if 0
 class Solution_169 {
 public:
 	// 排序法
@@ -318,6 +318,58 @@ void main() {
 	//std::cout << sol_169->majorityElement_0(nums) << std::endl;
 	//std::cout << sol_169->majorityElement_1(nums) << std::endl;
 	std::cout << sol_169->majorityElement_2(nums) << std::endl;
+}
+#endif
+
+#if 1
+class Solution_240 {
+public:
+	// 直接遍历
+	bool searchMatrix_0(vector<vector<int>>& matrix, int target) {
+		for (const auto& row : matrix) {
+			for (int element : row) {
+				if (element == target) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	// 分治
+	bool searchMatrix_1(vector<vector<int>>& matrix, int target) {
+		int matrix_row_len = matrix.size();
+		std::cout << "matrix row length: " << matrix_row_len << std::endl;
+		int matrix_column_len = matrix[0].size();
+		std::cout << "matrix column length: " << matrix_column_len << std::endl;
+		if (matrix_row_len == 0) {
+			return false;
+		}
+		if (matrix_column_len == 0) {
+			return false;
+		}
+		int row = matrix_row_len - 1;
+		int column = 0;
+		while (row >= 0 && column < matrix_column_len) {
+			if (matrix[row][column] == target) {
+				return true;
+			}
+			else if (matrix[row][column] < target) {
+				column += 1;
+			}
+			else {
+				row -= 1;
+			}
+		}
+		return false;
+	}
+};
+
+void main() {
+	vector<vector<int>> matrix = { {1,4,7,11,15},{2,5,8,12,19},{3,6,9,16,22},{10,13,14,17,24},{18,21,23,26,30} };
+	Solution_240* sol_240 = new Solution_240();
+	std::cout << sol_240->searchMatrix_0(matrix, 5) << std::endl;
+	std::cout << sol_240->searchMatrix_1(matrix, 5) << std::endl;
 }
 #endif
 
