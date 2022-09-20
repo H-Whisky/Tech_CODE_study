@@ -420,6 +420,7 @@ public:
 	// 单调栈
 	int largestRectangleArea_2(vector<int>& heights) {
 		int n = heights.size();
+		//std::cout << "n: " << n << std::endl;
 		vector<int> left(n), right(n);
 
 		stack<int> mono_stack;
@@ -447,13 +448,87 @@ public:
 		return ans;
 	}
 };
-
+#if 0
 void main() {
 	vector<int> heights = { 2,1,5,6,2,3 };
 	Solution_84* sol_84 = new Solution_84();
 	std::cout << sol_84->largestRectangleArea_0(heights) << std::endl;
 	std::cout << sol_84->largestRectangleArea_1(heights) << std::endl;
 	std::cout << sol_84->largestRectangleArea_2(heights) << std::endl;
+}
+#endif
+#endif
+
+#if 1
+class Solution_85 {
+public:
+	// No.84题求解柱状图的最大面积，此题矩形可拆解为多个柱状图
+	int maximalRectangle_0(vector<vector<char>>& matrix) {
+		Solution_84* sol_84 = new Solution_84;
+		std::cout << matrix.size() << std::endl;
+		std::cout << matrix[0].size() << std::endl;
+		if (matrix.size() == 0 || matrix[0].size() == 0) {
+			return 0;
+		}
+		int col = matrix.size();
+		int row = matrix[0].size();
+		vector<int> heights(row);
+		int ans = 0;
+		for (int i = 0; i < col; ++i) {
+			for (int j = 0; j < row; ++j) {
+				if (matrix[i][j] == '1') {
+					heights[j] += 1;
+				}
+				else {
+					heights[j] = 0;
+				}
+			}
+			ans = max(ans, sol_84->largestRectangleArea_2(heights));
+		}
+		return ans;
+	}
+
+	// 优化No.84暴力算法
+	int maximalRectangle_1(vector<vector<char>>& matrix) {
+		int matrix_row = matrix.size();
+		if (matrix_row == 0) {
+			return 0;
+		}
+		int matrix_col = matrix[0].size();
+		vector<vector<int>> left(matrix_row, vector<int>(matrix_row, 0));
+
+		for (int i = 0; i < matrix_row; i++) {
+			for (int j = 0; j < matrix_col; j++) {
+				if (matrix[i][j] == '1') {
+					left[i][j] = (j == 0 ? 0 : left[i][j - 1]) + 1;
+				}
+			}
+		}
+
+		int ret = 0;
+		for (int i = 0; i < matrix_row; i++) {
+			for (int j = 0; j < matrix_col; j++) {
+				if (matrix[i][j] == '0') {
+					continue;
+				}
+				int width = left[i][j];
+				int area = width;
+				for (int k = i - 1; k >= 0; k--) {
+					width = min(width, left[k][j]);
+					area = max(area, (i - k + 1) * width);
+				}
+				ret = max(ret, area);
+			}
+		}
+		return ret;
+	}
+};
+
+void main() {
+	Solution_85* sol_85 = new Solution_85;
+	vector<vector<char>> matrix = { {1,0,1,0,0},{1,0,1,1,1},{1,1,1,1,1},{1,0,0,1,0}};
+	//std::cout << sol_85->maximalRectangle_0(matrix) << std::endl;
+	std::cout << sol_85->maximalRectangle_1(matrix) << std::endl;
 }
 #endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
