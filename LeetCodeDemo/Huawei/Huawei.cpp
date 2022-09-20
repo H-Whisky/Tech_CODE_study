@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <queue>
+#include <stack>
 using namespace std;
 
 struct TreeNode {
@@ -321,7 +322,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_240 {
 public:
 	// 直接遍历
@@ -373,7 +374,88 @@ void main() {
 }
 #endif
 
+// 三、单调栈
+#if 1
+class Solution_84 {
+public:
+	// 暴力枚举【宽度】
+	int largestRectangleArea_0(vector<int>& heights) {
+		int n = heights.size();
+		int ans = 0;
+		// 枚举左边界
+		for (int left = 0; left < n; ++left) {
+			int minHeight = INT_MAX;
+			//  枚举右边界
+			for (int right = left; right < n; ++right) {
+				// 确定高度
+				minHeight = min(minHeight, heights[right]);
+				// 计算面积
+				ans = max(ans, (right - left + 1) * minHeight);
+			}
+		}
+		return ans;
+	}
 
+	// 暴力枚举【高度】
+	int largestRectangleArea_1(vector<int>& heights) {
+		int n = heights.size();
+		int ans = 0;
+		for (int mid = 0; mid < n; ++mid) {
+			// 枚举高
+			int height = heights[mid];
+			int left = mid, right = mid;
+			// 确定左右边界
+			while (left - 1 >= 0 && heights[left - 1] >= height) {
+				--left;
+			}
+			while (right + 1 < n && heights[right + 1] >= height) {
+				++right;
+			}
+			// 计算面积
+			ans = max(ans, (right - left + 1) * height);
+		}
+		return ans;
+	}
+
+	// 单调栈
+	int largestRectangleArea_2(vector<int>& heights) {
+		int n = heights.size();
+		vector<int> left(n), right(n);
+
+		stack<int> mono_stack;
+		for (int i = 0; i < n; ++i) {
+			while (!mono_stack.empty() && heights[mono_stack.top()] >= heights[i]) {
+				mono_stack.pop();
+			}
+			left[i] = (mono_stack.empty() ? -1 : mono_stack.top());
+			mono_stack.push(i);
+		}
+
+		mono_stack = stack<int>();
+		for (int i = n - 1; i >= 0; --i) {
+			while (!mono_stack.empty() && heights[mono_stack.top()] >= heights[i]) {
+				mono_stack.pop();
+			}
+			right[i] = (mono_stack.empty() ? n : mono_stack.top());
+			mono_stack.push(i);
+		}
+
+		int ans = 0;
+		for (int i = 0; i < n; ++i) {
+			ans = max(ans, (right[i] - left[i] - 1) * heights[i]);
+		}
+		return ans;
+	}
+};
+
+void main() {
+	vector<int> heights = { 2,1,5,6,2,3 };
+	Solution_84* sol_84 = new Solution_84();
+	std::cout << sol_84->largestRectangleArea_0(heights) << std::endl;
+	std::cout << sol_84->largestRectangleArea_1(heights) << std::endl;
+	std::cout << sol_84->largestRectangleArea_2(heights) << std::endl;
+}
+#endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
