@@ -4,6 +4,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <unordered_set>
 using namespace std;
 
 struct TreeNode {
@@ -602,7 +603,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_503 {
 public:
 	// 单调栈
@@ -629,6 +630,54 @@ void main() {
 	for (int i = 0; i < ans.size(); i++) {
 		std::cout << ans[i] << " ";
 	}
+}
+#endif
+
+// 四、并查集
+#if 1
+class Solution_547 {
+public:
+	int Find(vector<int>& parent, int index) {
+		if (parent[index] != index) {
+			parent[index] = Find(parent, parent[index]);
+		}
+		return parent[index];
+	}
+
+	void Union(vector<int>& parent, int index1, int index2) {
+		parent[Find(parent, index1)] = Find(parent, index2);
+	}
+
+	// 并查集
+	int findCircleNum_0(vector<vector<int>>& isConnected) {
+		int cities = isConnected.size();
+		vector<int> parent(cities);
+		// 初始化
+		for (int i = 0; i < cities; ++i) {
+			parent[i] = i;
+		}
+
+		for (int i = 0; i < cities; i++) {
+			for (int j = i + 1; j < cities; j++) {
+				if (isConnected[i][j] == 1) {
+					Union(parent, i, j);
+				}
+			}
+		}
+		int provinces = 0;
+		for (int i = 0; i < cities; ++i) {
+			if (parent[i] == i) {
+				provinces++;
+			}
+		}
+		return provinces;
+	}
+};
+
+void main() {
+	vector<vector<int>> isConnected = { {1,1,0}, {1,1,0}, {0,0,1} };
+	Solution_547* sol_547 = new Solution_547;
+	std::cout << sol_547->findCircleNum_0(isConnected) << std::endl;
 }
 #endif
 
