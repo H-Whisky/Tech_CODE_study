@@ -375,7 +375,7 @@ void main() {
 #endif
 
 // 三、单调栈
-#if 1
+#if 0
 class Solution_84 {
 public:
 	// 暴力枚举【宽度】
@@ -459,7 +459,7 @@ void main() {
 #endif
 #endif
 
-#if 1
+#if 0
 class Solution_85 {
 public:
 	// No.84题求解柱状图的最大面积，此题矩形可拆解为多个柱状图
@@ -531,6 +531,107 @@ void main() {
 	std::cout << sol_85->maximalRectangle_1(matrix) << std::endl;
 }
 #endif
+
+#if 0
+class Solution_739 {
+public:
+	// 暴力解法
+	vector<int> dailyTemperatures_0(vector<int>& temperatures) {
+		int temperatures_size = temperatures.size();
+		vector<int> ans(temperatures_size, 0);
+		for (int i = 0; i < temperatures_size; ++i) {
+			for (int j = i + 1; j < temperatures_size; ++j) {
+				if (temperatures[i] < temperatures[j]) {
+					ans[i] = j - i;
+					break;
+				}
+			}
+		}
+		return ans;
+	}
+
+	// 优化的暴力解法
+	vector<int> dailyTemperatures_1(vector<int>& temperatures) {
+		int temperatures_size = temperatures.size();
+		vector<int> ans(temperatures_size), next(101, INT_MAX);
+		for (int i = temperatures_size - 1; i >= 0; --i) {
+			int warmerIndex = INT_MAX;
+			for (int j = temperatures[i] + 1; j <= 100; ++j) {
+				warmerIndex = min(warmerIndex, next[j]);
+			}
+			if (warmerIndex != INT_MAX) {
+				ans[i] = warmerIndex - i;
+			}
+			next[temperatures[i]] = i;
+		}
+		return ans;
+	}
+
+	// 单调栈
+	vector<int> dailyTemperatures_2(vector<int>& temperatures) {
+		// 保存温度和天数的组合
+		stack<pair<int, int>> S;
+		// 初始化每个温度对应的结果
+		vector<int> ans(temperatures.size(), 0);
+		// 将第0个温度和天数0添加至栈
+		S.push(make_pair(temperatures[0], 0));
+		// 进入遍历的循环从第2个温度开始
+		for (int i = 1; i < temperatures.size(); ++i) {
+			// 只要栈顶的温度小于正在遍历的温度
+			while (!S.empty() && S.top().first < temperatures[i]) {
+				// 计算结果
+				ans[S.top().second] = i - S.top().second;
+				//  将栈顶弹出
+				S.pop();
+			}
+			S.push(make_pair(temperatures[i],i));
+		}
+		return ans;
+	}
+};
+
+void main() {
+	Solution_739* sol_739 = new Solution_739;
+	vector<int> temperatures = { 73,74,75,71,69,72,76,73 };
+	//vector<int> ans = sol_739->dailyTemperatures_0(temperatures);
+	//vector<int> ans = sol_739->dailyTemperatures_1(temperatures);
+	vector<int> ans = sol_739->dailyTemperatures_2(temperatures);
+	for (int i = 0; i <ans.size(); i++) {
+		std::cout << ans[i] << " ";
+	}
+}
+#endif
+
+#if 1
+class Solution_503 {
+public:
+	// 单调栈
+	vector<int> nextGreaterElements_0(vector<int>& nums) {
+		int nums_size = nums.size();
+		stack<int> S;
+		vector<int> ans(nums_size, -1);
+		for (int i = 0; i < nums_size * 2 - 1; ++i) {
+			while (!S.empty() && nums[S.top()] < nums[i % nums_size]) {
+				ans[S.top()] = nums[i % nums_size];
+				S.pop();
+			}
+			S.push(i % nums_size);
+		}
+		return ans;
+	}
+
+};
+
+void main() {
+	Solution_503* sol_503 = new Solution_503;
+	vector<int> nums = { 1,2,3,4,3 };
+	vector<int> ans = sol_503->nextGreaterElements_0(nums);
+	for (int i = 0; i < ans.size(); i++) {
+		std::cout << ans[i] << " ";
+	}
+}
+#endif
+
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
