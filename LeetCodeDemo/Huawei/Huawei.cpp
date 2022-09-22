@@ -682,7 +682,7 @@ void main() {
 #endif
 
 
-#if 1
+#if 0
 // 模板0：并查集
 class UnionFind_0 {
 private:
@@ -915,14 +915,54 @@ public:
 
 void main() {
 	vector<vector<int>> edges = { {1,2}, {1,3}, {2,3} };
-	vector<int> ans = { 0,0 };
+	//vector<vector<int>> edges = { {1,2}, {2,3}, {3,4}, {1,4},{1,5} };
+	int ans_size = edges[0].size();
+	vector<int> ans (ans_size, 0);
 	Solution_684* sol_684 = new Solution_684;
 	ans = sol_684->findRedundantConnection(edges);
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < ans_size; i++) {
 		std::cout << ans[i] << std::endl;
 	}
 }
 #endif
+
+// 五、滑动窗口
+#if 1
+class Solution_209 {
+public:
+	// 暴力解法
+	int minSubArrayLen_0(int target, vector<int>& nums) {
+		int nums_size = nums.size();
+		if (nums_size == 0) {
+			return 0;
+		}
+		int ans = INT_MAX;
+		for (int i = 0; i < nums_size; ++i) {
+			int sum = 0;
+			for (int j = i; j < nums_size; ++j) {
+				sum += nums[j];
+				if (sum >= target) {
+					ans = min(ans, j - i + 1);
+					break;
+				}
+			}
+		}
+		return ans == INT_MAX ? 0 : ans;
+	}
+};
+
+void main() {
+	Solution_209* sol_209 = new Solution_209;
+	vector<int> nums = {2,3,1,2,4,3};
+	std::cout << sol_209->minSubArrayLen_0(7, nums) << std::endl;
+}
+#endif
+
+
+
+
+
+
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
