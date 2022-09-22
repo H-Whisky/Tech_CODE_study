@@ -634,7 +634,7 @@ void main() {
 #endif
 
 // 四、并查集
-#if 1
+#if 0
 class Solution_547 {
 public:
 	int Find(vector<int>& parent, int index) {
@@ -680,6 +680,142 @@ void main() {
 	std::cout << sol_547->findCircleNum_0(isConnected) << std::endl;
 }
 #endif
+
+
+#if 1
+// 并查集 模板
+class UnionFind {
+private:
+	vector<int> parent;
+	vector<int> rank;
+	int count;
+
+public:
+	UnionFind(vector<vector<char>>& grid) {
+		count = 0;
+		int row = grid.size();
+		int column = grid[0].size();
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				if (grid[i][j] == '1') {
+					//  parent数组记录grid中每数的祖先
+					parent.push_back(i * column + j);
+					// 记录二维数组中“1”的个数
+					++count;
+				}
+				else {
+					parent.push_back(-1);
+				}
+				rank.push_back(0);
+			}
+		}
+	}
+
+	int find(int i) {
+		if (parent[i] != i) {
+			parent[i] = find(parent[i]);
+		}
+		return parent[i];
+	}
+
+	void unite(int x, int y) {
+		int rootx = find(x);
+		int rooty = find(y);
+		if (rootx != rooty) {
+			if (rank[rootx] < rank[rooty]) {
+				swap(rootx, rooty);
+			}
+			parent[rooty] = rootx;
+			if (rank[rootx] == rank[rooty]) {
+				rank[rootx] += 1;
+			}
+			--count;
+		}
+	}
+
+	int getCount() const {
+		return count;
+	}
+};
+
+class Solution_200_0 {
+public:
+	int numIslands(vector<vector<char>>& grid) {
+		int row = grid.size();
+		if (!row) {
+			return 0;
+		}
+		int column = grid[0].size();
+
+		UnionFind uf(grid);
+		int islands_num = 0;
+		for (int r = 0; r < row; ++r) {
+			for (int c = 0; c < column; ++c) {
+				if (grid[r][c] == '1') {
+					grid[r][c] = '0';
+					// up
+					if (r - 1 >= 0 && grid[r - 1][c] == '1') {
+						uf.unite(r * column + c, (r - 1) * column + c);
+					}		
+					// down
+					if (r + 1 < row && grid[r + 1][c] == '1') {
+						uf.unite(r * column + c, (r + 1) * column + c);
+					}	
+					// left
+					if (c - 1 >= 0 && grid[r][c - 1] == '1') {
+						uf.unite(r * column + c, r * column + (c - 1));
+					}
+					// right
+					if (c + 1 < column && grid[r][c + 1] == '1') {
+						uf.unite(r * column + c, r * column + (c + 1));
+					}
+				}
+			}
+		}
+		return uf.getCount();
+	}
+};
+
+class Solution_200_1 {
+public:
+	// 遍历岛中二维数组，如果当前数为1，则进入感染函数并岛数+1
+	int numIslands_1(vector <vector<char>>& grid) {
+		int islandNum = 0;
+		for (int i = 0; i < grid.size(); ++i) {
+			for (int j = 0; j < grid[0].size(); ++j) {
+				if (grid[i][j] == '1') {
+					infect(grid, i, j);
+					islandNum ++;
+				}
+			}
+		}
+		return islandNum;
+	}
+
+	// 感染函数（递归）
+	void infect(vector<vector<char>>& grid, int i, int j) {
+		if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || grid[i][j] != '1') {
+			return;
+		}
+		grid[i][j] = '2';
+		infect(grid, i + 1, j);
+		infect(grid, i - 1, j);
+		infect(grid, i, j + 1);
+		infect(grid, i, j - 1);
+	}
+};
+
+void main() {
+	vector<vector<char>> grid_1 = { {'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'} };
+	Solution_200_1* sol_200_1 = new Solution_200_1;
+	std::cout << sol_200_1->numIslands_1(grid_1) << std::endl;
+
+	vector<vector<char>> grid_0 = { {'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'} };
+	Solution_200_0* sol_200_0 = new Solution_200_0;
+	std::cout << sol_200_0->numIslands(grid_0) << std::endl;
+}
+#endif
+
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
