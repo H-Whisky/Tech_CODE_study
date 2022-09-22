@@ -683,6 +683,7 @@ void main() {
 
 
 #if 1
+// 模板0：并查集
 class UnionFind_0 {
 private:
 	// 节点数量 3 - 1000
@@ -720,7 +721,7 @@ public:
 	}
 };
 
-// 并查集 模板
+// 模板1：并查集 
 class UnionFind_1 {
 private:
 	vector<int> parent;
@@ -775,9 +776,9 @@ public:
 	}
 };
 
-class Solution_200_2 {
+class Solution_200_1 {
 public:
-	int numIslands_2(vector<vector<char>>& grid) {
+	int numIslands_1(vector<vector<char>>& grid) {
 		int row = grid.size();
 		if (!row) {
 			return 0;
@@ -813,10 +814,10 @@ public:
 	}
 };
 
-class Solution_200_1 {
+class Solution_200_2 {
 public:
 	// 遍历岛中二维数组，如果当前数为1，则进入感染函数并岛数+1
-	int numIslands_1(vector <vector<char>>& grid) {
+	int numIslands_2(vector <vector<char>>& grid) {
 		int islandNum = 0;
 		for (int i = 0; i < grid.size(); ++i) {
 			for (int j = 0; j < grid[0].size(); ++j) {
@@ -843,13 +844,17 @@ public:
 };
 
 void main() {
+	// 法0：并查集
+
+	// 法1：并查集
 	vector<vector<char>> grid_1 = { {'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'} };
 	Solution_200_1* sol_200_1 = new Solution_200_1;
 	std::cout << sol_200_1->numIslands_1(grid_1) << std::endl;
 
-	vector<vector<char>> grid_0 = { {'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'} };
+	// 法2：感染函数
+	vector<vector<char>> grid_2 = { {'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'} };
 	Solution_200_2* sol_200_2 = new Solution_200_2;
-	std::cout << sol_200_2->numIslands_2(grid_0) << std::endl;
+	std::cout << sol_200_2->numIslands_2(grid_2) << std::endl;
 }
 #endif
 
