@@ -683,15 +683,52 @@ void main() {
 
 
 #if 1
+class UnionFind_0 {
+private:
+	// 节点数量 3 - 1000
+	int n = 1005;
+	int father[1005];
+
+public:
+	// 并查集初始化
+	void init() {
+		for (int i = 0; i < n; ++i) {
+			father[i] = i;
+		}
+	}
+
+	// 并查集寻根的过程
+	int find(int u) {
+		return u == father[u] ? u : father[u] = find(father[u]);
+	}
+
+	//  将v->u这条边加入并查集
+	void join(int u, int v) {
+		u = find(u);
+		v = find(v);
+		if (u == v) {
+			return;
+		}
+		father[v] = u;
+	}
+
+	//  判断u和v是否同根
+	bool same(int u, int v) {
+		u = find(u);
+		v = find(v);
+		return u == v;
+	}
+};
+
 // 并查集 模板
-class UnionFind {
+class UnionFind_1 {
 private:
 	vector<int> parent;
 	vector<int> rank;
 	int count;
 
 public:
-	UnionFind(vector<vector<char>>& grid) {
+	UnionFind_1(vector<vector<char>>& grid) {
 		count = 0;
 		int row = grid.size();
 		int column = grid[0].size();
@@ -738,16 +775,16 @@ public:
 	}
 };
 
-class Solution_200_0 {
+class Solution_200_2 {
 public:
-	int numIslands(vector<vector<char>>& grid) {
+	int numIslands_2(vector<vector<char>>& grid) {
 		int row = grid.size();
 		if (!row) {
 			return 0;
 		}
 		int column = grid[0].size();
 
-		UnionFind uf(grid);
+		UnionFind_1 uf_1(grid);
 		int islands_num = 0;
 		for (int r = 0; r < row; ++r) {
 			for (int c = 0; c < column; ++c) {
@@ -755,24 +792,24 @@ public:
 					grid[r][c] = '0';
 					// up
 					if (r - 1 >= 0 && grid[r - 1][c] == '1') {
-						uf.unite(r * column + c, (r - 1) * column + c);
+						uf_1.unite(r * column + c, (r - 1) * column + c);
 					}		
 					// down
 					if (r + 1 < row && grid[r + 1][c] == '1') {
-						uf.unite(r * column + c, (r + 1) * column + c);
+						uf_1.unite(r * column + c, (r + 1) * column + c);
 					}	
 					// left
 					if (c - 1 >= 0 && grid[r][c - 1] == '1') {
-						uf.unite(r * column + c, r * column + (c - 1));
+						uf_1.unite(r * column + c, r * column + (c - 1));
 					}
 					// right
 					if (c + 1 < column && grid[r][c + 1] == '1') {
-						uf.unite(r * column + c, r * column + (c + 1));
+						uf_1.unite(r * column + c, r * column + (c + 1));
 					}
 				}
 			}
 		}
-		return uf.getCount();
+		return uf_1.getCount();
 	}
 };
 
@@ -811,12 +848,76 @@ void main() {
 	std::cout << sol_200_1->numIslands_1(grid_1) << std::endl;
 
 	vector<vector<char>> grid_0 = { {'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'} };
-	Solution_200_0* sol_200_0 = new Solution_200_0;
-	std::cout << sol_200_0->numIslands(grid_0) << std::endl;
+	Solution_200_2* sol_200_2 = new Solution_200_2;
+	std::cout << sol_200_2->numIslands_2(grid_0) << std::endl;
 }
 #endif
 
+#if 0
+class UnionFind {
+private:
+	// 节点数量 3 - 1000
+	int n = 1005;
+	int father[1005];
 
+public:
+	// 并查集初始化
+	void init() {
+		for (int i = 0; i < n; ++i) {
+			father[i] = i;
+		}
+	}
+
+	// 并查集寻根的过程
+	int find(int u) {
+		return u == father[u] ? u : father[u] = find(father[u]);
+	}
+
+	//  将v->u这条边加入并查集
+	void join(int u, int v) {
+		u = find(u);
+		v = find(v);
+		if (u == v) {
+			return;
+		}
+		father[v] = u;
+	}	
+	
+	//  判断u和v是否同根
+	bool same(int u, int v) {
+		u = find(u);
+		v = find(v);
+		return u == v;
+	}
+};
+
+class Solution_684 {
+public:
+	vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+		UnionFind* uf = new UnionFind;
+		uf->init();
+		for (int i = 0; i < edges.size(); ++i) {
+			if (uf->same(edges[i][0], edges[i][1])) {
+				return edges[i];
+			}
+			else {
+				uf->join(edges[i][0], edges[i][1]);
+			}
+		}
+		return {};
+	}
+};
+
+void main() {
+	vector<vector<int>> edges = { {1,2}, {1,3}, {2,3} };
+	vector<int> ans = { 0,0 };
+	Solution_684* sol_684 = new Solution_684;
+	ans = sol_684->findRedundantConnection(edges);
+	for (int i = 0; i < 2; i++) {
+		std::cout << ans[i] << std::endl;
+	}
+}
+#endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
