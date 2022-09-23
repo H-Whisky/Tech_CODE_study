@@ -949,12 +949,40 @@ public:
 		}
 		return ans == INT_MAX ? 0 : ans;
 	}
+
+	// 前缀和 + 二分查找
+	int minSubArrayLen_1(int target, vector<int>& nums) {
+		int nums_size = nums.size();
+		if (nums_size == 0) {
+			return 0;
+		}
+		int ans = INT_MAX;
+		vector<int> sums(nums_size + 1, 0);
+
+		// sums[]存储数组nums的前缀和
+		for (int i = 1; i <= nums_size; ++i) {
+			sums[i] = sums[i - 1] + nums[i - 1];
+		}
+		for (int i = 1; i <= nums_size; ++i) {
+			int target_ = target + sums[i - 1];
+			// lower_bond: 二分查找大于等于某个数的第一个位置
+			auto bound = lower_bound(sums.begin(), sums.end(), target_);
+			if (bound != sums.end()) {
+				ans = min(ans, static_cast<int>((bound - sums.begin()) - (i - 1)));
+			}
+		}
+		return ans == INT_MAX ? 0 : ans;
+	}
+
+	// 滑动窗口
+
 };
 
 void main() {
 	Solution_209* sol_209 = new Solution_209;
 	vector<int> nums = {2,3,1,2,4,3};
 	std::cout << sol_209->minSubArrayLen_0(7, nums) << std::endl;
+	std::cout << sol_209->minSubArrayLen_1(7, nums) << std::endl;
 }
 #endif
 
