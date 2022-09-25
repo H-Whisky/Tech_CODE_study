@@ -975,7 +975,25 @@ public:
 	}
 
 	// 滑动窗口
-
+	int minSubArrayLen_2(int target, vector<int>& nums) {
+		int n = nums.size();
+		if (n == 0) {
+			return 0;
+		}
+		int ans = INT_MAX;
+		int start = 0, end = 0;
+		int sum = 0;
+		while (end < n) {
+			sum += nums[end];
+			while (sum >= target) {
+				ans = min(ans, end - start + 1);
+				sum -= nums[start];
+				start++;
+			}
+			end++;
+		}
+		return ans == INT_MAX ? 0 : ans;
+	}
 };
 
 void main() {
@@ -983,6 +1001,7 @@ void main() {
 	vector<int> nums = {2,3,1,2,4,3};
 	std::cout << sol_209->minSubArrayLen_0(7, nums) << std::endl;
 	std::cout << sol_209->minSubArrayLen_1(7, nums) << std::endl;
+	std::cout << sol_209->minSubArrayLen_2(7, nums) << std::endl;
 }
 #endif
 
