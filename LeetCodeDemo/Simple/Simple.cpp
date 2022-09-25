@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <queue>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
@@ -520,4 +521,165 @@ public:
 		return sums[right + 1] - sums[left];
 	}
 };
+#endif
+
+#if 0
+// LCCUP'22 1. 气温变化趋势
+
+//力扣城计划在两地设立「力扣嘉年华」的分会场，气象小组正在分析两地区的气温变化趋势，对于第 i ~ (i+1) 天的气温变化趋势，将根据以下规则判断：
+//
+//若第 i+1 天的气温 高于 第 i 天，为 上升 趋势
+//若第 i+1 天的气温 等于 第 i 天，为 平稳 趋势
+//若第 i+1 天的气温 低于 第 i 天，为 下降 趋势
+//已知 temperatureA[i] 和 temperatureB[i] 分别表示第 i 天两地区的气温。
+//组委会希望找到一段天数尽可能多，且两地气温变化趋势相同的时间举办嘉年华活动。请分析并返回两地气温变化趋势相同的最大连续天数。
+//
+//即最大的 n，使得第 i~i+n 天之间，两地气温变化趋势相同
+
+// 示例1：
+// 输入：
+//temperatureA = [21, 18, 18, 18, 31]
+//temperatureB = [34, 32, 16, 16, 17]
+//
+//输出：2
+//
+//解释：如下表所示， 第 2～4 天两地气温变化趋势相同，且持续时间最长，因此返回 4 - 2 = 2
+
+class Solution_lccup22_1 {
+public:
+	int temperatureTrend_0(vector<int>& temperatureA, vector<int>& temperatureB) {
+		int tempA_size = temperatureA.size();
+		int tempB_size = temperatureB.size();
+		int tempA_tread_size = tempA_size - 1;
+		int tempB_tread_size = tempB_size - 1;
+
+		// 0:平稳
+		// 1:上升
+		// -1:下降
+		vector<int> tempA_tread (tempA_tread_size, 0 );
+		vector<int> tempB_tread ( tempB_tread_size, 0 );
+
+		for (int i = 0; i < tempA_tread_size; ++i) {
+			if (temperatureA[i] > temperatureA[i + 1]) {
+				tempA_tread[i] = -1;
+				continue;
+			}
+			else if (temperatureA[i] < temperatureA[i + 1]) {
+				tempA_tread[i] = 1;
+				continue;
+			}
+			else if (temperatureA[i] == temperatureA[i + 1]) {
+				tempA_tread[i] = 0;
+				continue;
+			}
+		}
+
+		for (int i = 0; i < tempB_tread_size; ++i) {
+			if (temperatureB[i] > temperatureB[i + 1]) {
+				tempB_tread[i] = -1;
+				continue;
+			}
+			else if (temperatureB[i] < temperatureB[i + 1]) {
+				tempB_tread[i] = 1;
+				continue;
+			}
+			else if (temperatureB[i] == temperatureB[i + 1]) {
+				tempB_tread[i] = 0;
+				continue;
+			}
+		}
+
+		int ans = 0;
+		int max_ans = 0;
+
+		for (int i = 0; i < tempA_tread.size(); ++i) {
+			if (tempA_tread[i] == tempB_tread[i]) {
+				ans+=1;
+			}
+			else {
+				ans = 0;
+			}
+			max_ans = max(ans, max_ans);
+		}
+		return max_ans;
+	}
+
+	int temperatureTrend_1(vector<int>& a, vector<int>& b) {
+		int n = a.size();
+		int cur = 0, ans = 0;
+		for (int i = 1; i < n; i++) {
+			int ta = (a[i] > a[i - 1]) - (a[i] < a[i - 1]);
+			int tb = (b[i] > b[i - 1]) - (b[i] < b[i - 1]);
+			if (ta != tb) cur = 0;
+			else cur++;
+			ans = max(ans, cur);
+		}
+		return ans;
+	}
+
+
+};
+
+void main() {
+	vector<int> temperatureA = { 21, 18, 18 ,18, 31};
+	vector<int> temperatureB = { 34, 32, 16, 16, 17};
+	Solution_lccup22_1* lccup22_1 = new Solution_lccup22_1();
+	std::cout << lccup22_1->temperatureTrend_0(temperatureA, temperatureB) << std::endl;
+	std::cout << lccup22_1->temperatureTrend_1(temperatureA, temperatureB) << std::endl;
+
+}
+#endif
+
+#if 0
+//LCCUP'22 2. 交通枢纽
+
+//为了缓解「力扣嘉年华」期间的人流压力，组委会在活动期间开设了一些交通专线。path[i] = [a, b] 表示有一条从地点 a通往地点 b 的 单向 交通专线。
+//若存在一个地点，满足以下要求，我们则称之为 交通枢纽：
+//
+//所有地点（除自身外）均有一条 单向 专线 直接 通往该地点；
+//该地点不存在任何 通往其他地点 的单向专线。
+//请返回交通专线的 交通枢纽。若不存在，则返回 - 1。
+//
+//注意：
+//
+//对于任意一个地点，至少被一条专线连通。
+//示例 1：
+//
+//输入：path = [[0, 1], [0, 3], [1, 3], [2, 0], [2, 3]]
+//
+//输出：3
+//
+//解释：如下图所示：
+//地点 0, 1, 2 各有一条通往地点 3 的交通专线，
+//且地点 3 不存在任何通往其他地点的交通专线。
+class Solution_lccup22_2 {
+public:
+	int transportationHub(vector<vector<int>>& path) {
+		int n = path.size();
+		vector <int> qwq;
+		vector <int> a(1001, 0), b(1001, 0);
+		for (int i = 0; i < n; i++) {
+			int u = path[i][0];
+			int v = path[i][1];
+			a[v]++, b[u] ++;
+			qwq.push_back(u);
+			qwq.push_back(v);
+		}
+		sort(qwq.begin(), qwq.end());
+		int nd = unique(qwq.begin(), qwq.end()) - qwq.begin();
+		for (int i = 0; i < nd; i++)
+			if (a[i] == nd - 1 && b[i] == 0)
+				return i;
+		return -1;
+
+	}
+	
+};
+
+void main() {
+	vector<vector<int>> path = { {0,1},{0,3},{1,3},{2,0},{2,3} };
+	Solution_lccup22_2* sol_lccip22_2 = new Solution_lccup22_2();
+	std::cout << sol_lccip22_2->transportationHub(path)<<std::endl;
+
+}
 #endif
