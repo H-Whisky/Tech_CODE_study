@@ -927,7 +927,7 @@ void main() {
 #endif
 
 // 五、滑动窗口
-#if 1
+#if 0
 class Solution_209 {
 public:
 	// 暴力解法
@@ -1005,7 +1005,41 @@ void main() {
 }
 #endif
 
+#if 0
+class Solution_3 {
+public:
+	// 滑动窗口
+	int lengthOfLongestSubstring(string s) {
+		// 哈希集合，记录每个字符是否出现
+		unordered_set<char> occ;
+		int s_size = s.size();
+		// 右指针，初始值为-1，相当于我们在 字符串的左边界的左侧，还没有开始移动
+		int rk = -1, ans = 0;
+		// 枚举左指针的位置，初始值隐形地面表示为-1
+		for (int i = 0; i < s_size; i++) {
+			if (i != 0) {
+				// 左指针向右移动一格，移除一个字符
+				occ.erase(s[i - 1]);
+			}
+			while (rk + 1 < s_size && !occ.count(s[rk + 1])) {
+				// 不断的移动右指针
+				occ.insert(s[rk + 1]);
+				++rk;
+			}
+			// 第i到rk个字符是一个极长的无重复字符字串
+			ans = max(ans, rk - i + 1);
+		}
+		return ans;
+	}
+};
 
+void main() {
+	std::string s = { "abcabcbb" };
+	Solution_3* sol_3 = new Solution_3;
+	std::cout << sol_3->lengthOfLongestSubstring(s) << std::endl;
+
+}
+#endif
 
 
 

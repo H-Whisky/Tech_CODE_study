@@ -683,3 +683,31 @@ void main() {
 
 }
 #endif
+
+
+
+// 每日一题
+#if 1
+class Solution_day {
+public:
+	bool CheckPermutation_20220927(string s1, string s2) {
+		if (s1.length() != s2.length()) {
+			return false;
+		}
+
+		sort(s1.begin(), s1.end());
+		sort(s2.begin(), s2.end());
+
+		return s1 == s2;
+	}
+
+};
+
+void main() {
+	string s1 = { "abc" };
+	string s2 = { "bca" };
+	Solution_day* sol_day = new Solution_day;
+	cout << sol_day->CheckPermutation_20220927(s1, s2) << endl;
+
+}
+#endif
