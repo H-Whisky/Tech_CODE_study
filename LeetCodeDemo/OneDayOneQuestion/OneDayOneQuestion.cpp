@@ -198,3 +198,139 @@ void main() {
 	//cout << sol->isFlipedString_0(s3, s4) << endl;
 }
 #endif
+
+#if 1
+/* 
+编写一种算法，若M × N矩阵中某个元素为0，则将其所在的行与列清零。
+示例 1：
+输入：
+[
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]
+输出：
+[
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
+*/
+class Solution_day_20220930 {
+public:
+	// 使用标记数组
+	void setZeroes_0(vector<vector<int>>& matrix) {
+		int row_size = matrix.size();
+		int column_size = matrix[0].size();
+		vector<int> row(row_size), col(column_size);
+		for (int i = 0; i < row_size; ++i) {
+			for (int j = 0; j < column_size; ++j) {
+				if (matrix[i][j] == 0) {
+					row[i] = col[j] = true;
+				}
+			}
+		}
+
+		for (int i = 0; i < row_size;++i) {
+			for (int j = 0; j < column_size;++j) {
+				if (row[i] || col[j]) {
+					matrix[i][j] = 0;
+				}
+			}
+		}
+	}
+
+	// 使用两个标记变量
+	void setZeroes_1(vector<vector<int>>& matrix) {
+		int row_size = matrix.size();
+		int column_size = matrix[0].size();
+		int flag_col0 = false, flag_row0 = false;
+		for (int i = 0; i < row_size; ++i) {
+			if (matrix[i][0] == 0) {
+				flag_col0 = true;
+			}
+		}		
+		for (int j = 0; j < column_size; ++j) {
+			if (matrix[0][j] == 0) {
+				flag_row0 = true;
+			}
+		}
+
+		for (int i = 1; i < row_size; ++i) {
+			for (int j = 1; j < column_size; ++j) {
+				if (matrix[i][j] == 0) {
+					matrix[i][0] = matrix[0][j] = 0;
+				}
+			}
+		}
+
+		for (int i = 1; i < row_size; ++i) {
+			for (int j = 1; j < column_size; ++j) {
+				if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+					matrix[i][j] = 0;
+				}
+			}
+		}
+
+		if (flag_col0) {
+			for (int i = 0; i < row_size; ++i) {
+				matrix[i][0] = 0;
+			}
+		}
+
+		if (flag_row0) {
+			for (int j = 0; j < column_size; ++j) {
+				matrix[0][j] = 0;
+			}
+		}
+	}
+
+	// 使用一个标记变量
+	void setZeroes_2(vector<vector<int>>& matrix) {
+		int row_size = matrix.size();
+		int column_size = matrix[0].size();
+		int flag_col0 = false;
+		for (int i = 0; i < row_size; ++i) {
+			if (matrix[i][0] == 0) {
+				flag_col0 = true;
+			}
+			for (int j = 1; j < column_size; ++j) {
+				if (matrix[i][j] == 0) {
+					matrix[i][0] = matrix[0][j] = 0;
+				}
+			}
+		}
+
+		for (int i = row_size - 1; i >= 0; --i) {
+			for (int j = 1; j < column_size; ++j) {
+				if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+					matrix[i][j] = 0;
+				}
+			}
+			if (flag_col0) {
+				matrix[i][0] = 0;
+			}
+		}
+
+	}
+};
+
+void main() {
+	vector<vector<int>> matrix = { {1,1,1},{1,0,1},{1,1,1} };
+	Solution_day_20220930* sol = new Solution_day_20220930;
+	//sol->setZeroes_0(matrix);
+	//sol->setZeroes_1(matrix);
+	sol->setZeroes_2(matrix);
+
+	for (int i = 0; i < matrix.size(); ++i) {
+		for (int j = 0; j < matrix[0].size(); ++j) {
+			cout << matrix[i][j] << " ";
+			if (j == 2) {
+				cout << endl;
+			}
+		}
+	}
+
+}
+
+#endif

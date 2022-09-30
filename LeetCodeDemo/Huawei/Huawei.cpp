@@ -1041,6 +1041,36 @@ void main() {
 }
 #endif
 
+#if 1
+class Solution_1004 {
+public:
+	// 滑动窗口:右边无脑滑动，左边看情况收缩
+	int longestOnes_0(vector<int>& nums, int k) {
+		int left = 0;
+		int right = 0;
+		int res = INT_MIN;
+		while (right < nums.size()) {
+			if (nums[right] == 0) k--;
+			right++;
+			// 左边界收缩
+			while (k < 0) {
+				if (nums[left] == 0) k++;
+				left++;
+			}
+			res = max(res, right - left);
+		}
+		return res;
+	}
+
+};
+
+void main() {
+	Solution_1004* sol = new Solution_1004;
+	vector<int> nums = { 1,1,1,0,0,0,1,1,1,1,0 };
+	cout << sol->longestOnes_0(nums, 2) << endl;
+}
+#endif
+
 
 
 
