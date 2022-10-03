@@ -335,7 +335,7 @@ void main() {
 
 #endif
 
-#if 1
+#if 0
 /*
 给你一个字符串形式的电话号码 number 。number 由数字、空格 ' '、和破折号 '-' 组成。
 
@@ -405,4 +405,47 @@ void main() {
 	cout << sol->reformatNumber(number) << endl;
 }
 
+#endif
+
+#if 0
+/*
+给你一个二进制字符串 s ，该字符串 不含前导零 。
+如果 s 包含 零个或一个由连续的 '1' 组成的字段 ，返回 true​​​ 。否则，返回 false 。
+如果 s 中 由连续若干个 '1' 组成的字段 数量不超过 1，返回 true​​​ 。否则，返回 false 。
+示例 1：
+输入：s = "1001"
+输出：false
+解释：由连续若干个 '1' 组成的字段数量为 2，返回 false
+*/
+class Solution_1784_day_20221003 {
+public:
+	// 寻找01串
+	bool checkOnesSegment_0(string s) {
+		return s.find("01") == string::npos;
+	}
+	bool checkOnesSegment_1(string s) {
+		bool zero = false;
+		for (int i = 0, n = s.size(); i < n; ++i) {
+			if (s[i] == '1') {
+				if (zero) {
+					return false;
+				}
+			} else {
+				zero = true;
+			}
+		}
+		return true;
+	}
+
+	// 模拟
+
+
+};
+
+void main() {
+	string s = { "110" };
+	Solution_1784_day_20221003* sol = new Solution_1784_day_20221003;
+	//cout << sol->checkOnesSegment_0(s);
+	cout << sol->checkOnesSegment_1(s);
+}
 #endif
