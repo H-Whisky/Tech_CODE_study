@@ -1106,6 +1106,56 @@ void main() {
 }
 #endif
 
+#if 1
+class Solution_724 {
+public:
+	// 暴力枚举
+	int pivotIndex_0(vector<int>& nums) {
+		int nums_size = nums.size();
+		for (int i = 0; i < nums_size; i++) {
+			int sum_before= 0;
+			int sum_after= 0;
+			for (int j = 0; j < i; j++) {
+				sum_before += nums[j];
+			}
+			for (int j = i + 1; j < nums_size; j++) {
+				sum_after += nums[j];
+			}
+			if (sum_before == sum_after) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	// 前缀和
+	int pivotIndex_1(vector<int>& nums) {
+		int total = 0;
+		for (int i = 0; i < nums.size(); ++i) {
+			total += nums[i];
+		}
+		int sum = 0;
+		for (int i = 0; i < nums.size(); ++i) {
+			// 算法
+			if (2 * sum + nums[i] == total) {
+				return i;
+			}
+			sum += nums[i];
+		}
+		return -1;
+	}
+};
+
+void main() {
+	vector<int> nums_0 = { 1,7,3,6,5,6 };
+	vector<int> nums_1 = { 1};
+	Solution_724* sol = new Solution_724;
+	cout << sol->pivotIndex_0(nums_0) << endl;
+	cout << sol->pivotIndex_0(nums_1) << endl;
+	cout << sol->pivotIndex_1(nums_1) << endl;
+}
+#endif
+
 
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
