@@ -5,6 +5,7 @@
 #include <queue>
 #include <stack>
 #include <unordered_set>
+#include <unordered_map>
 using namespace std;
 
 struct TreeNode {
@@ -1106,7 +1107,8 @@ void main() {
 }
 #endif
 
-#if 1
+// 六、前缀和
+#if 0
 class Solution_724 {
 public:
 	// 暴力枚举
@@ -1156,6 +1158,49 @@ void main() {
 }
 #endif
 
+#if 0
+class Solution_560 {
+public:
+	// 暴力枚举
+	int subarraySum_0(vector<int>& nums, int k) {
+		int ans = 0;
+		for (int i = 0; i < nums.size(); ++i) {
+			if (nums[i] == k) {
+				ans += 1;
+			}
+			int temp = nums[i];
+			for (int j = i + 1; j < nums.size(); ++j) {
+				temp += nums[j];
+				if (temp == k) {
+					ans += 1;
+				}
+			}
+		}
+		return ans;
+	}
+
+	//前缀和 + 哈希表
+	int subarraySum_1(vector<int>& nums, int k) {
+		unordered_map<int, int> mp;
+		mp[0] = 1;
+		int count = 0, pre = 0;
+		for (auto& x : nums) {
+			pre += x;
+			if (mp.find(pre - k) != mp.end()) {
+				count += mp[pre - k];
+			}
+			mp[pre]++;
+		}
+		return count;
+	 }
+};
+
+void main() {
+	Solution_560* sol = new Solution_560;
+	vector<int> nums = { 1,2,3 };
+	cout << sol->subarraySum_0(nums, 3) << endl;
+}
+#endif
 
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

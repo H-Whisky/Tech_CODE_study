@@ -336,36 +336,6 @@ void main() {
 #endif
 
 #if 0
-/*
-给你一个字符串形式的电话号码 number 。number 由数字、空格 ' '、和破折号 '-' 组成。
-
-请你按下述方式重新格式化电话号码。
-
-首先，删除 所有的空格和破折号。
-其次，将数组从左到右 每 3 个一组 分块，直到 剩下 4 个或更少数字。剩下的数字将按下述规定再分块：
-2 个数字：单个含 2 个数字的块。
-3 个数字：单个含 3 个数字的块。
-4 个数字：两个分别含 2 个数字的块。
-最后用破折号将这些块连接起来。注意，重新格式化过程中 不应该 生成仅含 1 个数字的块，并且 最多 生成两个含 2 个数字的块。
-返回格式化后的电话号码。
-
-示例 1：
-输入：number = "1-23-45 6"
-输出："123-456"
-解释：数字是 "123456"
-步骤 1：共有超过 4 个数字，所以先取 3 个数字分为一组。第 1 个块是 "123" 。
-步骤 2：剩下 3 个数字，将它们放入单个含 3 个数字的块。第 2 个块是 "456" 。
-连接这些块后得到 "123-456" 。
-
-示例 2：
-输入：number = "123 4-567"
-输出："123-45-67"
-解释：数字是 "1234567".
-步骤 1：共有超过 4 个数字，所以先取 3 个数字分为一组。第 1 个块是 "123" 。
-步骤 2：剩下 4 个数字，所以将它们分成两个含 2 个数字的块。这 2 块分别是 "45" 和 "67" 。
-连接这些块后得到 "123-45-67" 。
-*/
-
 class Solution_1694_day_20221001 {
 public:
 	string reformatNumber(string number) {
@@ -408,15 +378,6 @@ void main() {
 #endif
 
 #if 0
-/*
-给你一个二进制字符串 s ，该字符串 不含前导零 。
-如果 s 包含 零个或一个由连续的 '1' 组成的字段 ，返回 true​​​ 。否则，返回 false 。
-如果 s 中 由连续若干个 '1' 组成的字段 数量不超过 1，返回 true​​​ 。否则，返回 false 。
-示例 1：
-输入：s = "1001"
-输出：false
-解释：由连续若干个 '1' 组成的字段数量为 2，返回 false
-*/
 class Solution_1784_day_20221003 {
 public:
 	// 寻找01串
@@ -447,5 +408,37 @@ void main() {
 	Solution_1784_day_20221003* sol = new Solution_1784_day_20221003;
 	//cout << sol->checkOnesSegment_0(s);
 	cout << sol->checkOnesSegment_1(s);
+}
+#endif
+
+#if 1
+class Solution_811_day_20221005 {
+public:
+	// 哈希表
+	vector<string> subdomainVisits(vector<string>& cpdomains) {
+		unordered_map<string, int> mp;
+		for (string s : cpdomains) {
+			int pos = s.find(' '), cnt = stoi(s.substr(0, pos));
+			while (pos != -1) {
+				mp[s.substr(pos + 1)] += cnt;
+				// 不断更行pos
+				pos = s.find(".", pos + 1);
+			}
+		}
+		vector<string> ans;
+		for (auto kv : mp) {
+			ans.push_back(to_string(kv.second) + ' ' + kv.first);
+		}
+		return ans;
+	}
+};
+
+void main() {
+	vector<string> cpdomains = { "9001 discuss.leetcode.com" };
+	Solution_811_day_20221005* sol = new Solution_811_day_20221005;
+	vector<string> ans = sol->subdomainVisits(cpdomains);
+	for (int i = 0; i < ans.size(); ++i) {
+		cout << ans[i] <<" ";
+	}
 }
 #endif
