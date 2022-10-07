@@ -411,7 +411,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_811_day_20221005 {
 public:
 	// 哈希表
@@ -440,5 +440,51 @@ void main() {
 	for (int i = 0; i < ans.size(); ++i) {
 		cout << ans[i] <<" ";
 	}
+}
+#endif
+
+#if 1
+class Solution_1800_day_20221007 {
+public:
+	// 动态规划
+	int maxAscendingSum_0(vector<int>& nums) {
+		int res = 0;
+		int l = 0;
+		while (l < nums.size()) {
+			int curSum = nums[l++];
+			while (l < nums.size() && nums[l] > nums[l - 1]) {
+				curSum += nums[l++];
+			}
+			res = max(res, curSum);
+		}
+		return res;
+	}
+
+	// 暴力枚举
+	int maxAscendingSum_1(vector<int>& nums) {
+		int maxSum = 0;
+		for (int i = 0; i < nums.size(); ++i) {
+			int curSum = nums[i];
+			for (int j = i + 1; j < nums.size(); ++j) {
+				if (nums[j] > nums[j - 1]) {
+					curSum += nums[j];
+				}
+				else {
+					break;
+				}
+			}
+			if (maxSum < curSum) {
+				maxSum = curSum;
+			}
+		}
+		return maxSum;
+	}
+};
+
+void main() {
+	vector<int> nums = { 10,20,30,5,10,50 };
+	Solution_1800_day_20221007* sol = new Solution_1800_day_20221007;
+	cout << sol->maxAscendingSum_0(nums) << endl;
+	cout << sol->maxAscendingSum_1(nums) << endl;
 }
 #endif

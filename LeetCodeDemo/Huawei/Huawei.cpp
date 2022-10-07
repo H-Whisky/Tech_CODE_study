@@ -1202,6 +1202,40 @@ void main() {
 }
 #endif
 
+#if 1
+class Solution_437 {
+public:
+	// 深度优先搜索
+	int pathSum_0(TreeNode* root, int targetSum) {
+		if (!root) {
+			return 0;
+		}
+
+		int ret = rootSum(root, targetSum);
+		ret += pathSum_0(root->left, targetSum);
+		ret += pathSum_0(root->right, targetSum);
+		return ret;
+	}
+
+	int rootSum(TreeNode* root, int targetSum) {
+		if (!root) {
+			return 0;
+		}
+
+		int ret = 0;
+		if (root->val == targetSum) {
+			ret++;
+		}
+		ret += rootSum(root->left, targetSum - root->val);
+		ret += rootSum(root->right, targetSum - root->val);
+		return ret;
+	}
+};
+
+void main() {
+	
+}
+#endif
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
