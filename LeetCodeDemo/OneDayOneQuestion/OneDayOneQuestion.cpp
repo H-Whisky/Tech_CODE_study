@@ -11,6 +11,7 @@
 #include <queue>
 #include <sstream>
 #include <map>
+#include <numeric>      // std::iot
 
 using namespace std;
 
@@ -443,7 +444,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_1800_day_20221007 {
 public:
 	// 动态规划
@@ -486,5 +487,70 @@ void main() {
 	Solution_1800_day_20221007* sol = new Solution_1800_day_20221007;
 	cout << sol->maxAscendingSum_0(nums) << endl;
 	cout << sol->maxAscendingSum_1(nums) << endl;
+}
+#endif
+
+#if 1
+class Solution_870 {
+public:
+	// 贪心
+	vector<int> advantageCount_0(vector<int>& nums1, vector<int>& nums2) {
+		int n = nums1.size();
+		vector<int> idx1(n), idx2(n);
+		iota(idx1.begin(), idx1.end(), 0);
+		iota(idx2.begin(), idx2.end(), 0);
+		sort(idx1.begin(), idx1.end(), [&](int i, int j) {return nums1[i] < nums1[j]; });
+		sort(idx2.begin(), idx2.end(), [&](int i, int j) {return nums2[i] < nums2[j]; });
+		
+		vector<int> ans(n);
+		int left = 0, right = n - 1;
+		for (int i = 0; i < n; ++i) {
+			if (nums1[idx1[i]] > nums2[idx2[left]]) {
+				ans[idx2[left]] = nums1[idx1[i]];
+				++left;
+			}
+			else {
+				ans[idx2[right]] = nums1[idx1[i]];
+				--right;
+			}
+		}
+		return ans;
+	}
+
+	vector<int> advantageCount_1(vector<int>& A, vector<int>& B) {
+		vector<int> vec;
+		sort(A.begin(), A.end());
+		for (int i = 0; i < B.size(); ++i) {
+			bool flag = false;
+			for (int j = 0; j < A.size(); ++j) {
+				if (A[j] > B[i]) {
+					vec.push_back(A[j]);
+					A.erase(A.begin() + j);
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				vec.push_back(A[0]);
+				A.erase(A.begin());
+			}
+		}
+		return vec;
+	}
+};
+
+void main() {
+	vector<int> nums1 = { 2,7,11,15 };
+	vector<int> nums2 = { 1,10,4,11 };
+	Solution_870* sol = new Solution_870;
+	//vector <int> nums_0 = sol->advantageCount_0(nums1, nums2);
+	vector <int> nums_1 = sol->advantageCount_1(nums1, nums2);
+	//for (int i = 0; i < nums_0.size(); ++i) {
+	//	cout << nums_0[i] << " ";
+	//}	
+	cout << endl;
+	for (int i = 0; i < nums_1.size(); ++i) {
+		cout << nums_1[i] << " ";
+	}
 }
 #endif
