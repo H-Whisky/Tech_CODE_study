@@ -17,6 +17,18 @@ struct TreeNode {
 	TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
+TreeNode* invertTree(TreeNode* root) {
+	if (root == nullptr) {
+		return nullptr;
+	}
+
+	TreeNode* left = invertTree(root->left);
+	TreeNode* right = invertTree(root->right);
+	root->left = right;
+	root->right = left;
+	return root;
+}
+
 struct ListNode {
 	int val;
 	ListNode* next;
@@ -62,15 +74,6 @@ void main() {
 #if 0
 class Solution_112 {
 public:
-	//struct TreeNode {
-	//	int val;
-	//	TreeNode* left;
-	//	TreeNode* right;
-	//	TreeNode() : val(0), left(nullptr), right(nullptr){}
-	//	TreeNode(int x) : val(x),left(nullptr), right(nullptr){}
-	//	TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right){}
-	//};
-	
 	//深度优先遍历
 	bool hasPathSum_0(TreeNode* root, int targetSum) {
 		if (root == nullptr) {
@@ -1230,10 +1233,56 @@ public:
 		ret += rootSum(root->right, targetSum - root->val);
 		return ret;
 	}
+
+	unordered_map<long long, int>prefix;
+
+	int dfs(TreeNode* root, long long curr, int targetSum) {
+		if (!root) {
+			return 0;
+		}
+
+		int ret = 0;
+		curr += root->val;
+		if (prefix.count(curr - targetSum)) {
+			ret = prefix[curr - targetSum];
+		}
+		prefix[curr]++;
+		ret += dfs(root->left, curr, targetSum);
+		ret += dfs(root->right, curr, targetSum);
+		prefix[curr]--;
+		return ret;
+	}
+
+	// 前缀和
+	int pathSum_1(TreeNode* root, int targetSum) {
+		prefix[0] = 1;
+		return dfs(root, 0, targetSum);
+	}
 };
 
 void main() {
-	
+	TreeNode* root = new TreeNode(10);
+	TreeNode* node0 = new TreeNode(5);
+	TreeNode* node1 = new TreeNode(-3);
+	TreeNode* node2 = new TreeNode(3);
+	TreeNode* node3 = new TreeNode(2);
+	TreeNode* node4 = new TreeNode(11);
+	TreeNode* node5 = new TreeNode(3);
+	TreeNode* node6 = new TreeNode(-2);
+	TreeNode* node7 = new TreeNode(1);
+	root->left = node0;
+	root->right = node1;
+	node0->left = node2;
+	node0->right = node3;	
+	node1->right = node4;	
+	node2->left = node5;
+	node2->right = node6;
+	node3->right = node7;
+
+	Solution_437* sol = new Solution_437;
+	cout << sol->pathSum_0(root, 8) << endl;
+	cout << sol->pathSum_1(root, 8) << endl;
+
 }
 #endif
 

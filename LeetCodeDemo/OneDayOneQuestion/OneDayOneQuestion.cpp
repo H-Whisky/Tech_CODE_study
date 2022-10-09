@@ -490,8 +490,8 @@ void main() {
 }
 #endif
 
-#if 1
-class Solution_870 {
+#if 0
+class Solution_870_day_20221008 {
 public:
 	// 贪心
 	vector<int> advantageCount_0(vector<int>& nums1, vector<int>& nums2) {
