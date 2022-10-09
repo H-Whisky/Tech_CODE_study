@@ -554,3 +554,67 @@ void main() {
 	}
 }
 #endif
+
+#if 1
+class Solution_856_day_20221009 {
+public:
+	// 栈
+	int scoreOfParentheses_0(string s) {
+		stack<int> st;
+		st.push(0);
+		for (auto c : s) {
+			if (c == '(') {
+				st.push(0);
+			}
+			else {
+				int v = st.top();
+				st.pop();
+				st.top() += max(2 * v, 1);
+			}
+		}
+		return st.top();
+	}
+
+	// 分治 ?
+	int scoreOfParentheses_1(string s) {
+		if (s.size() == 2) {
+			return 1;
+		}
+		int bal = 0, n = s.size(), len;
+		for (int i = 0; i < n; ++i) {
+			bal += (s[i] == '('?1:-1);
+			if (bal == 0) {
+				len = i + 1;
+				break;
+			}
+		}
+		if (len == n) {
+			return 2 * scoreOfParentheses_1(s.substr(1, n - 2));
+		}
+		else {
+			return scoreOfParentheses_1(s.substr(0, len)) + scoreOfParentheses_1(s.substr(len, n - len));
+		}
+	}
+
+	// 计算最终分数和
+	int scoreOfParentheses_2(string s) {
+		int bal = 0, n = s.size(), res = 0;
+		for (int i = 0; i < n; ++i) {
+			bal += (s[i] == '(' ? 1 : -1);
+			if (s[i] == ')' && s[i - 1] == '(') {
+				res += 1 << bal;
+			}
+		}
+		return res;
+	}
+
+};
+
+void main() {
+	string s = {"(())()"};
+	Solution_856_day_20221009* sol = new Solution_856_day_20221009;
+	//cout << sol->scoreOfParentheses_0(s) << endl;
+	//cout << sol->scoreOfParentheses_1(s) << endl;
+	cout << sol->scoreOfParentheses_2(s) << endl;
+}
+#endif
