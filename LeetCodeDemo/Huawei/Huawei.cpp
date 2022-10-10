@@ -6,6 +6,7 @@
 #include <stack>
 #include <unordered_set>
 #include <unordered_map>
+#include <map>
 using namespace std;
 
 struct TreeNode {
@@ -1205,7 +1206,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_437 {
 public:
 	// 深度优先搜索
@@ -1286,6 +1287,190 @@ void main() {
 }
 #endif
 
+#if 0
+class Solution_1248 {
+public:
+	// 滑动窗口
+	int numberOfSubarrays_0(vector<int>& nums, int k) {
+		int left = 0, right = 0, oddCnt = 0, res = 0;
+		while (right < nums.size()) {
+			// 右指针先走，每遇到一个奇数则oddCnt++
+			if ((nums[right++]) % 2 != 0) {
+				oddCnt++;
+			}
+
+			// 若当前滑动窗口[left, right) 中有k个奇数了，进入此分支统计当前滑动窗口的优美子数组个数。
+			if (oddCnt == k) {
+				// 先将滑动窗口的右边界向右拓展，直到遇到下一个奇数（或出界）
+				// rightEvenCnt 即为第k个奇数右边的偶数的个数
+				int tmp = right;
+				while (right < nums.size() && nums[right] % 2 == 0) {
+					right++;
+				}
+				int rightEvenCnt = right - tmp;
+				// leftEvenCnt 即为第1个奇数左边的偶数的个数
+				int leftEvenCnt = 0;
+				while ((nums[left] % 2) == 0) {
+					leftEvenCnt++;
+					left++;
+				}
+				// 第 1 个奇数左边的 leftEvenCnt 个偶数都可以作为优美子数组的起点
+				// (因为第1个奇数左边可以1个偶数都不取，所以起点的选择有 leftEvenCnt + 1 种）
+				// 第 k 个奇数右边的 rightEvenCnt 个偶数都可以作为优美子数组的终点
+				// (因为第k个奇数右边可以1个偶数都不取，所以终点的选择有 rightEvenCnt + 1 种）
+				// 所以该滑动窗口中，优美子数组左右起点的选择组合数为 (leftEvenCnt + 1) * (rightEvenCnt + 1)
+				res += (leftEvenCnt + 1) * (rightEvenCnt + 1);
+
+				// 此时left指向的是第1个奇数，因为该区间已经统计完了，因此left右移一位，oddCnt--
+				left++;
+				oddCnt--;
+			}
+		}
+		return res;
+	}
+
+	// 前缀和
+	int numberOfSubarrays_1(vector<int>& nums, int k) {
+		// 数组prefixCnt的下标是前缀和（即当前奇数的个数），值是前缀和的个数
+		vector<int> prefixCnt(nums.size()+1);
+		prefixCnt[0] = 1;
+		// 遍历原数组，计算当前的前缀和，统计到prefixCnt数组中，
+		// 并且在res中累加上与当前前缀和差值为k的前缀和的个数
+		int res = 0, sum = 0;
+		for (int num : nums) {
+			sum += num & 1;
+			prefixCnt[sum]++;
+			if (sum >= k) {
+				res += prefixCnt[sum - k];
+			}
+		}
+		return res;
+
+	}
+};
+
+void main() {
+	vector <int> nums = { 1,1,2,1,1 };
+	Solution_1248* sol = new Solution_1248;
+	//cout << sol->numberOfSubarrays_0(nums, 3)<<endl;
+	cout << sol->numberOfSubarrays_1(nums, 3);
+
+}
+#endif
+
+#if 0
+class Solution_1094 {
+public:
+	//  根据上车地点排序， 然后用一个map记录下车地点和乘客人数； 
+	//	每次pick up 新乘客前， 先drop off旧的乘客。
+	bool carPooling_0(vector<vector<int>>& trips, int capacity) {
+		// 根据上车地点排序
+		sort(trips.begin(), trips.end(), [&](const vector<int>& t1, const vector<int>& t2) {return t1[1] < t2[1]; });
+
+		map<int, int> m; // {end => passengers}
+		int passengers = 0;
+		for (auto t : trips) {
+			for (auto it = m.begin(); it != m.end();) {
+				// 车上到终点的人下车
+				if (it->first <= t[1]) {
+					passengers -= it->second;
+					m.erase(it++);
+				}
+				else {
+					break;
+				}
+			}
+			// new passengers get on
+			passengers += t[0];
+			if (passengers > capacity) {
+				return false;
+			}
+			m[t[2]] += t[0];
+		}
+		return true;
+	}
+
+	// 利用map内数据本身就有序的特性， 把上车地点和上车乘客人数，
+	// 以及下车地点和下车人数都放进map中， 然后遍历整个map计算实时乘客人数即可。
+	bool carPooling_1(vector<vector<int>>& trips, int capacity) {
+		map<int, int> m; // {first:start -> second:passengers}
+		for (auto & t: trips) {
+			m[t[1]] += t[0]; // pick up
+			m[t[2]] -= t[0]; // drop off
+		}
+		int passengers = 0;
+		for (auto it : m) {
+			passengers += it.second;
+			if (passengers > capacity) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// 比较取巧的方法， 既然路程的总长已经给定了不超过1000， 
+	// 那么先初始化一个1001 的数组， 在上车点和下车点分别加上/减去乘客人数。 
+	// 然后遍历整个数组计算乘客人数， 超过capacity则返回false。
+	bool carPooling_2(vector<vector<int>>& trips, int capacity) {
+		vector<int> road(1001, 0);
+		for (auto& t : trips) {
+			road[t[1]] += t[0];
+			road[t[2]] -= t[0];
+		}
+		int count = 0;
+		for (auto i : road) {
+			count += i;
+			if (count > capacity) {
+				return false;
+			}
+		}
+		return true;
+	}
+};
+
+void main() {
+	vector<vector<int>> trips = { {2,1,5},{3,3,7} };
+	int capacity = 5;
+	Solution_1094* sol = new Solution_1094;
+	//cout << sol->carPooling_0(trips, capacity);
+	cout << sol->carPooling_1(trips, capacity);
+}
+#endif
+
+#if 0
+class Solution_121 {
+public:
+	// 暴力枚举
+	int maxProfit_0(vector<int>& prices) {
+		int maxPrice = 0;
+		for (int i = 0; i < prices.size(); ++i) {
+			for (int j = i + 1; j < prices.size(); ++j) {
+				maxPrice = max(maxPrice, prices[j]-prices[i]);
+			}
+		}
+		return maxPrice;
+	}
+
+	// 差分
+	int maxProfit_1(vector<int>& prices) {
+		int maxPrice = 0, pre = prices[0];
+		for (int i = 1; i < prices.size(); ++i) {
+			maxPrice = max(maxPrice, prices[i] - pre);
+			pre = min(pre, prices[i]);
+		}
+		return maxPrice;
+	}
+};
+
+void main() {
+	vector<int> prices = { 7, 1, 5, 3, 6, 4 };
+	//vector<int> prices = { 7, 6, 4, 3, 1};
+	Solution_121* sol = new Solution_121;
+	cout << sol->maxProfit_0(prices) << endl;
+	cout << sol->maxProfit_1(prices) << endl;
+
+}
+#endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
