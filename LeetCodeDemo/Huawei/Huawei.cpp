@@ -1471,6 +1471,41 @@ void main() {
 
 }
 #endif
+
+#if 1
+class Solution_122 {
+public:
+	// 贪心
+	int maxProfit_0(vector<int>& prices) {
+		int ans = 0;
+		for (int i = 1; i < prices.size(); i++) {
+			ans += max(prices[i] - prices[i - 1], 0);
+		}
+		return ans;
+	}
+
+	// 动态规划
+	int maxProfit_1(vector<int>& prices) {
+		int n = prices.size();
+		int dp0 = 0, dp1 = -prices[0];
+		for (int i = 1; i < n; ++i) {
+			int newDp0 = max(dp0, dp1 + prices[i]);
+			int newDp1 = max(dp1, dp0 - prices[i]);
+			dp0 = newDp0;
+			dp1 = newDp1;
+		}
+		return dp0;
+	}
+};
+
+void main() {
+	vector<int> prices = { 7,1,5,3,6,4 };
+	Solution_122* sol = new Solution_122;
+	//cout << sol->maxProfit_0(prices) << endl;
+	cout << sol->maxProfit_1(prices) << endl;
+
+}
+#endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
