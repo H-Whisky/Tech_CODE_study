@@ -555,7 +555,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_856_day_20221009 {
 public:
 	// 栈
@@ -616,5 +616,36 @@ void main() {
 	//cout << sol->scoreOfParentheses_0(s) << endl;
 	//cout << sol->scoreOfParentheses_1(s) << endl;
 	cout << sol->scoreOfParentheses_2(s) << endl;
+}
+#endif
+
+#if 1
+class Solution_1790_day_20221011 {
+public:
+	// 计数统计
+	bool areAlmostEqual_0(string s1, string s2) {
+		int n = s1.size();
+		vector<int> diff;
+		for (int i = 0; i < n; ++i) {
+			if (s1[i] != s2[i]) {
+				diff.emplace_back(i);
+			}
+		}
+		if (diff.size() == 0) 
+		{ 
+			return true; 
+		}
+		if (diff.size() != 2) {
+			return false;
+		}
+		return s1[diff[0]] == s2[diff[1]] && s1[diff[1]] == s2[diff[0]];
+	}
+};
+
+void main() {
+	Solution_1790_day_20221011* sol = new Solution_1790_day_20221011;
+	string s1 = { "bank" }, s2 = { "kanb" };
+	//string s1 = { "attack" }, s2 = { "defend" };
+	cout << sol->areAlmostEqual_0(s1, s2) << endl;
 }
 #endif
