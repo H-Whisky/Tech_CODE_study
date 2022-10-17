@@ -619,7 +619,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_1790_day_20221011 {
 public:
 	// 计数统计
@@ -647,5 +647,61 @@ void main() {
 	string s1 = { "bank" }, s2 = { "kanb" };
 	//string s1 = { "attack" }, s2 = { "defend" };
 	cout << sol->areAlmostEqual_0(s1, s2) << endl;
+}
+#endif
+
+#if 1
+class Solution_904_day_20221017 {
+public:
+	// 滑动窗口(wrong)
+	int totalFruit_0(vector<int>& fruits) {
+		int left = 0, right = 0;
+		set<int> bucket_set;
+		int max_bucket_size = INT_MIN;
+		while (left != fruits.size() - 1) {
+			bucket_set.insert(fruits[right]);
+			if (bucket_set.size() == 3) {
+				right = left;
+				bucket_set.clear();
+			}
+			else {
+				max_bucket_size = max(max_bucket_size, right - left);
+			}
+			right++;
+			if (right >= fruits.size()- left) {
+				right = ++left;
+			}
+			
+		}
+		return max_bucket_size;
+	}
+
+	// 滑动窗口(right)
+	int totalFruit_1(vector<int>& fruits) {
+		int n = fruits.size();
+		unordered_map<int, int> cnt;
+
+		int left = 0, ans = 0;
+		for (int right = 0; right < n; ++right) {
+			++cnt[fruits[right]];
+			while (cnt.size() > 2) {
+				auto it = cnt.find(fruits[left]);
+				--it->second;
+				if (it->second == 0) {
+					cnt.erase(it);
+				}
+				++left;
+			}
+			ans = max(ans, right - left + 1);
+		}
+		return ans;
+	}
+};
+
+void main() {
+	Solution_904_day_20221017* sol = new Solution_904_day_20221017;
+	//vector<int> fruits = { 1,2,1 };
+	vector<int> fruits = { 0,1,2,2 };
+	cout << sol->totalFruit_1(fruits) << endl;
 }
 #endif
