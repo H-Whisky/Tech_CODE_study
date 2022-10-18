@@ -650,7 +650,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_904_day_20221017 {
 public:
 	// 滑动窗口(wrong)
@@ -703,5 +703,64 @@ void main() {
 	//vector<int> fruits = { 1,2,1 };
 	vector<int> fruits = { 0,1,2,2 };
 	cout << sol->totalFruit_1(fruits) << endl;
+}
+#endif
+
+#if 1
+class Solution_902_day_20221018 {
+public:
+	// 数位DP
+	/*
+	1. 如果我们生成的数字的位数 是 小于 n的位数的话
+	如果生成的数字有i位的话，那么就有digits.size()^i
+
+	2. 我们生成的数字 位数 和 n的位数相同
+		n = 7386 1 3 5 7 => rev(n):6837 num[0-3]
+		n = 7133 1 3 5 7
+	*/
+	int power(int a, int b) {
+		int res = 1;
+		while (b--) res *= a;
+		return res;
+	}
+	int atMostNGivenDigitSet_0(vector<string>& digits, int n) {
+		// n转为字符串，截取每位数字
+		string num = to_string(n);
+		reverse(num.begin(), num.end());
+		int res = 0;
+		// 	1. 如果我们生成的数字的位数 是 小于 n的位数的话
+		//	   如果生成的数字有i位的话，那么就有digits.size() ^ i
+		for (int i = 1; i < num.size(); i++) res += power(digits.size(), i);
+
+		// 2. 我们生成的数字 位数 和 n的位数相同
+		//	  n = 7386 1 3 5 7 = > rev(n) :6837 num[0 - 3]
+		//	  n = 7133 1 3 5 7
+		bool flag = true;
+		for (int i = num.size() - 1; i >= 0; i--) {
+			int x = num[i] - '0';
+			int cnt = power(digits.size(), i);
+			int j;
+			for (j = 0; j < digits.size(); j++) {
+				if (digits[j][0] - '0' < x) {
+					res += cnt;
+				}
+				else {
+					break;
+				}
+			}
+			if (j < digits.size() && digits[j][0] - '0' == x) continue;
+			flag = false;
+			break;
+		}
+		if (flag) res++;
+		return res;
+	}
+};
+
+void main() {
+	vector<string> digits = { "1", "3", "5", "7" };
+	int n = 100;
+	Solution_902_day_20221018* sol = new Solution_902_day_20221018;
+	cout << sol->atMostNGivenDigitSet_0(digits, n) << endl;
 }
 #endif
