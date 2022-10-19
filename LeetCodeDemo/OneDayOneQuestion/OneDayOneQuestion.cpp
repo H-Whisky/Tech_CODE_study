@@ -706,7 +706,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_902_day_20221018 {
 public:
 	// 数位DP
@@ -762,5 +762,63 @@ void main() {
 	int n = 100;
 	Solution_902_day_20221018* sol = new Solution_902_day_20221018;
 	cout << sol->atMostNGivenDigitSet_0(digits, n) << endl;
+}
+#endif
+
+#if 1
+class Solution_1700_day_20221019 {
+public:
+	// 计数器运用题
+	int countStudents_0(vector<int>& students, vector<int>& sandwiches) {
+		// sandwiches 入栈
+		stack<int> sandwiches_t;
+		for (auto it = sandwiches.rbegin(); it != sandwiches.rend(); it ++) {
+			sandwiches_t.push(*it);
+		}
+		// students 入队列
+		queue<int> students_q;
+		for (auto it = students.begin();it!=students.end();it++) {
+			students_q.push(*it);
+		}
+
+		clock_t start = clock();
+		while (clock() - start < 1500 && !students_q.empty()) {
+			int cur = students_q.front();
+			students_q.pop();
+			if (cur == sandwiches_t.top()) {
+				sandwiches_t.pop();
+			}
+			else {
+				students_q.push(cur);
+			}
+		}
+		return students_q.size();
+	}
+
+	// 模拟
+	int countStudents_1(vector<int>& students, vector<int>& sandwiches) {
+		int s1 = accumulate(students.begin(), students.end(), 0 );
+		int s0 = students.size() - s1;
+		for (int i = 0; i < sandwiches.size(); i++) {
+			if (sandwiches[i] == 0 && s0 > 0) {
+				s0--;
+			}
+			else if (sandwiches[i] == 1 && s1 > 0) {
+				s1--;
+			}
+			else {
+				break;
+			}
+		}
+		return s1 + s0;
+
+	}
+};
+
+void main() {
+	Solution_1700_day_20221019* sol = new Solution_1700_day_20221019;
+	vector<int> students = { 1,1,0,0 };
+	vector<int> sandwiches = { 0 , 1, 0 ,1 };
+	cout << sol->countStudents_0(students, sandwiches);
 }
 #endif
