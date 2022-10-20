@@ -765,7 +765,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_1700_day_20221019 {
 public:
 	// 计数器运用题
@@ -820,5 +820,28 @@ void main() {
 	vector<int> students = { 1,1,0,0 };
 	vector<int> sandwiches = { 0 , 1, 0 ,1 };
 	cout << sol->countStudents_0(students, sandwiches);
+}
+#endif
+
+#if 1
+class Solution_779_day_20221020 {
+public:
+	// 找规律 + 递归
+	int kthGrammar_0(int n, int k) {
+		if (n == 1) {
+			return 0;
+		}
+		if (k > (1 << (n - 2))) {
+			return 1 ^ (kthGrammar_0(n - 1, k - (1 << (n - 2))));
+		}
+		return kthGrammar_0(n - 1, k);
+	}
+};
+
+void main() {
+	Solution_779_day_20221020* sol = new Solution_779_day_20221020;
+	int n = 2, k = 2;
+	cout << sol->kthGrammar_0(n, k) << endl;
+
 }
 #endif
