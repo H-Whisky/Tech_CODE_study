@@ -836,12 +836,24 @@ public:
 		}
 		return kthGrammar_0(n - 1, k);
 	}
+
+	// 找规律 + 位运算
+	int kthGrammar_1(int n, int k) {
+		k--;
+		int res = 0;
+		while (k > 0) {
+			k &= k - 1;
+			res ^= 1;
+		}
+		return res;
+	}
 };
 
 void main() {
 	Solution_779_day_20221020* sol = new Solution_779_day_20221020;
 	int n = 2, k = 2;
 	cout << sol->kthGrammar_0(n, k) << endl;
+	cout << sol->kthGrammar_1(n, k) << endl;
 
 }
 #endif
