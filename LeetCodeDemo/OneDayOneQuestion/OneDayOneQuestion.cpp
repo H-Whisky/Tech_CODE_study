@@ -823,7 +823,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_779_day_20221020 {
 public:
 	// 找规律 + 递归
@@ -854,6 +854,57 @@ void main() {
 	int n = 2, k = 2;
 	cout << sol->kthGrammar_0(n, k) << endl;
 	cout << sol->kthGrammar_1(n, k) << endl;
+
+}
+#endif
+
+#if 1
+/*
+                -  
+      - 
+    -         -
+  -     -   -
+-         - 
+1 2 3 4 5 6 7 8 9
+*/
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner* obj = new StockSpanner();
+ * int param_1 = obj->next(price);
+ */
+class Solution_901_day_20221021 {
+private :
+	stack<pair<int, int>> stk;
+	int idx;
+public:
+	// 单调栈
+	Solution_901_day_20221021() {
+		this->stk.emplace(-1, INT_MAX);
+		this->idx = -1;
+
+	}
+
+	int next(int price) {
+		idx++;
+		while (price >= stk.top().second) {
+			stk.pop();
+		}
+		int ret = idx - stk.top().first;
+		stk.emplace(idx, price);
+		return ret;
+	}
+};
+
+void main() {
+	Solution_901_day_20221021* sol = new Solution_901_day_20221021;
+	cout << sol->next(NULL) << endl;
+	cout << sol->next(100) << endl;
+	cout << sol->next(80)<< endl;
+	cout << sol->next(60)<< endl;
+	cout << sol->next(70)<< endl;
+	cout << sol->next(60)<< endl;
+	cout << sol->next(75)<< endl;
+	cout << sol->next(85)<< endl;
 
 }
 #endif
