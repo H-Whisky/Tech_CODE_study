@@ -909,7 +909,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_915_day_20221024 {
 public:
 	// 两次遍历
@@ -952,4 +952,67 @@ void main() {
 	cout << sol->partitionDisjoint_1(nums) << endl;
 }
 
+#endif
+
+#if 1
+class Solution_1822_day_20221027 {
+public:
+	// 暴力枚举
+	int arraySign_0(vector<int>& nums) {
+		int res = 1;
+		for (int i = 0; i < nums.size(); i++) {
+			if (nums[i] == 0) {
+				return 0;
+			}
+			res *= nums[i];
+		}
+		if (res > 0) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
+	}
+
+	// 算负数个数
+	int arraySign_1(vector<int>& nums) {
+		int negSum = 0;
+		for (int i = 0; i < nums.size(); i++) {
+			if (nums[i] == 0) {
+				return 0;
+			}
+			else if (nums[i] < 0) {
+				negSum++;
+			}
+		}
+		if (negSum % 2 == 0) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
+	}
+
+	// 取反
+	int arraySign_2(vector<int>& nums) {
+		int sign = 1;
+		for (auto num : nums) {
+			if (num == 0) {
+				return 0;
+			}
+			if (num < 0) {
+				sign = -sign;
+			}
+		}
+		return sign;
+	}
+};
+
+void main() {
+	Solution_1822_day_20221027* sol = new Solution_1822_day_20221027;
+	vector<int> nums = { -1,-2,-3,-4,3,2,1 };
+	cout << sol->arraySign_0(nums) << endl;
+	cout << sol->arraySign_1(nums) << endl;
+	cout << sol->arraySign_2(nums) << endl;
+}
 #endif
