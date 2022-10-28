@@ -954,7 +954,7 @@ void main() {
 
 #endif
 
-#if 1
+#if 0
 class Solution_1822_day_20221027 {
 public:
 	// 暴力枚举
@@ -1014,5 +1014,48 @@ void main() {
 	cout << sol->arraySign_0(nums) << endl;
 	cout << sol->arraySign_1(nums) << endl;
 	cout << sol->arraySign_2(nums) << endl;
+}
+#endif
+
+#if 1
+class Solution_907_day_20221028 {
+public:
+	// 单调栈
+	int sunSubarrayMins_0(vector<int>& arr) {
+		int n = arr.size();
+		// 单调栈，求上一个更小元素
+		stack<int> stk;
+		// dp[i] 表示以i结尾的子数组的最小值之和
+		vector<int> dp(n);
+		for (int i = 0; i < n; i++) {
+			while (!stk.empty() && arr[stk.top()] >= arr[i]) {
+				stk.pop();
+			}
+			// 上一个更小元素
+			int preIdx = stk.empty() ? -1 : stk.top();
+			stk.push(i);
+
+			if (preIdx == -1) {
+				// 如果没有上一个更小元素，则以i结尾的i+1区间的最小值都为arr[i]
+				dp[i] = arr[i] * (i + 1);
+			}
+			else {
+				// 如果存在上一个更小元素，则[preIdx,i]之间的所有子区间的最小值都为arr[i]
+				dp[i] = dp[preIdx] + arr[i] * (i - preIdx);
+			}
+		}
+		int res = 0;
+		long mod = 1e9 + 7;
+		for (int cnt : dp) {
+			res = (res + cnt) % mod;
+		}
+		return res;
+	}
+};
+
+int main() {
+	Solution_907_day_20221028* sol = new Solution_907_day_20221028;
+	vector<int> arr = { 3,1,2,4 };
+	cout << sol->sunSubarrayMins_0(arr) << endl;
 }
 #endif
