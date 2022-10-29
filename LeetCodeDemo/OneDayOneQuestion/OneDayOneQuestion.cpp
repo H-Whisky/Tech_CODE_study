@@ -1017,7 +1017,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_907_day_20221028 {
 public:
 	// 单调栈
@@ -1057,5 +1057,55 @@ int main() {
 	Solution_907_day_20221028* sol = new Solution_907_day_20221028;
 	vector<int> arr = { 3,1,2,4 };
 	cout << sol->sunSubarrayMins_0(arr) << endl;
+}
+#endif
+
+#if 1
+class Solution_1773_day_20221029 {
+public:
+	// ?
+	int countMatches_0(vector<vector<string>>& items, string ruleKey, string ruleValue) {
+		// type color name
+		int index;
+		if (ruleKey == "type") {
+			index = 0;
+		}
+		else if (ruleKey == "color") {
+			index = 1;
+		}
+		else {
+			index = 2;
+		}
+
+		unordered_map<string, int> map;
+		for (int i = 0; i < items.size(); ++i) {
+			++map[items[i][index]];
+		}
+		return  map.find(ruleValue)->second;
+	}
+
+	// 模拟
+	int countMatches_1(vector<vector<string>>& items, string ruleKey, string ruleValue) {
+		unordered_map<string, int> dic = { {"type",0},{"color",1},{"name",2} };
+		int res = 0, index = dic[ruleKey];
+		for (auto&& item : items) {
+			if (item[index] == ruleValue) {
+				res++;
+			}
+		}
+		return res;
+	}
+};
+
+void main() {
+	Solution_1773_day_20221029* sol = new Solution_1773_day_20221029;
+	vector<vector<string>> items = { {"phone","blue","pixel"}, {"computer","silver","lenovo"},{"phone","gold","iphone"} };
+	//vector<vector<string>> items = { { "phone","blue","pixel"},{"computer","silver","phone"},{"phone","gold","iphone"} };
+	string ruleKey = "color";
+	string ruleValue = "silver";
+	//string ruleKey = "type";
+	//string ruleValue = "phone";
+	cout << sol->countMatches_0(items, ruleKey, ruleValue);
+	cout << sol->countMatches_1(items, ruleKey, ruleValue);
 }
 #endif
