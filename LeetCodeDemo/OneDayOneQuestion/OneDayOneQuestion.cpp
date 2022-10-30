@@ -1060,7 +1060,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_1773_day_20221029 {
 public:
 	// ?
@@ -1107,5 +1107,50 @@ void main() {
 	//string ruleValue = "phone";
 	cout << sol->countMatches_0(items, ruleKey, ruleValue);
 	cout << sol->countMatches_1(items, ruleKey, ruleValue);
+}
+#endif
+
+#if 1
+class Solution_784_day_20221030 {
+	vector<string> res;
+	int len;
+public:
+	// 回溯
+	vector<string> letterCasePermutation(string s) {
+		this->len = s.size();
+		dfs(0, s);
+		return res;
+
+	}
+
+	void dfs(int pos, string& s) {
+		if (pos == len) {
+			res.push_back(s);
+			return;
+		}
+
+		if (s[pos] >= '0' && s[pos] <= '9') {
+			dfs(pos + 1, s);
+			return;
+		}
+
+		dfs(pos + 1, s);
+
+		if (s[pos] >= 'a' && s[pos] <= 'z') {
+			s[pos] -= 32;
+		}
+		else if (s[pos] >= 'A' && s[pos] <= 'Z') {
+			s[pos] += 32;
+		}
+		dfs(pos + 1, s);
+	}
+};
+
+void main() {
+	Solution_784_day_20221030* sol = new Solution_784_day_20221030;
+	string s = "a1b2";
+	for (auto it : sol->letterCasePermutation(s)) {
+		cout << it << endl;
+	}
 }
 #endif
