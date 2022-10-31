@@ -1110,7 +1110,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_784_day_20221030 {
 	vector<string> res;
 	int len;
@@ -1152,5 +1152,58 @@ void main() {
 	for (auto it : sol->letterCasePermutation(s)) {
 		cout << it << endl;
 	}
+}
+#endif
+
+#if 1
+class Sol_481_day_20221031 {
+public:
+	// 构造字符串
+	// 小技巧：字符 '1' 变 '2'，'2' 变 '1' 可以用「异或 3」来实现。
+	//	'1' 的 ASCII 码为 49，'2' 的 ASCII 码为 50。
+	//	转换为二进制就是 '1' = 0011 0001，'2' = 0011 0010。
+	//	可以看到只有最后两位是不同的，而 0 变 1，1 变 0 可以用「异或 1 」来实现。
+	//	所以 01 ^ 11 = 10，10 ^ 11 = 01。
+	int magicalString_0(int n) {
+		string s = "122";
+		char c = '1';
+		for (int i = 2; i < n; i++) {
+			if (s[i] == '1') {
+				s += string(1, c);
+			}
+			else {
+				s += string(2, c);
+			}
+			// c = c == '1' ? '2' : '1';
+			c ^= 3;
+		}
+		return count(s.begin(), s.begin() + n, '1');
+	}
+
+	// 边构造边统计
+	int magicalString_1(int n) {
+		string s = "122";
+		char c = '1';
+		int i = 2, cnt = 1;
+		while (s.size() < n) {
+			s += c;
+			cnt += c == '1';
+			if (s[i] == '2' && s.size() < n) {
+				// 如果s[i] 是 2 就多加一个c
+				// 如果s.size() == n时，不再统计
+				s += c;
+				cnt += c == '1';
+			}
+			i++;
+			c ^= 3;
+		}
+		return cnt;
+	}
+};
+
+void main() {
+	Sol_481_day_20221031* sol = new Sol_481_day_20221031;
+	cout << sol->magicalString_0(6) << endl;
+	cout << sol->magicalString_1(6) << endl;
 }
 #endif
