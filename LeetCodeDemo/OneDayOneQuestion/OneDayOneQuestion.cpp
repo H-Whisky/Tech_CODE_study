@@ -1155,7 +1155,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Sol_481_day_20221031 {
 public:
 	// 构造字符串
@@ -1205,5 +1205,54 @@ void main() {
 	Sol_481_day_20221031* sol = new Sol_481_day_20221031;
 	cout << sol->magicalString_0(6) << endl;
 	cout << sol->magicalString_1(6) << endl;
+}
+#endif
+
+#if 1
+class Solution_1662_day_20221101 {
+public:
+	// 字符串拼接
+	bool arrayStringsAreEqual_0(vector<string>& word1, vector<string>& word2) {
+		string word1_str, word2_str;
+		for (auto it : word1) {
+			word1_str += it;
+		}		
+		for (auto it : word2) {
+			word2_str += it;
+		}
+		if (word1_str == word2_str) {
+			return true;
+		}
+		return false;
+	}
+
+	// 遍历
+	bool arrayStringsAreEqual_1(vector<string>& word1, vector<string>& word2) {
+		int p1 = 0, p2 = 0, i = 0, j = 0;
+		while (p1 < word1.size() && p2 < word2.size()) {
+			if (word1[p1][i] != word2[p2][j]) {
+				return false;
+			}
+			i++;
+			if (i == word1[p1].size()) {
+				p1++;
+				i = 0;
+			}
+			j++;
+			if (j == word2[p2].size()) {
+				p2++;
+				j = 0;
+			}
+		}
+		return p1 == word1.size() && p2 == word2.size();
+	}
+};
+
+void main() {
+	Solution_1662_day_20221101* sol = new Solution_1662_day_20221101;
+	vector<string> word1 = { "ab","c" };
+	vector<string> word2 = { "a", "bc" };
+	cout << sol->arrayStringsAreEqual_0(word1, word2) << endl;
+	cout << sol->arrayStringsAreEqual_1(word1, word2) << endl;
 }
 #endif
