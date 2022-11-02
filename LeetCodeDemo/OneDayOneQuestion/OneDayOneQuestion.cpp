@@ -12,6 +12,7 @@
 #include <sstream>
 #include <map>
 #include <numeric>      // std::iot
+#include<math.h>
 
 using namespace std;
 
@@ -1208,7 +1209,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_1662_day_20221101 {
 public:
 	// 字符串拼接
@@ -1255,4 +1256,50 @@ void main() {
 	cout << sol->arrayStringsAreEqual_0(word1, word2) << endl;
 	cout << sol->arrayStringsAreEqual_1(word1, word2) << endl;
 }
+#endif
+
+#if 1
+class Sol_1620_day_20221102 {
+public:
+	// 遍历
+	vector<int> baseCoordinate_0(vector<vector<int>>& towers, int radius) {
+		int maxq = 0, resx = 0, resy = 0;
+		for (int i = 0; i < towers.size(); i++) {
+			for (int j = 0; j < towers.size(); j++) {
+				int quality = 0;
+				for (auto tower : towers) {
+					int x = tower[0], y = tower[1], q = tower[2];
+					int d2 = (x - i) * (x - i) + (y - j) * (y - j);
+					if (d2 <= radius * radius) {
+						quality += (int)(q / (1 + sqrt(d2)));
+					}
+				}
+
+				//int origin_x = towers[i][0], origin_y = towers[i][1];
+				//int des_x = towers[j][0], des_y = towers[j][1];
+				//int dis = (des_x - origin_x) * (des_x - origin_x) + (des_y - origin_y) * (des_y - origin_y);
+				//if (dis <= radius * radius) {
+				//	quality += (int)(towers[j][2] / (1 + sqrt(dis)));
+				//}
+				if (maxq < quality) {
+					maxq = quality;
+					resx = i;
+					resy = j;
+				}
+			}
+		}
+		return { resx, resy };
+	}
+};
+
+void main() {
+	Sol_1620_day_20221102* sol = new Sol_1620_day_20221102;
+	vector<vector<int>> towers = { {1,2,5},{2,1,7},{3,1,9} };
+	int radius = 2;
+	auto res = sol->baseCoordinate_0(towers, radius);
+	for (auto it : res) {
+		cout << it << endl;
+	}
+}
+
 #endif
