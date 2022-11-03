@@ -1258,7 +1258,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Sol_1620_day_20221102 {
 public:
 	// 遍历
@@ -1302,4 +1302,32 @@ void main() {
 	}
 }
 
+#endif
+
+
+#if 1
+class Solution_1668_day_20221103 {
+public:
+	// 简单枚举
+	int maxRepeating_0(string sequence, string word) {
+		int ans = 0;
+		string t = word;
+		int x = sequence.size() / word.size();
+		for (int k = 1; k <= x; ++k) {
+			// 从小到大枚举重复值
+			if (sequence.find(t) != string::npos) {
+				ans = k;
+			}
+			t += word;
+		}
+		return ans;
+	}
+};
+
+void main() {
+	Solution_1668_day_20221103* sol = new Solution_1668_day_20221103;
+	//string sequence = "ababc", word = "ab";
+	string sequence = "ababc", word = "ba";
+	cout << sol->maxRepeating_0(sequence, word);
+}
 #endif
