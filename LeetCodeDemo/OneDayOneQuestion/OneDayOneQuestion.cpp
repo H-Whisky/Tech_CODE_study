@@ -1305,7 +1305,7 @@ void main() {
 #endif
 
 
-#if 1
+#if 0
 class Solution_1668_day_20221103 {
 public:
 	// 简单枚举
@@ -1329,5 +1329,27 @@ void main() {
 	//string sequence = "ababc", word = "ab";
 	string sequence = "ababc", word = "ba";
 	cout << sol->maxRepeating_0(sequence, word);
+}
+#endif
+
+#if 1
+class Sol_754_day_20221104 {
+public:
+
+	// 分析+数学
+	int reachNumber(int target) {
+		target = abs(target);
+		int k = 0;
+		while (target > 0) {
+			k++;
+			target -= k;
+		}
+		return target % 2 == 0 ? k : k + 1 + k % 2;
+	}
+};
+
+void main() {
+	Sol_754_day_20221104* sol = new Sol_754_day_20221104;
+	cout << sol->reachNumber(2) << endl;
 }
 #endif
