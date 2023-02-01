@@ -1354,7 +1354,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Sol_1971_day_20221219 {
 public:
 	// 广度优先搜索
@@ -1418,5 +1418,17 @@ void main() {
 	cout << sol->validPath_0(n, edges, source, destination) << endl;
 	cout << sol->validPath_1(n, edges, source, destination) << endl;
 	
+}
+#endif
+
+#if 0
+// 不同变量共享同一地址空间
+int main() {
+	int x = 5;
+	int* p1 = &x;
+	int* p2 = &x;
+	*p1 = 10;
+	std::cout << *p2 << std::endl;
+	return 0;
 }
 #endif
