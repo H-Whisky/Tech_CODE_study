@@ -6,7 +6,7 @@ int main(int argc, const char** argv)
 {
 #if 1
     Mat img = imread("D:\\Workspace\\Anaconda\\JupteNotebook\\Demo\\1_result.jpg", 0);
-    threshold(img, img, 150, 150, THRESH_BINARY_INV); // to delete some noise
+    threshold(img, img, 150, 120, THRESH_BINARY_INV); // to delete some noise
     Mat labels;
     connectedComponents(img, labels, 8, CV_16U);//连通域提取
     Mat maximage = labels == 1;
