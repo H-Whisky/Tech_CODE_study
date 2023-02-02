@@ -1433,7 +1433,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Sol_2325_day_20230201 {
 public:
 	// 模拟
@@ -1461,5 +1461,60 @@ void main() {
 	string message = "vkbs bs t suepuv";
 	Sol_2325_day_20230201* sol = new Sol_2325_day_20230201();
 	cout << sol->decodeMessage_0(key, message) << endl;
+}
+#endif
+
+#if 1
+class Sol_1129_day_20230202 {
+public:
+	// DFS
+	vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& redEdges, vector<vector<int>>& blueEdges) {
+		vector<vector<vector<int>>> next(2, vector<vector<int>>(n));
+		for (auto& e : redEdges) {
+			next[0][e[0]].push_back(e[1]);
+		}
+		for (auto& e : blueEdges) {
+			next[1][e[0]].push_back(e[1]);
+		}
+
+		vector<vector<int>> dist(2, vector<int>(n, INT_MAX)); // 两种类型的颜色最短路径的长度
+		queue<pair<int, int>> q;
+		dist[0][0] = 0;
+		dist[1][0] = 0;
+		q.push({ 0, 0 });
+		q.push({ 0, 1 });
+		//cout << q.front().first << endl;
+		while (!q.empty()) {
+			//auto [x,t] = q.front();
+			auto x = q.front().first;
+			auto t = q.front().second;
+			q.pop();
+			for (auto y : next[1 - t][x]) {
+				if (dist[1 - t][y] != INT_MAX) {
+					continue;
+				}
+				dist[1 - t][y] = dist[t][x] + 1;
+				q.push({ y, 1 - t });
+			}
+		}
+		vector<int> answer(n);
+		for (int i = 0; i < n; i++) {
+			answer[i] = min(dist[0][i], dist[1][i]);
+			if (answer[i] == INT_MAX) {
+				answer[i] = -1;
+			}
+		}
+		return answer;
+	}
+};
+
+void main() {
+	int n = 3;
+	vector<vector<int>> red_edges = { {0,1},{1,2} };
+	vector<vector<int>> blud_edges = {};
+	Sol_1129_day_20230202* sol = new Sol_1129_day_20230202;
+	for (auto it : sol->shortestAlternatingPaths(n, red_edges, blud_edges)) {
+		cout << it << " ";
+	}
 }
 #endif
