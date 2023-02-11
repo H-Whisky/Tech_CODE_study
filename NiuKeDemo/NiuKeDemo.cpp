@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 #ifdef DEBUG
@@ -36,14 +37,70 @@ int main() {
 #endif
 
 
+#if 1
+// https://www.nowcoder.com/practice/f9c6f980eeec43ef85be20755ddbeaf4
+class HUAWEI_HJ16 {
+public:
 
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
+};
 
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
+void main() {
+	// 总钱数<32000
+	int dp[32000];
+	// N:总钱数
+	// m:可购买的物品的个数
+	int N, m;
+	cin >> N >> m;
+
+	// 定义几个数组
+	vector<int> zj(m + 1), zj_vw(m + 1), fj_1(m + 1), fj_1_vw(m + 1), fj_2(m + 1), fj_2_vw(m + 1);
+	
+	for (int i = 1; i <= m; i++) {
+		// v:物品的价格
+		// p:物品的重要程度
+		// q:所属主件的编号，=0为主件，>0为编号
+		int v, p, q;
+		cin >> v >> p >> q;
+		// 主件
+		if (q == 0) {
+			zj[i] = v;
+			zj_vw[i] = v * p;
+		}
+		// 附件1
+		else if (fj_1[q] == 0) {
+			fj_1[q] = v;
+			fj_1_vw[q] = v * p;
+		}
+		// 附件2
+		else if (fj_2[q] == 0) {
+			fj_2[q] = v;
+			fj_2_vw[q] = v * p;
+		}
+	}
+
+	// dp
+	for (int i = 1; i <= m; i++) {
+		for (int j = N; j >= 1; j--) {
+			// 只要主件
+			if (j >= zj[i]) {
+				dp[j] = max(dp[j],dp[j-zj[i]]+zj_vw[i]);
+			}
+
+			// 主件+附件1
+			if (j >= zj[i]- + fj_1[i]) {
+				dp[j] = max(dp[j], dp[j - zj[i] - fj_1[i]] + zj_vw[i]+ fj_1_vw[i]);
+			}
+			// 主件+附件2
+			if (j >= zj[i] + fj_2[i]) {
+				dp[j] = max(dp[j], dp[j - zj[i] - fj_2[i]] + zj_vw[i] + fj_2_vw[i]);
+			}
+			// 主件 + 附件1 + 附件2
+			if (j >= zj[i] + fj_1[i] + fj_2[i]) {
+				dp[j] = max(dp[j], dp[j - zj[i] - fj_1[i]-fj_2[i]] + zj_vw[i] + fj_1_vw[i] + fj_2_vw[i]);
+			}
+		}
+	}
+	cout  << endl;
+	cout << dp[N] << endl;
+}
+#endif
