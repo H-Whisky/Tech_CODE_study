@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_set>
+#include <string>
 using namespace std;
 
 #ifdef DEBUG
@@ -186,7 +188,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // 坐标移动
 // https://www.nowcoder.com/practice/119bcca3befb405fbe58abe9c532eb29
 
@@ -249,4 +251,103 @@ int main() {
 	}
 	return 0;
 }
+#endif
+
+#if 1
+// 密码验证合格程序
+// https://www.nowcoder.com/practice/184edec193864f0985ad2684fbc86841
+
+const std::string OK = "OK";
+const std::string NG = "NG";
+class HUAWEI_HJ20 {
+public:
+	bool check1(const std::string& s) {
+		return s.length() > 8;
+	}
+
+	bool check2(const std::string& s) {
+		int type[4] = { 0, 0, 0, 0 };
+		for (auto& i : s) {
+			if (i == ' ' || i == '\n') {
+				return false;
+			}
+			if (i >= 'A' && i <= 'Z') {
+				type[0] = 1;
+			}
+			else if (i >= 'a' && i <= 'z') {
+				type[1] = 1;
+			}
+			else if (i >= '0' && i <= '9') {
+				type[2] = 1;
+			}
+			else {
+				type[3] = 1;
+			}
+		}
+		if (type[0] + type[1] + type[2] + type[3] < 3) {
+			return false;
+		}
+		return true;
+	}
+
+	bool check3(const std::string& s) {
+		// 法一
+		return check3_func1(s);
+		// 法二
+		return check3_func2(s);
+	}
+
+	bool check3_func1(const std::string& s) {
+		std::unordered_set<std::string> sets;
+		std::string tmp;
+		for (int i = 0; i < s.length() - 2; ++i) {
+			tmp = s.substr(i, 3);
+			if (sets.find(tmp) == sets.end()) {
+				sets.insert(tmp);
+			}
+			else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool check3_func2(const std::string& s) {
+		string::size_type pos;
+		for (int i = 0; i < s.size(); i++) {
+			string sub = s.substr(i, 3);
+			pos = s.find(sub, i + 3);
+			// string::npos是特殊值，说明查找没有匹配
+			// ！= 即匹配了
+			if (pos != string::npos) {
+				break;
+			}
+			if (pos == string::npos) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+};
+
+int main() {
+	HUAWEI_HJ20* hj20 = new HUAWEI_HJ20;
+	std::string in;
+	while (getline(std::cin, in)) {
+		if (hj20->check1(in) && hj20->check2(in) && hj20->check3(in)) {
+			std::cout << OK << '\n';
+		}
+		else {
+			std::cout << NG << '\n';
+		}
+	}
+	return 0;
+}
+#endif
+
+#if 1
+
 #endif
