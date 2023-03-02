@@ -348,7 +348,8 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
+// https://www.nowcoder.com/practice/6d9d69e3898f45169a441632b325c7b4
 class HUAWEI_HJ24 {
 public:
 	int solution_1() {
@@ -450,4 +451,46 @@ int main() {
 	hj24->solution_2();
 	return 0;
 }
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/5190a1db6f4f4ddb92fd9c365c944584
+
+class HUAWEI_HJ26 {
+public:
+	void solution_1() {
+		// 输入
+		string str;
+		// 字母顺序存储
+		vector<char> alp;
+
+		while (getline(cin, str))
+		{
+			alp.clear();
+			for (int i = 0; i < 26; i++) {
+				for (int j = 0; j < str.size(); j++) {
+					// abc
+					if (str[j] - 'a' == i || str[j] - 'A' == i) {
+						alp.push_back(str[j]);
+					}
+				}
+			}
+			// 输出
+			for (int m = 0, n = 0; m < str.size() && n < alp.size(); m++) {
+				if (str[m] >= 'a' && str[m] <= 'z' || str[m] >= 'A' && str[m] <= 'Z') {
+					str[m] = alp[n], n++;
+				}
+			}
+			//
+			cout << str << endl;
+		}
+	}
+};
+
+int main() {
+	HUAWEI_HJ26* sj26 = new HUAWEI_HJ26;
+	sj26->solution_1();
+	return 0;
+}
+
 #endif
