@@ -253,7 +253,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // 密码验证合格程序
 // https://www.nowcoder.com/practice/184edec193864f0985ad2684fbc86841
 
@@ -349,5 +349,105 @@ int main() {
 #endif
 
 #if 1
+class HUAWEI_HJ24 {
+public:
+	int solution_1() {
+		int n;
+		while (cin >> n) {
+			// 输入的数组
+			int tmp;
+			vector<int> v;
+			for (int i = 0; i < n; ++i) {
+				cin >> tmp;
+				v.push_back(tmp);
+			}
 
+			// 最长递增子序列
+			if (v.empty()) return 0;
+			vector<int> dp1(n, 0);
+			for (int i = 0; i < n; ++i) {
+				dp1[i] = 1;
+				for (int j = 0; j < i; ++j) {
+					if (v[i] > v[j]) {
+						dp1[i] = max(dp1[i], dp1[j] + 1);
+					}
+				}
+			}
+
+			// 最长递减子序列
+			vector<int> dp2(n, 0);
+			for (int i = n - 1; i >= 0; --i) {
+				dp2[i] = 1;
+				for (int j = n - 1; j > i; --j) {
+					if (v[i] > v[j]) {
+						dp2[i] = max(dp2[i], dp2[j] + 1);
+					}
+				}
+			}
+
+			int maxLength = 0;
+			for (int i = 0; i < n; ++i) {
+				if (maxLength < dp1[i] + dp2[i] - 1) {
+					// i就是划分中点
+					maxLength = dp1[i] + dp2[i] - 1;
+				}
+			}
+			cout << n - maxLength << endl;
+		}
+		return 0;
+	}
+
+	int solution_2() {
+		int n;
+
+		while (cin >> n) {
+			vector<int> height(n, 1);
+			vector<int> increasenum(n, 1);
+			vector<int> decreasenum(n, 1);
+			vector<int> realnum;
+
+			int tmp;
+			for (int i = 0; i < n; i++) {
+				cin >> height[i];
+				//cin >> tmp, height.push_back(tmp);
+			}
+			// 求递增序列数组人数
+			calcu(height, increasenum);
+
+			// 求递减序列数组人数
+			reverse(height.begin(), height.end());
+			calcu(height, decreasenum);
+			reverse(decreasenum.begin(), decreasenum.end());
+
+			// 求最长的队列
+			int maxnum = 0;
+			for (int i = 0; i < n; i++) {
+				// 减掉自身的
+				realnum.push_back(increasenum[i] + decreasenum[i] - 1);
+				maxnum = max(maxnum, realnum[i]);
+			}
+			cout << n - maxnum << endl;
+
+		}
+		return 0;
+	}
+
+	void calcu(vector<int> height, vector<int>& increasenum) {
+		// 计算以height[i]为最高的递增队列人数
+		for (int i = 1; i < height.size(); i++) {
+			for (int j = i - 1; j >= 0; j--) {
+				if (height[j] < height[i] && increasenum[i] < increasenum[j] + 1) {
+					increasenum[i] = increasenum[j] + 1;
+				}
+			}
+		}
+	}
+};
+
+int main() {
+	HUAWEI_HJ24* hj24 = new HUAWEI_HJ24;
+	//hj24->solution_1();
+	hj24->solution_2();
+	return 0;
+}
 #endif
