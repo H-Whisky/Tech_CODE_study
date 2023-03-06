@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_set>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 #ifdef DEBUG
@@ -453,7 +454,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/5190a1db6f4f4ddb92fd9c365c944584
 
 class HUAWEI_HJ26 {
@@ -493,4 +494,68 @@ int main() {
 	return 0;
 }
 
+#endif
+
+#if 1
+class HUAWEI_HJ27 {
+public:
+	void solution_1() {
+		// 字典中单词个数
+		int n;
+
+		while (cin >> n) {
+			// 字典
+			vector<string> dic;
+			string word;
+			// 字典初始化
+			for (int i = 0; i < n; i++) {
+				cin >> word;
+				dic.push_back(word);
+			}
+
+			// 目标单词
+			string target;
+			cin >> target;
+
+			// 处理 搜索兄弟单词
+			// 记录所有兄弟单词
+			vector<string> res;
+
+			string temp = target;
+			// 排序
+			sort(temp.begin(), temp.end());
+			int lent = target.size(); // 目标单词的长度
+			for (int i = 0; i < n; i++) {
+				int lendic = dic[i].size();
+
+				// 长度一致，单词不同
+				if ((lendic == lent) && target != dic[i]) {
+					string tempdic = dic[i];
+					sort(tempdic.begin(), tempdic.end());
+					if (temp == tempdic) {
+						res.push_back(dic[i]);
+					}
+				}
+			}
+
+			// 所有兄弟单词都在res中
+			int index; // res[index - 1]
+			cin >> index;
+			// 坑 一定要字典排序
+			sort(res.begin(), res.end());
+			cout << res.size() << endl;
+			// 默认了index-1 >= res.size()
+			if (index - 1 < res.size()) {
+			cout << res[index - 1] << endl;
+			}
+
+		}
+	}
+};
+
+int main() {
+	HUAWEI_HJ27* hj27 = new HUAWEI_HJ27;
+	hj27->solution_1();
+	return 0;
+}
 #endif
