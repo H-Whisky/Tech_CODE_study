@@ -496,7 +496,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 class HUAWEI_HJ27 {
 public:
 	void solution_1() {
@@ -556,6 +556,130 @@ public:
 int main() {
 	HUAWEI_HJ27* hj27 = new HUAWEI_HJ27;
 	hj27->solution_1();
+	return 0;
+}
+#endif
+
+#if 0
+// https://www.nowcoder.com/practice/2aa32b378a024755a3f251e75cbf233a
+
+const string helpStr1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const string helpStr2 = "BCDEFGHIJKLMNOPQRSTUVWXYZAbcdefghijklmnopqrstuvwxyza1234567890";
+
+class HUAWEI_HJ29 {
+public:
+	void solution_1() {
+		string str1, str2;
+		string pwdGet, pwdSet;
+		while (cin >> str1 >> str2) {
+			pwdSet = setPwd(str1);
+			pwdGet = getPwd(str2);
+			cout << pwdSet << endl;
+			cout << pwdGet << endl;
+		}
+	}
+
+	string setPwd(string str) {
+		int len = str.size();
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < helpStr1.size(); j++) {
+				if (str[i] == helpStr1[j]) {
+					str[i] = helpStr2[j];
+					break;
+				}
+			}
+		}
+		return str;
+	}
+
+	string getPwd(string str) {
+		int len = str.size();
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < helpStr2.size(); j++) {
+				if (str[i] == helpStr2[j]) {
+					str[i] = helpStr1[j];
+					break;
+				}
+			}
+		}
+		return str;
+	}
+};
+
+int main() {
+	HUAWEI_HJ29* hj29 = new HUAWEI_HJ29;
+	hj29->solution_1();
+	return 0;
+}
+
+#endif
+
+#if 1
+class HUAWEI_HJ32 {
+public:
+	void solution_1() {
+		string s;
+		
+		while (cin >> s) {
+			int maxLen = 0;
+
+			int n = s.size();
+
+			for (int i = 1; i < n; i++) {
+				// 奇数 ABA
+				int low = i - 1, high = i + 1;
+				while (low >= 0 && high < n && s[low] == s[high]) {
+					low--, high++;
+				}
+				if (high - low - 1 > maxLen) {
+					maxLen = high - low - 1;
+				}
+				// 偶数 ABBA
+				low = i - 1, high = i;
+				while (low >= 0 && high < n && s[low] == s[high]) {
+					low--, high++;
+				}
+				if (high - low - 1 > maxLen) {
+					maxLen = high - low - 1;
+				}
+			}
+			cout << maxLen << endl;
+		}
+	}
+
+	void solution_2() {
+		string s;
+
+		while (cin >> s) {
+			int maxLen = 0;
+			// ABA 3 #A#B#A# 7		7/2 = 3
+			// ABBA 4 #A#B#B#A# 9	9/2 = 4
+			// 扩充字符串
+			string temp = "";
+			temp.append(1, '#');
+			for (int i = 0; i < s.size(); i++) {
+				temp.append(1, s[i]), temp.append(1, '#');
+			}
+			s = temp;
+			int n = s.size();
+
+			for (int i = 1; i < n; i++) {
+				int low = i - 1, high = i + 1;
+				while (low >= 0 && high < n && s[low] == s[high]) {
+					low--, high++;
+				}
+				if (high - low - 1 > maxLen) {
+					maxLen = high - low - 1;
+				}
+			}
+			cout << maxLen / 2 << endl;
+		}
+	}
+};
+
+int main() {
+	HUAWEI_HJ32* hj32 = new HUAWEI_HJ32;
+	hj32->solution_1();
 	return 0;
 }
 #endif
