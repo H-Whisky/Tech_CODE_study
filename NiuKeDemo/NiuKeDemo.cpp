@@ -6,6 +6,8 @@
 #include <unordered_set>
 #include <string>
 #include <algorithm>
+#include <sstream>
+#include <regex>
 using namespace std;
 
 #ifdef DEBUG
@@ -614,7 +616,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 class HUAWEI_HJ32 {
 public:
 	void solution_1() {
@@ -682,4 +684,93 @@ int main() {
 	hj32->solution_1();
 	return 0;
 }
+#endif
+
+#if 1
+class HUAWEI_HJ33 {
+public:
+	int solution_1() {
+		unsigned int a, b, c, d,shi;// 10.0.3.193
+		// int 32 1正负数
+		//long a, b, c, d,shi;// 10.0.3.193
+
+		char dot;
+		while (cin >> a >> dot >> b >> dot >> c >> dot >> d) {
+			cout << (a << 24) + (b << 16) + (c << 8) + d << endl;
+
+			// 输入十进制
+			cin >> shi;
+			cout << ((shi & 0xff000000) >> 24) << '.' <<  ((shi & 0x00ff0000)>> 16) << '.' << ((shi & 0x0000ff00) >> 8) << '.' <<  (shi & 0x000000ff) << endl;
+
+		}
+		return 0;
+	}
+
+	/*
+	2^n			<——>		1 << n;
+	a * 2^n		<——>		a << n;
+	a / 2^n		<——>		a >> n;
+	a % 2^n		<——>		a & ((1 << n) - 1);
+	*/
+	const int BYTE = 8;
+
+	unsigned int str2uint(const string& s) {
+		unsigned int ret = 0;
+		stringstream ss;
+		ss << s;
+		ss >> ret;
+		ss.clear();
+		return ret;
+	}
+
+	string uint2str(unsigned int n) {
+		string ret = "";
+		stringstream ss;
+		ss << n;
+		ss >> ret;
+		ss.clear();
+		return ret;
+	}
+
+	unsigned int ip2uint(string& s) {
+		unsigned int ans = 0;
+		for (char* p = strtok((char*)s.data(), "."); p; p = strtok(NULL,".")) {
+			ans = (ans << BYTE) + str2uint(p);
+		}
+		return ans;
+	}
+
+	string uint2ip(unsigned int n) {
+		string ans;
+		for (int i = 4; i > 0; --i) {
+			ans = (i == 1 ? "" : ".") + uint2str(n & ((1 << BYTE) - 1)) + ans;
+			n >>= BYTE;
+		}
+		return ans;
+	}
+
+	bool is_ip(const string& s) {
+		regex res("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
+		return regex_match(s, res);
+	}
+
+	int solution_2() {
+		string in;
+		while (getline(cin, in)) {
+			if (is_ip(in)) {
+				cout << ip2uint(in) << endl;
+			}
+			else {
+				cout << uint2ip(str2uint(in)) << endl;
+			}
+		}
+		return 0;
+	}
+};
+
+int main() {
+
+	return 0;
+}
+
 #endif
