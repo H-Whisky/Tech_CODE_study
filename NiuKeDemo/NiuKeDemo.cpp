@@ -686,7 +686,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class HUAWEI_HJ33 {
 public:
 	int solution_1() {
@@ -772,5 +772,15 @@ int main() {
 
 	return 0;
 }
+
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/e4af1fe682b54459b2a211df91a91cf3
+
+class HUAWEI_HJ36 {
+public:
+
+};
 
 #endif
