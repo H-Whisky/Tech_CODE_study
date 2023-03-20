@@ -1,6 +1,7 @@
 ﻿// CplusplusPrimer.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
+#if 0
 #include <iostream>
 #include <string>
 // 使用using声明使得以下的名字在程序中可见
@@ -140,3 +141,22 @@ int main()
     }
     return 0;
 }
+#endif
+
+#if 1
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() { // 使用getline一次读入一整行，遇回车结束
+    string line;
+    // 循环读取，每次读入一整行，直至文件结束或遇到异常输入
+    cout << "请输入您的字符串，可以包含空格：" << endl;
+    while (getline(cin, line)) {
+        cout << line << endl;
+    }
+    return 0;
+
+}
+#endif
