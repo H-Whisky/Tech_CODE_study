@@ -775,7 +775,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/e4af1fe682b54459b2a211df91a91cf3
 
 class HUAWEI_HJ36 {
@@ -839,4 +839,39 @@ int main() {
 	hj36->Solution_1();
 	return 0;
 }
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/2f6f9339d151410583459847ecc98446
+
+class HUAWEI_HJ38 {
+public:
+	void Solution_1() {
+		float height = 0; // 小球初始高度
+		
+		cin >> height;
+		float sum = 0;
+		for (int i = 0; i < 5; i++) {
+			sum += height;
+			height /= 2;
+			sum += height;
+		}
+		cout << sum - height << endl << height / 2;
+	}
+
+	int Solution_2() {
+		int a1;
+		cin >> a1;
+		cout << a1 * 23.0 / 8 << endl;
+		cout << a1 / 32.0 << endl;
+		return 0;
+	}
+};
+
+int main() {
+	HUAWEI_HJ38* hj38 = new HUAWEI_HJ38;
+	hj38->Solution_1();
+	return 0;
+}
+
 #endif
