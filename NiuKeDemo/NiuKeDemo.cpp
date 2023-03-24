@@ -841,7 +841,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/2f6f9339d151410583459847ecc98446
 
 class HUAWEI_HJ38 {
@@ -874,4 +874,50 @@ int main() {
 	return 0;
 }
 
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/f9a4c19050fc477e9e27eb75f3bfd49c
+
+class HUAWEI_HJ41 {
+public:
+	int DP_ForWeightProblem(void) { // 01背包+DP
+		int kinds; // the kinds of weights
+		cin >> kinds;
+		vector<int> weight(kinds, 0); // the weight of each weight
+		vector<int> amount(kinds, 0); // the amount of each weight
+		int total_weight = 0; // the total weight of all the weights
+		for (int i = 0; i < kinds; i++) {
+			cin >> weight[i];
+		}
+		for (int i = 0; i < kinds; i++) {
+			cin >> amount[i];
+			total_weight += amount[i] * weight[i];
+		}
+		vector<bool> dp(total_weight + 1, false);
+		dp[0] = true;
+		vector<int> combinations(1, 0);
+		combinations.reserve(100);// 申请100个元素的内存空间
+		for (int i = 0; i < kinds; i++) {
+			int i_weight = weight[i];
+			for (int j = 0; j < amount[i]; j++) {
+				int cur_size = combinations.size();
+				for (int k = 0; k < cur_size; k++) {
+					int temp = i_weight + combinations[k];
+					if (!dp[temp]) {
+						combinations.push_back(i_weight + combinations[k]);
+						dp[temp] = true;
+					}
+				}
+			}
+		}
+		return combinations.size();
+	}
+};
+
+int main() {
+	HUAWEI_HJ41* hj41 = new HUAWEI_HJ41;
+	cout << hj41->DP_ForWeightProblem() << endl;
+	return 0;
+}
 #endif
