@@ -922,7 +922,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/cf24906056f4488c9ddb132f317e03bc
 
 int n, m;
@@ -972,6 +972,68 @@ int main() {
 		hj43->dfs(0, 0);
 		for (vector<vector<int>>::iterator it = best_path.begin(); it != best_path.end(); it++) {
 			cout << '(' << (*it)[0] << ',' << (*it)[1] << ')' << endl;
+		}
+	}
+	return 0;
+}
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/02cb8d3597cf416d9f6ae1b9ddc4fde3
+bool cmp1(pair<char, int> a, pair<char, int> b) { // 自定义比较函数
+	return a.second > b.second;
+}
+
+class HUAWEI_HJ45 {
+
+public:
+	int beautility(string str) { // 计算漂亮度函数
+		vector<int> vec;
+		string tmp(str); // 字符串tmp保存字符串str的副本
+		sort(str.begin(), str.end());
+		str.erase(unique(str.begin(), str.end()),str.end()); // 对输入字符串str去重
+		for (char c : str) {
+			int count = 0;
+			for (int i = 0; i < tmp.length(); i++) { // 计算字符串tmp中每种字符出现的次数
+				if (c == tmp[i]) {
+					count++;
+				}
+			}
+			vec.push_back(count); // 容器vec保存每个字符出现的次数
+		}
+		vector<pair<char, int>> vec_pair; // 容器vec_pair记录每个字符及该字符出现的次数
+		for (int i = 0; i < vec.size(); i++) {
+			vec_pair.push_back(make_pair(str[i], vec[i]));
+		}
+		sort(vec_pair.begin(), vec_pair.end(), cmp1); // 按字符出现次数从大到小对容器vec_pair进行排序
+		for (int i = 0; i < vec_pair.size(); i++) {
+			vec_pair[i].second = 26 - i; // 要使漂亮度最大，就要使出现次数最多的字符漂亮度的值最大
+		}
+		int beautility = 0; //  保存输入字符串的最大漂亮度
+		for (char c : tmp) {
+			for (int i = 0; i < vec_pair.size(); i++) {
+				if (c == vec_pair[i].first) {
+					beautility += vec_pair[i].second; //累加字符串中每个字符的漂亮度
+				}
+			}
+		}
+		return beautility; // 返回输入字符串的漂亮度
+
+	}
+};
+
+int main() {
+	HUAWEI_HJ45* hj45 = new HUAWEI_HJ45;
+	int n;
+	while (cin >> n) {
+		vector<string> vec;
+		string str;
+		for (int i = 0; i < n; i++) {
+			cin >> str;
+			vec.push_back(str);
+		}
+		for (int i = 0; i < n; i++) {
+			cout << hj45->beautility(vec[i]) << endl;
 		}
 	}
 	return 0;
