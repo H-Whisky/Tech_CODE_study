@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <sstream>
 #include <regex>
+#include <forward_list>
 using namespace std;
 
 #ifdef DEBUG
@@ -978,8 +979,9 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/02cb8d3597cf416d9f6ae1b9ddc4fde3
+
 bool cmp1(pair<char, int> a, pair<char, int> b) { // 自定义比较函数
 	return a.second > b.second;
 }
@@ -1018,7 +1020,6 @@ public:
 			}
 		}
 		return beautility; // 返回输入字符串的漂亮度
-
 	}
 };
 
@@ -1038,4 +1039,38 @@ int main() {
 	}
 	return 0;
 }
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/f96cd47e812842269058d483a11ced4f
+
+class HUAWEI_HJ48 {
+public:
+	void Solution_1() {
+		int n, head;
+		cin >> n >> head; // 输入结点数和头结点的值
+		forward_list<int> linklist; // 创建一个单向链表
+		linklist.push_front(head); // 初始化头结点
+		for (int i = 1; i < n; i++) {
+			int front, back;
+			cin >> back >> front;
+			auto it = find(linklist.begin(), linklist.end(), front);
+			linklist.insert_after(it, back); // 逐个插入结点
+		}
+		int last;
+		cin >> last; // 输入要删除的结点值
+		linklist.remove(last); // 移除具有该值的结点
+		for (auto it = linklist.begin(); it != linklist.end(); it++) {
+			cout << *it << " "; // 从头到尾输出链表的值
+		}
+		cout << endl;
+	}
+};
+
+int main() {
+	HUAWEI_HJ48* hj48 = new HUAWEI_HJ48;
+	hj48->Solution_1();
+	return 0;
+}
+
 #endif
