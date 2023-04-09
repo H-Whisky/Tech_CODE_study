@@ -4,9 +4,9 @@
 
 int main() {
 	namespace fs = std::filesystem;
-	fs::path p1{ "D:\\worksapce\\MoocClassDemo\\CheckPath\\Hello.txt" };
-	fs::path p2{ R"(D:\worksapce\MoocClassDemo\CheckPath)" };
-	fs::path p3{ "D:/workspace/MoocClassDemo/CheckPath/Hello.txt" };
+	fs::path p1{ "D:\Workspace\Practise\Tech_CODE_study\MoocClassDemo\CheckPath\Hello.txt" };
+	fs::path p2{ R"(D:\Workspace\Practise\Tech_CODE_study\MoocClassDemo\CheckPath)" };
+	fs::path p3{ "D:\Workspace\Practise\Tech_CODE_study\MoocClassDemo\CheckPath\Hello.txt" };
 
 	std::cout << fs::path::preferred_separator << std::endl;
 	if (fs::is_regular_file(p2)) {

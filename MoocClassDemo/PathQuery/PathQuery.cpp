@@ -5,7 +5,7 @@
 int main() {
 	namespace fs = std::filesystem;
 	//定义路径
-	fs::path p{R"(D:\worksapce\MoocClassDemo\PathQuery\PathQuery.cpp)"};
+	fs::path p{R"(D:\Workspace\Practise\Tech_CODE_study\MoocClassDemo\PathQuery\PathQuery.cpp)"};
 	//是否存在？根名？根路径？相对路径？
 	
 	if (p.empty()) {

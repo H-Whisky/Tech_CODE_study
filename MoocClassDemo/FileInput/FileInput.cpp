@@ -14,7 +14,7 @@ namespace fs = std::filesystem;
 
 
 int main() {
-	fs::path p{ "scores.txt" };
+	fs::path p{ "D:/Workspace/Practise/Tech_CODE_study/MoocClassDemo/FileInput/scores.txt" };
 	ifstream input{ p };
 
 	if (input.fail()) {
