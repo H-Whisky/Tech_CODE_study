@@ -1041,7 +1041,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/f96cd47e812842269058d483a11ced4f
 
 class HUAWEI_HJ48 {
@@ -1072,5 +1072,153 @@ int main() {
 	hj48->Solution_1();
 	return 0;
 }
+
+#endif
+
+#if 0
+// https://www.nowcoder.com/practice/9999764a61484d819056f807d2a91f1e
+
+//3 + 2 * {1 + 2 * [-4 / (8 - 6) + 7]}
+
+class HUAWEI_HJ50 {
+public:
+	int compute(string& s, int left, int right) {
+		char op = '+'; // 默认+开始
+		int num = 0;
+		vector<int> st;
+		for (int i = left; i <= right; i++) {
+			if (isdigit(s[i])) { // 数字
+				num = num * 10 + s[i] - '0'; // 计算该部分数字总和
+			}
+			if (s[i] == '{' || s[i] == '[' || s[i] == '(') { // 进入左括号
+				int layer = 0; // 统计左括号层数
+				int j = i;
+				while (j <= right) { // 遍历到右边
+					if (s[j] == '{' || s[j] == '[' || s[j] == '(') {
+						layer++; // 遇到左括号，层数累加
+					}
+					else if (s[j] == '}' || s[j] == ']' || s[j] == ')') {
+						layer--; // 遇到右括号，层数递减
+						if (layer == 0) { // 直到层数等于0
+							break;
+						}
+					}
+					j++;
+				}
+				num = compute(s, i + 1, j - 1); // 递归计算括号中的部分
+				i = j + 1;
+			}
+			if (!isdigit(s[i]) || i == right) { // 遇到运算符或者结尾
+				switch (op) { // 根据运算符开始计算 
+				case '+': st.push_back(num); break; // 加减法加入到末尾
+				case '-': st.push_back(-num); break; 
+				case '*': st.back() *= num; break; // 乘除法与末尾计算 
+				case '/': st.back() /= num; break; 
+				}
+				op = s[i]; // 修改为下一次的运算符
+				num = 0;
+			}
+		}
+		int res = 0;
+		for (int x : st) { // 累加和
+			res += x;
+		}
+		return res;
+	}
+};
+
+int main() {
+	HUAWEI_HJ50* hj50 = new HUAWEI_HJ50;
+	string s;
+	while (cin >> s) {
+		cout << hj50->compute(s, 0, s.length() - 1) << endl;
+	}
+	return 0;
+}
+#endif
+
+#if 1
+// https://www.nowcoder.com/practice/3959837097c7413a961a135d7104c314
+
+int f[1001][1001]; // s1中前i个字符与s2中前j个字符的编辑距离
+
+class HUAWEI_HJ52 {
+public:
+	int Distance_1(string s1, string s2) {
+		int n = s1.length(), m = s2.length();
+		// 初始化f
+		for (int i = 0; i < n; i++) {
+			f[i][0] = i; // 要使s1中前i个字符与s2前0个字符相同，只能删除s1前i个
+		}
+		for (int j = 0; j < m; j++) {
+			f[0][j] = j; // 同上，要使s1中前0个字符与s2前j个字符相同，只能s1增加j个
+		}
+
+		for (int i = 1; i < n; i++) { // 在输入字符串前加个‘ ’，所以是1~n
+			for (int j = 1; j < m; j++) { // 同上
+				f[i][j] = min(f[i - 1][j] + 1, f[i][j - 1] + 1); //  增加or删除
+				if (s1[i] != s2[j]) {
+					f[i][j] = min(f[i][j], f[i - 1][j - 1] + 1); // or 替换
+				}
+				else {
+					f[i][j] = min(f[i][j], f[i - 1][j - 1]);
+				}
+			}
+		}
+		return f[n - 1][m - 1];
+	}
+
+	int Distance_2(string s1, string s2) {
+		vector<int> dp(s2.size() + 1, 0);
+		for (int i = 0; i <= s2.size(); i++) { // 初始化第一行
+			dp[i] = i;
+		}
+		for (int i = 1; i < s1.size(); i++) {
+			dp[0] = i; // 初始化dp[0],i->0需要i个删除操作
+			int l = dp[0] - 1;
+			for (int j = 1; j <= s2.size(); j++) {
+				int curr = dp[j]; // 保留当前的值，作为dp[j+1]的左上角值
+				dp[j] = min(min(dp[j] + 1, dp[j - 1] + 1), ((s1[i - 1] == s2[j - 1]) ? 0 : 1) + 1);
+				l = curr; // 更新左上角值
+			}
+		}
+		return dp[s2.size()];
+	}
+
+	int Distance_3(string s1, string s2) {
+		vector<vector<int>> dp(s1.size() + 1, vector<int>(s2.size() + 1, 0));
+		for (int i = 1; i <= s2.size(); i++) { // s1从0个字符变成s2的i个字符需要i个插入操作
+			dp[0][i] = i;
+		}
+		for (int i = 1; i < s1.size(); i++) { // s1从i个字符变成s2的0个字符也需要i个删除操作
+			dp[i][0] = i;
+		}
+		for (int i = 1; i <= s1.size(); i++) {
+			for (int j = 1; j <= s2.size(); j++) {
+				int op1 = dp[i - 1][j] + 1;// 删除字符s1[i-1]
+				int op2 = dp[i][j - 1] + 1; // 删除字符s2[j-1]
+				int op3 = dp[i - 1][j - 1]; // 替换操作
+				if (s1[i - 1] != s2[j - 1]) {
+					op3++;
+				}
+				dp[i][j] = min(min(op1, op2) ,op3); // 替换操作和删除操作取最小
+			}
+		}
+		return dp[s1.size()][s2.size()];
+	}
+
+};
+
+int main() {
+	HUAWEI_HJ52* hj52 = new HUAWEI_HJ52;
+	string s1, s2;
+	cin >> s1;
+	s1 = ' ' + s1; // 小tip，在s前面加一个' '，之后计算编辑距离可以从下标1开始
+	cin >> s2;
+	s2 = ' ' + s2;
+	cout << hj52->Distance_3(s1, s2) << endl;
+	return 0;
+}
+
 
 #endif
