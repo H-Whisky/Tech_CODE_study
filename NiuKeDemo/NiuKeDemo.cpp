@@ -9,6 +9,7 @@
 #include <sstream>
 #include <regex>
 #include <forward_list>
+#include <set>
 using namespace std;
 
 #ifdef DEBUG
@@ -1137,7 +1138,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 // https://www.nowcoder.com/practice/3959837097c7413a961a135d7104c314
 
 int f[1001][1001]; // s1中前i个字符与s2中前j个字符的编辑距离
@@ -1220,5 +1221,245 @@ int main() {
 	return 0;
 }
 
+
+#endif
+
+#if 1
+/*
+1.
+汽水瓶
+某商店规定：三个空汽水瓶可以换一瓶汽水，允许向老板借空汽水瓶（但是必须要归还）。
+小张手上有n个空汽水瓶，她想知道自己最多可以喝到多少瓶汽水。
+数据范围：输入的正整数满足
+1
+≤
+�
+≤
+100
+
+1≤n≤100
+
+注意：本题存在多组输入。输入的 0 表示输入结束，并不用输出结果。
+时间限制：C/C++ 1秒，其他语言2秒
+空间限制：C/C++ 32M，其他语言64M
+输入描述：
+输入文件最多包含 10 组测试数据，每个数据占一行，仅包含一个正整数 n（ 1<=n<=100 ），表示小张手上的空汽水瓶数。n=0 表示输入结束，你的程序不应当处理这一行。
+
+输出描述：
+对于每组测试数据，输出一行，表示最多可以喝的汽水瓶数。如果一瓶也喝不到，输出0。
+
+示例1
+输入例子：
+3
+10
+81
+0
+输出例子：
+1
+5
+40
+例子说明：
+样例 1 解释：用三个空瓶换一瓶汽水，剩一个空瓶无法继续交换
+样例 2 解释：用九个空瓶换三瓶汽水，剩四个空瓶再用三个空瓶换一瓶汽水，剩两个空瓶，向老板借一个空瓶再用三个空瓶换一瓶汽水喝完得一个空瓶还给老板
+
+*/
+class HUAWEI_REAL_20230414_1 {
+public:
+	// 错误答案
+	void Solution_1() {
+		int num_nullcup = 0;
+		vector<int> res;
+		while (cin >> num_nullcup) {
+			if (num_nullcup <= 0) break; // 输入0或负数直接返回
+			int num_fullcup = 0; // 空汽水数量
+			int num_lastcup = 0; // 
+			while (num_nullcup / 3 > 0) {
+				num_nullcup -= 3; num_lastcup++; num_fullcup++;
+				if (num_nullcup < 3) {
+					num_lastcup += num_nullcup % 3;
+				}
+				if (num_lastcup / 3 > 0 || num_lastcup == 2) {
+					num_lastcup -= 3; num_fullcup++; num_lastcup++;
+				}
+
+			}
+			res.push_back(num_fullcup);
+		}
+		for (auto it : res) {
+			cout << it << endl;
+		}
+	}
+
+	void Solution_2() {
+		int n;
+		vector<int> res;
+		while (cin >> n && n != 0) { // 循环读入n，直到n为0
+			int ans = 0; // 定义答案变量
+			while (n >= 3) { // 当n>=3时可以继续兑换
+				ans += n / 3; // 计算当前可以兑换的汽水瓶数量
+				n = n / 3 + n % 3; // 更新剩余的空汽水瓶数量
+			}
+			if (n == 2) ans++; // 如果还剩2个空瓶，可以向老板借一个再兑换一瓶汽水
+			res.push_back(ans);
+		}
+		for (auto it : res) {
+			cout << it << endl;
+		}
+	}
+};
+
+/*
+2.
+明明的随机数
+明明生成了
+�
+N个1到500之间的随机整数。请你删去其中重复的数字，即相同的数字只保留一个，把其余相同的数去掉，然后再把这些数从小到大排序，按照排好的顺序输出。
+
+数据范围：
+1
+≤
+�
+≤
+1000
+
+1≤n≤1000  ，输入的数字大小满足
+1
+≤
+�
+�
+�
+≤
+500
+
+1≤val≤500
+时间限制：C/C++ 1秒，其他语言2秒
+空间限制：C/C++ 32M，其他语言64M
+输入描述：
+第一行先输入随机整数的个数 N 。
+接下来的 N 行每行输入一个整数，代表明明生成的随机数。
+具体格式可以参考下面的"示例"。
+输出描述：
+输出多行，表示输入数据处理后的结果
+
+示例1
+输入例子：
+3
+2
+2
+1
+输出例子：
+1
+2
+例子说明：
+输入解释：
+第一个数字是3，也即这个小样例的N=3，说明用计算机生成了3个1到500之间的随机整数，接下来每行一个随机数字，共3行，也即这3个随机数字为：
+2
+2
+1
+所以样例的输出为：
+1
+2
+*/
+class HUAWEI_REAL_20230414_2 {
+public:
+	void Solution_1() {
+		int N; // 随机整数的个数
+		cin >> N;
+		int i = 0;
+		vector<int> nums;
+		int temp;
+		while (i < N) {
+			cin >> temp;
+			nums.push_back(temp);
+			i++;
+		}
+		set<int> s(nums.begin(), nums.end()); // 利用set去重
+		vector<int> new_nums(s.begin(), s.end()); // 将去重后的数字存入到新的vector容器中
+		sort(new_nums.begin(), new_nums.end()); // 对新的vector容器进行排序
+
+		for (auto it : new_nums) {
+			cout << it << endl;
+		}
+		
+	}
+};
+
+/*
+3.
+进制转换
+写出一个程序，接受一个十六进制的数，输出该数值的十进制表示。
+
+数据范围：保证结果在
+1
+≤
+�
+≤
+2
+31
+−
+1
+
+1≤n≤2
+31
+ −1
+时间限制：C/C++ 1秒，其他语言2秒
+空间限制：C/C++ 32M，其他语言64M
+输入描述：
+输入一个十六进制的数值字符串。
+
+输出描述：
+输出该数值的十进制字符串。不同组的测试用例用\n隔开。
+
+示例1
+输入例子：
+0xAA
+输出例子：
+170
+*/
+class HUAWEI_REAL_20230414_3 {
+public:
+	void Solution_1(){
+		string hex_str; // 十六进制数的字符串
+		cin >> hex_str;
+		int hex_str_len = hex_str.length(); // 十六进制位数
+
+		int dec_num = 0; // 十进制整数
+		for (int i = 0; i < hex_str_len; i++) {
+			char ch = hex_str[i]; // 取十六进制的每个字符
+			int digit; // 存字符对应的数值
+			if (ch >= '0' && ch <= '9') {
+				digit = ch - '0'; // 数字 -》 数字
+			}
+			else if (ch >= 'A' && ch <= 'F') {
+				digit = ch - 'A' + 10; // 大写字母A:55 -》 数值
+			}
+			else if (ch >= 'a' && ch <= 'f') {
+				digit = ch - 'a' + 10; // 小写字母a:97 -》数值
+			}
+			else {
+				// 如果不是有效的十六进制数，则输出错误信息并退出程序
+				cerr << "Invalid hex string" << endl;
+			}
+			dec_num += (digit * pow(16, hex_str_len - i - 1)); // 根据权值计算对应的十进制数
+		}
+		cout << dec_num << endl;
+	}
+};
+
+
+
+int main() {
+	//HUAWEI_REAL_20230414_1* hr1 = new HUAWEI_REAL_20230414_1;
+	//hr1->Solution_2();
+
+	//HUAWEI_REAL_20230414_2* hr2 = new HUAWEI_REAL_20230414_2;
+	//hr2->Solution_1();
+
+	HUAWEI_REAL_20230414_3* hr3 = new HUAWEI_REAL_20230414_3;
+	hr3->Solution_1();
+
+
+	return 0;
+}
 
 #endif
