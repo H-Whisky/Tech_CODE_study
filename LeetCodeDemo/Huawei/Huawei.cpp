@@ -1111,7 +1111,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_209 {
 public:
 	int minSubArrayLen(int target, vector<int> nums) {
@@ -1144,6 +1144,42 @@ void main() {
 }
 
 #endif
+
+#if 1
+class Solution_487 {
+public:
+	int findMaxConsecutiveOnes(vector<int> nums) {
+		int left = 0; // 左指针
+		int right = 0; // 右指针
+
+		int zeroCount = 0; // 0的个数 最大为1
+		int result = 0;
+
+		while (right < nums.size()) {
+			if (nums[right] == 0) {
+				zeroCount++;
+			}
+			while (zeroCount > 1) { 
+				// 当左指针指向的数值是0的时候，0的个数减一
+				if (nums[left] == 0) {
+					zeroCount--;
+				}
+				left++; // 移动左指针
+			}
+			result = max(result, right - left + 1); // 更新结果
+			right++; // 右指针移动
+		}
+		return result;
+	}
+};
+
+int main() {
+	Solution_487* sol = new Solution_487;
+	vector<int> nums = {1,0,1,1,0};
+	cout << sol->findMaxConsecutiveOnes(nums) << endl;
+}
+#endif
+
 
 
 // 六、前缀和
