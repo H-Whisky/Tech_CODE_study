@@ -1018,7 +1018,7 @@ public:
 		// 哈希集合，记录每个字符是否出现
 		unordered_set<char> occ;
 		int s_size = s.size();
-		// 右指针，初始值为-1，相当于我们在 字符串的左边界的左侧，还没有开始移动
+		// 右指针，初始值为-1，相当于我们在字符串的左边界的左侧，还没有开始移动
 		int rk = -1, ans = 0;
 		// 枚举左指针的位置，初始值隐形地面表示为-1
 		for (int i = 0; i < s_size; i++) {
@@ -1110,6 +1110,41 @@ void main() {
 	cout << sol->equalSubstring(s, t, maxCost) << endl;
 }
 #endif
+
+#if 1
+class Solution_209 {
+public:
+	int minSubArrayLen(int target, vector<int> nums) {
+		if (nums.size() == 0) {
+			return 0;
+		}
+		int left = 0; // 窗口左边界
+		int right = 0; // 窗口右边界
+		int sum = 0; // 总和
+		int result = INT8_MAX;
+
+		while (right < nums.size()) {
+			sum += nums[right]; // 计算滑动窗口内的总和
+			while (sum >= target) { // 当这次的总和 >= 目标值
+				result = min(result, right - left + 1); // 更新滑动窗口的长度，用上次长度和这次的滑窗长度比，取最短的
+				sum -= nums[left]; // 更新总和，减去左边界的值
+				left++; // 滑动窗口右边界向右移动
+			}
+			right++; // 滑动窗口右边界向右移动
+		}
+		return result == INT8_MAX ? 0 : result; // 如果result没变的话，代表没有符合条件的子数组，返回0，否则返回result
+	}
+};
+
+void main() {
+	Solution_209* sol = new Solution_209;
+	vector<int> nums = {2,3,1,2,4,3};
+	int target = 7;
+	cout << sol->minSubArrayLen(target, nums) << endl;
+}
+
+#endif
+
 
 // 六、前缀和
 #if 0
@@ -1507,7 +1542,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_210 {
 private:
 	// 存储有向图
