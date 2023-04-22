@@ -1673,7 +1673,7 @@ void main() {
 #endif
 
 
-#if 0
+#if 1
 class Solution_5 {
 public:
 	// 解法一：暴力解法
@@ -1734,9 +1734,7 @@ public:
 			}
 		}
 		return s.substr(begin, begin + maxLen);
-
 	}
-
 
 	int expandAroundCenter(string charArray, int left, int right) {
 		// 当left = right的时候，回文中心是一个字符，回文串的长度是奇数
@@ -1758,6 +1756,44 @@ public:
 		return j - i - 1;
 	}
 
+	// 解法3：动态规划
+	string longestPalindrome_3(string s) {
+		int len = s.size();
+		if (len < 2) return s;
+		int maxLen = 1;
+		int begin = 0;
+
+		// dp[i][j] 表示 s[i..j]是否是回文串
+		vector<vector<bool>> dp(len,vector<bool>(len));
+		for (int i = 0; i < len; i++) {
+			dp[i][i] = true;
+		}
+
+		// 注意：左下角先填
+		for (int j = 1; j < len; j++) {
+			for (int i = 0; i < j; i++) {
+				if (s[i] != s[j]) {
+					dp[i][j] = false;
+				}
+				else {
+					if (j - i < 3) {
+						dp[i][j] = true;
+					}
+					else {
+						dp[i][j] = dp[i + 1][j - 1];
+					}
+				}
+
+				// 只要dp[i][j]==true成立,就表示子串s[i..j]是回文，此时记录回文长度和起始位置
+				if (dp[i][j] && j - i + 1 > maxLen) {
+					maxLen = j - i + 1;
+					begin = i;
+				}
+			}
+		}
+		return s.substr(begin, begin + maxLen);
+	}
+
 };
 
 int main() {
@@ -1767,6 +1803,7 @@ int main() {
 
 	cout << sol->longestPalindrome_1(s) << endl;
 	cout << sol->longestPalindrome_2(s) << endl;
+	cout << sol->longestPalindrome_3(s) << endl;
 
 	return 0;
 }
