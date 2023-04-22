@@ -1067,12 +1067,34 @@ public:
 		return res;
 	}
 
+	int longestOnes_1(vector<int>& nums, int k) {
+		int left = 0;
+		int right = 0;
+		int zeroCount = 0;
+		int result = 0;
+		while (right < nums.size()) {
+			if (nums[right] == 0) {
+				zeroCount++;
+			}
+			while (zeroCount > k) {
+				if (nums[left] == 0) {
+					zeroCount--;
+				}
+				left++;
+			}
+			result = max(result, right - left + 1);
+			right++;
+		}
+		return result;
+	}
+
 };
 
 void main() {
 	Solution_1004* sol = new Solution_1004;
 	vector<int> nums = { 1,1,1,0,0,0,1,1,1,1,0 };
 	cout << sol->longestOnes_0(nums, 2) << endl;
+	cout << sol->longestOnes_1(nums, 2) << endl;
 }
 #endif
 
@@ -1145,7 +1167,7 @@ void main() {
 
 #endif
 
-#if 1
+#if 0
 class Solution_487 {
 public:
 	int findMaxConsecutiveOnes(vector<int> nums) {
@@ -1647,6 +1669,106 @@ void main() {
 	for (int i = 0; i < res.size(); ++i) {
 		cout << res[i] << " ";
 	}
+}
+#endif
+
+
+#if 0
+class Solution_5 {
+public:
+	// 解法一：暴力解法
+	string longestPalindrome_1(string s) {
+		int len = s.size();
+		if (len < 2) {
+			return s;
+		}
+
+		int maxLen = 1;
+		int begin = 0;
+
+		// 枚举所有长度严格大于1的子串
+		for (int i = 0; i < len - 1; i++) {
+			for (int j = i + 1; j < len; j++) {
+				if (j - i + 1 > maxLen && validPalindromic(s, i, j)) {
+					maxLen = j - i + 1;
+					begin = i;
+				}
+			}
+		}
+		return s.substr(begin, begin + maxLen);
+	}
+
+
+	// 验证字串s[left...right]是否为回文串
+	bool validPalindromic(string charArray, int left, int right) {
+		while (left < right) {
+			if (charArray[left] != charArray[right]) {
+				return false;
+			}
+			left++;
+			right--;
+		}
+		return true;
+	}
+
+	// 解法二：回文中心字符解法
+	string longestPalindrome_2(string s) {
+		int len = s.length();
+		if (len < 2) {
+			return s;
+		}
+
+		int maxLen = 1;
+		int begin = 0;
+
+		// 枚举所有长度严格大于1的子串
+		for (int i = 0; i < len - 1; i++) {
+			int oddLen = expandAroundCenter(s, i, i);
+			int evenLen = expandAroundCenter(s, i, i + 1);
+
+			int curMaxLen = max(oddLen, evenLen);
+			if (curMaxLen > maxLen) {
+				maxLen = curMaxLen;
+				// 纸上画图找规律
+				begin = i - (maxLen - 1) / 2;
+			}
+		}
+		return s.substr(begin, begin + maxLen);
+
+	}
+
+
+	int expandAroundCenter(string charArray, int left, int right) {
+		// 当left = right的时候，回文中心是一个字符，回文串的长度是奇数
+		// 当left = right + 1的时候，此时回文中心两个字符，回文串的长度是偶数
+		int len = charArray.size();
+		int i = left;
+		int j = right;
+		while (i >= 0 && j < len) {
+			if (charArray[i] == charArray[j]) {
+				i--;
+				j++;
+			}
+			else {
+				break;
+			}
+		}
+		// 跳出while循环时，恰好满足s.charAt(i) != s.charAt(j)
+		// 回文串的长度是j-i+1-2 = j-i-1
+		return j - i - 1;
+	}
+
+};
+
+int main() {
+
+	string s = "babad";
+	Solution_5* sol = new Solution_5;
+
+	cout << sol->longestPalindrome_1(s) << endl;
+	cout << sol->longestPalindrome_2(s) << endl;
+
+	return 0;
 }
 #endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

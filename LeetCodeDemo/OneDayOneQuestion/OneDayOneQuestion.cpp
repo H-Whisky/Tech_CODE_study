@@ -1464,7 +1464,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Sol_1129_day_20230202 {
 public:
 	// DFS
@@ -1517,4 +1517,165 @@ void main() {
 		cout << it << " ";
 	}
 }
+#endif
+
+#if 1
+class Solution_2023Spring {
+private:
+	vector<string> split(const string& s, const string& delimiter) {
+		vector<string> res;
+		size_t pos = 0;
+		while (pos < s.length()) {
+			size_t end = s.find(delimiter, pos);
+			if (end == string::npos) {
+				end = s.length();
+			}
+			res.push_back(s.substr(pos, end - pos));
+			pos = end + delimiter.length();
+		}
+		return res;
+	}
+
+
+public:
+	vector<int> Q1_expedition(vector<int>& supplies) {
+		int origin_supplies_size = supplies.size() / 2;
+		while (supplies.size() > 1) {
+			int min_sum = supplies[0] + supplies[1];
+			int min_index = 0;
+			for (int i = 1; i < supplies.size() - 1; i++) {
+				int curr_sum = supplies[i] + supplies[i + 1];
+				if (curr_sum < min_sum) {
+					min_sum = curr_sum;
+					min_index = i;
+				}
+			}
+			supplies[min_index] = min_sum;
+			supplies.erase(supplies.begin() + min_index + 1);
+			if (supplies.size() == origin_supplies_size) {
+				break;
+			}
+		}
+		return supplies;
+	}
+
+	int Q2_maxIndex(vector<string>& expeditions) {
+		unordered_set<string> known; // 已知的营地
+		int max_count = 0; // 最多的新发现数量
+		int min_index = INT_MAX; // 最小的索引
+		int n = expeditions.size();
+		bool find_flag = false;
+
+		for (int i = 0; i < n; ++i) {
+			vector<string> camps = split(expeditions[i], "->");
+			int count = 0; // 本次探险中新发现的营地数量
+
+			for (const string& camp : camps) {
+				if (known.count(camp) == 0) { // 如果营地未知
+					++count;
+					known.insert(camp); // 将营地加入已知集合
+				}
+			}
+
+			if (count > 0 && i!=0) { // 如果本次探险中有新发现的营地排除第一次
+				find_flag = true;
+				if (count > max_count || (count == max_count && i < min_index)) {
+					min_index = i;
+				}
+			}
+			if (count > 0) { // 如果本次探险中有新发现的营地
+				if (count > max_count || (count == max_count && i < min_index)) {
+					max_count = max(max_count, count);
+				}
+			}
+		}
+
+		if (find_flag == false) return -1;
+		return (max_count == 0) ? -1 : min_index;
+	}
+
+	int Q3_maxFieldStrength(vector<vector<int>>& forceField) {
+		unordered_map<int, int> coveredPoints; // 记录每个点被覆盖的力场数量
+		unordered_map<int, vector<pair<int, int>>> fieldRanges; // 记录每个力场的覆盖范围
+
+		// 遍历每个力场，记录其覆盖范围
+		for (int i = 0; i < forceField.size(); i++) {
+			int x = forceField[i][0], y = forceField[i][1], side = forceField[i][2];
+			for (int dx = -side; dx <= side; dx++) {
+				for (int dy = -side; dy <= side; dy++) {
+					int nx = x + dx, ny = y + dy;
+					int key = nx * 100000 + ny;
+					fieldRanges[i].emplace_back(nx, ny); // 将该点加入力场的覆盖范围中
+					coveredPoints[key]++; // 将该点被覆盖的力场数量加 1
+				}
+			}
+		}
+
+		// 找到力场强度等于覆盖该点的力场数量的最大值
+		int maxStrength = 0;
+		for (int i = 0; i < forceField.size(); i++) {
+			int strength = 0;
+			for (auto& p : fieldRanges[i]) {
+				int key = p.first * 100000 + p.second;
+				if (coveredPoints[key] == i + 1) { // 如果力场覆盖该点，则力场强度加 1
+					strength++;
+				}
+			}
+			maxStrength = max(maxStrength, strength);
+		}
+
+		return maxStrength;
+	}
+
+
+	int Q3_maxPower(vector<vector<int>>& forceField) {
+		int n = forceField.size();
+		vector<vector<int>> area(1001, vector<int>(1001, 0)); // 二维数组表示地带，初始值为0
+		for (int i = 0; i < n; i++) {
+			int x = forceField[i][0], y = forceField[i][1], side = forceField[i][2];
+			for (int j = x - side; j <= x + side; j++) { // 遍历力场范围内的点
+				for (int k = y - side; k <= y + side; k++) {
+					if (j >= 0 && j <= 1000 && k >= 0 && k <= 1000) { // 判断点是否在地带内
+						area[j][k]++; // 将点的值加1
+					}
+				}
+			}
+		}
+		int maxPower = 0;
+		for (int i = 0; i <= 1000; i++) { // 遍历地带
+			for (int j = 0; j <= 1000; j++) {
+				maxPower = max(maxPower, area[i][j]); // 更新最大值
+			}
+		}
+		return maxPower;
+	}
+
+};
+
+int main() {
+	Solution_2023Spring* sol = new Solution_2023Spring;
+
+	// Q1
+/*	vector<int> supplies = { 7,3,6,1,8 };
+	for (auto it : sol->Q1_expedition(supplies)) {
+		std::cout << it << endl;
+	}*/
+
+	// Q2
+	//vector<string> expeditions = { "Alice->Dex", "", "Dex" };
+	//vector<string> expeditions = { "oWgkEWHaD","oWgkEWHaD","oWgkEWHaD","oWgkEWHaD","oWgkEWHaD","oWgkEWHaD","oWgkEWHaD","ilDoCQP","FcfcUcAh" };
+	//vector<string> expeditions = {"leet->code", "leet->code->Campsite->Leet", "leet->code->leet->courier"};
+	//vector<string> expeditions = { "", "Gryffindor->Slytherin->Gryffindor", "Hogwarts->Hufflepuff->Ravenclaw" };
+	//cout << sol->Q2_maxIndex(expeditions) << endl;
+
+	// Q3
+	//vector<vector<int>> forceField = { {0,0,1},{1,0,1} };
+	vector<vector<int>> forceField = { {7,7,9},{7,5,3},{1,8,5},{5,6,3},{9,10,2},{8,4,10} }; //这个输出应该是4
+	//cout << sol->Q3_maxFieldStrength(forceField) << endl;
+	cout << sol->Q3_maxPower(forceField) << endl;
+
+	
+
+}
+
 #endif
