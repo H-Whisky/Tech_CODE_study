@@ -1775,6 +1775,7 @@ public:
 		}
 
 		// 注意：左下角先填
+		// 先一列一列的填，再一行一行的填
 		for (int j = 1; j < len; j++) {
 			for (int i = 0; i < j; i++) {
 				if (s[i] != s[j]) {
@@ -1807,8 +1808,8 @@ int main() {
 	Solution_5* sol = new Solution_5;
 
 	cout << sol->longestPalindrome_1(s) << endl;
-	cout << sol->longestPalindrome_2(s) << endl;
-	cout << sol->longestPalindrome_3(s) << endl;
+	//cout << sol->longestPalindrome_2(s) << endl;
+	//cout << sol->longestPalindrome_3(s) << endl;
 
 	return 0;
 }
