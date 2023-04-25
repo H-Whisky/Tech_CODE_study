@@ -1850,7 +1850,7 @@ int main() {
 	while (cin >> s) {
 		cout << sol->checkRecord_1(s) << endl;
 	}
-	return 0;
+	return (0);
 }
 #endif
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
