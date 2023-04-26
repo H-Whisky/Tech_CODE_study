@@ -18,6 +18,7 @@ struct TreeNode {
 	TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
+// 镜像
 TreeNode* invertTree(TreeNode* root) {
 	if (root == nullptr) {
 		return nullptr;
@@ -29,6 +30,76 @@ TreeNode* invertTree(TreeNode* root) {
 	root->right = left;
 	return root;
 }
+
+// 先序遍历
+void preOrderIterator(TreeNode* root) {
+	if (root)
+	{
+		stack<TreeNode*> s;
+		while (root || !s.empty()) {	// 只要root不为空
+			// 一路压栈
+			while (root) {	// r非空
+				cout << root->val << " ";
+				s.push(root);
+				root = root->left;	// 将r取为r的左节点
+			}
+			// 出栈 - 类似于dfs，在s栈空前一直寻找有右节点的，把右节点压栈输出然后继续寻找这个右节点的左节点
+			root = s.top();
+			s.pop();
+			root = root->right;
+		}
+	}
+}
+
+// 中序遍历
+void midOrderIterator(TreeNode* root) {
+	if (root)
+	{
+		stack<TreeNode*> s;
+		while (root || !s.empty()) {	// 只要root不为空
+			// 一路压栈
+			while (root) {	// r非空
+				s.push(root);
+				root = root->left;	// 将r取为r的左节点
+			}
+			// 出栈 - 类似于dfs，在s栈空前一直寻找有右节点的，把右节点压栈输出然后继续寻找这个右节点的左节点
+			root = s.top();
+			s.pop();
+			cout << root->val << " ";
+			root = root->right;
+		}
+	}
+}
+
+// 后序遍历
+void postOrderIterator(TreeNode* root) {
+	if (root)
+	{
+		stack<TreeNode*> s;
+		TreeNode* cur;	// 当前节点
+		TreeNode* pre = NULL; // 上一次访问的节点
+		s.push(root);
+		while (!s.empty()) {
+			cur = s.top(); s.pop();	// 先取出栈顶的节点,得到节点的值
+			s.push(cur);	// 再把节点放回去
+
+			// 如果当前节点没有子节点 或者 子节点都已经被访问过了
+			if ((cur->left == NULL && cur->right == NULL) || (pre != NULL && (pre == cur->left || pre == cur->right)))
+			{
+				cout << cur->val << " ";
+				s.pop();
+				pre = cur;
+			}
+			else {
+				if (cur->right != NULL) s.push(cur->right);
+				if (cur->left != NULL) s.push(cur->left);
+			}
+
+		}
+
+	}
+}
+
 
 struct ListNode {
 	int val;
@@ -1923,15 +1994,62 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_226 {
 public:
 	TreeNode* invertTree(TreeNode* root) {
+		if (root == nullptr) return nullptr;
+		TreeNode* left = invertTree(root->left);
+		TreeNode* right = invertTree(root->right);
+		root->left = right;
+		root->right = left;
+		return root;
+	}
 
+	// 先序遍历
+	void preOrderIterator(TreeNode* root) {
+		if (root)
+		{
+			stack<TreeNode*> s;
+			while (root || !s.empty()) {	// 只要root不为空
+				// 一路压栈
+				while (root) {	// r非空
+					cout << root->val << " ";
+					s.push(root);
+					root = root->left;	// 将r取为r的左节点
+				}
+				// 出栈 - 类似于dfs，在s栈空前一直寻找有右节点的，把右节点压栈输出然后继续寻找这个右节点的左节点
+				root = s.top();
+				s.pop();
+				root = root->right;
+			}
+		}
 	}
 };
 
 int main() {
+	Solution_226* sol = new Solution_226;
+
+	TreeNode a, b, c, d, e, f, g;
+	TreeNode* root = &a;
+	a.val = 4;
+	b.val = 2;
+	c.val = 7;
+	d.val = 1;
+	e.val = 3;
+	f.val = 6;
+	g.val = 9;
+	a.left = &b;
+	a.right = &c;
+	b.left = &d;
+	b.right = &e;
+	c.left = &f;
+	c.right = &g;
+
+
+	root = sol->invertTree(root);
+	sol->preOrderIterator(root);
+	cout << endl;
 
 	return 0;
 }
