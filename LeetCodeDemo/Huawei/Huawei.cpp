@@ -1815,7 +1815,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 
 class Solution_551 {
 public:
@@ -1841,7 +1841,6 @@ public:
 		}
 		return true;
 	}
-
 };
 
 int main() {
@@ -1850,6 +1849,34 @@ int main() {
 	while (cin >> s) {
 		cout << sol->checkRecord_1(s) << endl;
 	}
+	return 0;
+}
+#endif
+
+# if 1
+class Solution_11 {
+public:
+	int maxArea(vector<int>& height) {
+		int l = 0, r = height.size() - 1;
+		int ans = 0;
+		while (l < r) {
+			int area = min(height[l], height[r]) * (r - 1);
+			ans = max(ans, area);
+			if (height[l] <= height[r]) {
+				l++;
+			}
+			else {
+				r--;
+			}
+		}
+		return ans;
+	}
+};
+
+int main() {
+	vector<int> height = { 1,8,6,2,5,4,8,3,7 };
+	Solution_11* sol = new Solution_11();
+	cout << sol->maxArea(height) << endl;
 	return 0;
 }
 #endif
