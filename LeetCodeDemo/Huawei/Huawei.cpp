@@ -1853,7 +1853,7 @@ int main() {
 }
 #endif
 
-# if 1
+# if 0
 class Solution_11 {
 public:
 	int maxArea(vector<int>& height) {
@@ -1877,6 +1877,62 @@ int main() {
 	vector<int> height = { 1,8,6,2,5,4,8,3,7 };
 	Solution_11* sol = new Solution_11();
 	cout << sol->maxArea(height) << endl;
+	return 0;
+}
+#endif
+
+#if 0
+class Solution_144 {
+public:
+	vector<int> preorderTraversal(TreeNode* root) {
+		vector<int> res;
+		dfs(root, res);
+		return res;
+	}
+
+	void dfs(TreeNode* root, vector<int>& res) {
+		if (!root) {
+			return;
+		}
+		if (root->val != NULL) {
+			res.push_back(root->val);
+		}
+		dfs(root->left, res);
+		dfs(root->right, res);
+	}
+};
+
+int main() {
+	Solution_144* sol = new Solution_144;
+	vector<int> res;
+
+	TreeNode* root = new TreeNode(1);
+	TreeNode* node0 = new TreeNode(NULL);
+	TreeNode* node1 = new TreeNode(2);
+	TreeNode* node2 = new TreeNode(3);
+	root->left = node0;
+	root->right = node1;
+	node1->left = node2;
+
+	res = sol->preorderTraversal(root);
+	for (auto it : res) {
+		cout << it <<" ";
+	}
+	
+	return 0;
+}
+#endif
+
+#if 1
+class Solution_226 {
+public:
+	TreeNode* invertTree(TreeNode* root) {
+
+	}
+};
+
+int main() {
+
 	return 0;
 }
 #endif
