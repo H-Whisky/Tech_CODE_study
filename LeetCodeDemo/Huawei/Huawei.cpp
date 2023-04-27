@@ -9,7 +9,11 @@
 #include <map>
 using namespace std;
 
-// 公有数据结构
+/// <summary>
+/// 公有数据结构
+/// </summary>
+
+// 二叉树
 class TreeNode {
 public:
 	int val;
@@ -102,7 +106,8 @@ public:
 	}
 };
 
-struct ListNode {
+class ListNode {
+public:
 	int val;
 	ListNode* next;
 	ListNode() : val(0), next(nullptr){}
@@ -2055,6 +2060,66 @@ int main() {
 
 	root->preOrderIterator(root->invertTree(root));
 
+	return 0;
+}
+#endif
+
+#if 1
+class Solution_135 {
+public:
+	int candy_1(vector<int>& ratings) {
+		int n = ratings.size();
+		vector<int> left(n);
+		for (int i = 0; i < n; i++) {
+			if (i > 0 && ratings[i] > ratings[i - 1]) {
+				left[i] = left[i - 1] + 1;
+			}
+			else {
+				left[i] = 1;
+			}
+		}
+		int right = 0, ret = 0;
+		for (int i = n - 1; i >= 0; i--) {
+			if (i < n - 1 && ratings[i] > ratings[i + 1]) {
+				right++;
+			}
+			else {
+				right = 1;
+			}
+			ret += max(left[i], right);
+		}
+		return ret;
+	}
+
+	int candy_2(vector<int>& ratings) {
+		int n = ratings.size();
+		int ret = 1;
+		int inc = 1, dec = 0, pre = 1;
+		for (int i = 1; i < n; i++) {
+			if (ratings[i] >= ratings[i - 1]) {
+				dec = 0;
+				pre = ratings[i] == ratings[i - 1] ? 1 : pre + 1;
+				ret += pre;
+				inc = pre;
+			}
+			else {
+				dec++;
+				if (dec == inc) {
+					dec++;
+				}
+				ret += dec;
+				pre = 1;
+			}
+		}
+		return ret;
+	}
+};
+
+int main() {
+	vector<int> ratings= { 1, 0 ,2 };
+	Solution_135* sol = new Solution_135;
+	cout << sol->candy_1(ratings) << endl;
+	cout << sol->candy_2(ratings) << endl;
 	return 0;
 }
 #endif
