@@ -1519,7 +1519,7 @@ void main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_LCCUP23Spring {
 private:
 	vector<string> split(const string& s, const string& delimiter) {
@@ -1636,8 +1636,364 @@ int main() {
 	vector<vector<int>> forceField = { {0,0,1},{1,0,1} };
 	//vector<vector<int>> forceField = { {7,7,9},{7,5,3},{1,8,5},{5,6,3},{9,10,2},{8,4,10} }; //这个输出应该是4
 	cout << sol->Q3_fieldOfGreatestBlessing(forceField) << endl;
-	
-
 }
+#endif
 
+#if 0
+// Sol_1172_day_20230428
+class DinnerPlates_0 {
+private:
+	int capacity;
+	vector<int> stk; // 模拟栈
+	vector<int> top; // 记录每个栈的栈顶元素在栈中的位置
+	set<int> poppedPos; // 保存被方法popAtStack()删除的位置
+
+public:
+	DinnerPlates_0(int capacity) {
+		this->capacity = capacity;
+	}
+
+	void push(int val) {
+		// 先考虑poppedPos中的位置，如果非空则找出最小的位置，把元素push到这个位置，如果为空，则往stack后追加，然后更新top
+		if (poppedPos.empty()) {
+			int pos = stk.size();
+			stk.emplace_back(val);
+			if (pos % capacity == 0) {
+				top.emplace_back(0);
+			}
+			else {
+				top.back()++;
+			}
+		}
+		else {
+			int pos = *poppedPos.begin();
+			poppedPos.erase(pos);
+			stk[pos] = val;
+			int index = pos / capacity;
+			top[index]++;
+		}
+	}
+
+	// 先找出这个栈现在的栈顶位置，然后把这个位置的元素的下标计算出来并更新栈顶位置，把下标放入poppedPos，返回元素的值。如果栈为空，返回-1
+	int popAtStack(int index) {
+		if (index >= top.size()) {
+			return -1;
+		}
+		int stackTop = top[index];
+		if (stackTop < 0) return -1;
+		top[index]--;
+		int pos = index * capacity + stackTop;
+		poppedPos.emplace(pos);
+		return stk[pos];
+	}
+
+	// 
+	int pop() {
+		while (!stk.empty() && poppedPos.count(stk.size() - 1)) {
+			stk.pop_back();
+			int pos = *poppedPos.rbegin();
+			poppedPos.erase(pos);
+			if (pos % capacity == 0) {
+				top.pop_back();
+			}
+		}
+		if (stk.empty()) {
+			return -1;
+		}
+		else {
+			int pos = stk.size() - 1;
+			int val = stk.back();
+			stk.pop_back();
+			if (pos % capacity == 0) {
+				top.pop_back();
+			}
+			else {
+				top.back() == top.size() - 2;
+			}
+			return val;
+		}
+	}
+};
+
+class DinnerPlates_1 {
+private:
+	int p;//当前非空栈的最大下标
+	int c;//单个栈的最大容量
+	vector<stack<int>> a;//元素是栈的数组
+	set<int> e;//用于保存未满的栈的下标
+
+	inline void update_p() {//更新p
+		while (p != -1 && a[p].empty())
+			p--;
+	}
+
+public:
+	DinnerPlates_1(int capacity) {
+		c = capacity;
+		p = -1;//初始化标记
+	}
+
+	void push(int val) {
+		if (e.empty())//保证e中有元素
+			e.insert(p + 1);
+		auto l = e.begin();
+		if (*l >= a.size())//防止a下标越界
+			a.emplace_back(stack<int>());
+		a[*l].push(val);
+		p = max(p, *l);//更新p
+		if (a[*l].size() == c)
+			e.erase(l);//更新e
+	}
+
+	int pop() {
+		if (p == -1)
+			return -1;
+		int t = a[p].top();
+		a[p].pop();
+		if (a[p].size() == c - 1)
+			e.insert(p);//更新e
+		update_p();//更新p
+		return t;
+	}
+
+	int popAtStack(int index) {
+		if (index > p || a[index].empty())
+			return -1;
+		int t = a[index].top();
+		a[index].pop();
+		if (a[index].size() == c - 1)
+			e.insert(index);//更新e
+		if (index == p)
+			update_p();//更新p
+		return t;
+	}
+};
+int main() {
+	DinnerPlates_1* D = new DinnerPlates_1(2);
+	D->push(1);
+	D->push(2);
+	D->push(3);
+	D->push(4);
+	D->push(5);
+	cout << D->popAtStack(0) << endl;
+	return 0;
+}
+#endif
+
+#if 1
+
+struct PrintJob {
+	int id; // 文件编号
+	int printer; // 打印机编号
+	int priority; //优先级
+	bool operator < (const PrintJob& other) const {
+		// 
+		if (priority != other.priority) {
+			return priority < other.printer;
+		}
+
+		return id > other.id;
+	}
+};
+
+struct Document {
+	int eventIndex;
+	int priority;
+};
+
+class Huawei_2022Q4_20230503 {
+public:
+	void Q1() {
+		//map<int, priority_queue<int>> print_queues;
+
+		//int num_events;
+		//cin >> num_events;
+
+		//int event_count = 1;
+		//for (int i = 0; i < num_events; i++) {
+		//	string event;
+		//	cin >> event;
+		//	if (event == "IN") {
+		//		int printer, priority;
+		//		cin >> printer >> priority;
+		//		print_queues[printer].push(priority * 10000 + event_count);
+		//		event_count++;
+		//	}
+		//	else if (event == "OUT") {
+		//		int printer;
+		//		cin >> printer;
+
+		//		if (print_queues[printer].empty()) {
+		//			cout << "NULL";
+		//		}
+		//		else {
+		//			int file_number = print_queues[printer].top() % 10000;
+		//			print_queues[printer].pop();
+		//			cout << file_number << " ";
+		//		}
+		//	}
+		//}
+
+
+
+
+
+
+		/*while (cin >> N) {
+			queue<PrintJob> q[5];
+			int currentJob[5] = { 0 };
+
+			int jobCount = 0;
+
+			for (int i = 0; i < N; i++) {
+				string event;
+				cin >> event;
+
+				if (event == "IN") {
+					int printer, priority;
+					cin >> printer >> priority;
+					PrintJob job = { ++jobCount, priority, printer - 1 };
+					q[printer - 1].push(job);
+				}
+				else if (event == "OUT") {
+					int printer;
+					cin >> printer;
+
+					if (currentJob[printer - 1] == 0 && !q[printer - 1].empty()) {
+						PrintJob job = q[printer - 1].front();
+						q[printer - 1].pop();
+						currentJob[printer - 1] = job.id;
+						cout << job.id << " ";
+					}
+					else if (currentJob[printer - 1] > 0) {
+						cout << currentJob[printer - 1] << " ";
+					}
+					else {
+						cout << "NULL";
+					}
+				}
+			}
+		}*/
+
+
+		int N;
+		cin >> N;
+
+		vector<priority_queue<Document>> printerQueues(5);// 打印机队列
+		unordered_map<int, Document> printingDocs;
+
+		int eventIndex = 1;
+
+		for (int i = 0; i < N; i++) {
+			string  command;
+			cin >> command;
+
+			if (command == "IN") {
+				int printerIndex, priority;
+				cin >> printerIndex >> priority;
+
+				Document doc = { eventIndex, priority };
+				printerQueues[printerIndex - 1].push(doc);
+				eventIndex++;
+			}
+			else if (command == "OUT") {
+				int printerIndex;
+				cin >> printerIndex;
+
+				if (printerQueues[printerIndex - 1].empty()) {
+					cout << "NULL";
+				}
+				else {
+					Document doc = printerQueues[printerIndex - 1].top();
+					printerQueues[printerIndex - 1].pop();
+					printingDocs[doc.eventIndex] = doc;
+					cout << doc.eventIndex << " ";
+				}
+			}
+		}
+	}
+
+	void Q2() {
+		int n, d;
+		cin >> n >> d;
+
+		vector<int> strengths(n);
+		for (int i = 0; i < n; i++) {
+			cin >> strengths[i];
+		}
+
+		sort(strengths.begin(), strengths.end());
+		int max_teams = 0;
+		int sum_diffs = 0;
+		int i = 0, j = 0;
+		while (i < n && j < n) {
+			if (strengths[j] - strengths[i] <= d) {
+				int num_teams = j - i + 1;
+				if (num_teams > max_teams) {
+					max_teams = num_teams;
+					sum_diffs = 0;
+					for (int k = i; k <= j; k++) {
+						for (int l = i; l < k; l++) {
+							sum_diffs += strengths[k] - strengths[l];
+						}
+					}
+				}
+				else if (num_teams == max_teams) {
+					int cur_sum_diffs = 0;
+					for (int k = i; k <= j; k++) {
+						for (int l = i; l < k; l++) {
+							cur_sum_diffs += strengths[k] - strengths[l];
+						}
+					}sum_diffs = min(sum_diffs, cur_sum_diffs);
+				}
+				j++;
+			}
+			else {
+				i++;
+			}
+		}
+		if (max_teams == 0) {
+			cout << -1 << endl;
+		}
+		else {
+			cout << sum_diffs << endl;
+		}
+		/*int left = 0, right = 0;
+		int minDiffSum = INT_MAX;
+		int matchedCount = 0;
+
+		while (left < n) {
+			while (right < n && strengths[right] - strengths[left] <= d) {
+				right++;
+				matchedCount++;
+			}
+
+			if (matchedCount >= 2) {
+				int diffSum = 0;
+				for (int i = left; i < right - 1; i++) {
+					for (int j = i + 1; j < right; j++) {
+						diffSum += strengths[j] - strengths[i];
+					}
+				}
+				minDiffSum = min(minDiffSum, diffSum);
+			}
+
+			left++;
+			matchedCount--;
+		}
+		if (minDiffSum == INT_MAX) {
+			cout << -1 << endl;
+		}
+		else {
+			cout << minDiffSum << endl;
+		}*/
+	}
+};
+
+int main() {
+	Huawei_2022Q4_20230503* sol = new Huawei_2022Q4_20230503;
+	sol->Q1();
+	//sol->Q2();
+	return 0;
+}
 #endif
