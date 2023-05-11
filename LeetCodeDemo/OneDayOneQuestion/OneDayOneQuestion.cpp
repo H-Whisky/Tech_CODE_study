@@ -1782,135 +1782,142 @@ int main() {
 
 #if 1
 
-struct PrintJob {
-	int id; // 文件编号
-	int printer; // 打印机编号
-	int priority; //优先级
-	bool operator < (const PrintJob& other) const {
-		// 
-		if (priority != other.priority) {
-			return priority < other.printer;
-		}
+/* 
+- Q1:
+- 题目描述：
+	有5台打印机打印文件，每台打印机有自己的待打印队列。因为打印的文件内容有轻重缓急之分，
+	所以队列中的文件有1~10不同的代先级，其中数字越大优先级越高。
+	打印机会从自己的待打印队列中选择优先级最高的文件来打印。
+	如果存在两个优先级一样的文件，则选择最早进入队列的那个文件。
+	现在请你来模拟这5台打印机的打印过程。
+- 输入描述：
+	每个输入包含1个测试用例，每个测试用例第一行给出发生事件的数量N（0 < N < 1000）。
+	接下来有 N 行，分别表示发生的事件。
+	共有如下两种事件：
+	1. “IN P NUM”，表示有一个拥有优先级 NUM 的文件放到了打印机 P 的待打印队列中。（0< P <= 5, 0 < NUM <= 10)；
+	2. “OUT P”，表示打印机 P 进行了一次文件打印，同时该文件从待打印队列中取出。（0 < P <= 5）。
+- 输出描述：
+	对于每个测试用例，每次”OUT P”事件，请在一行中输出文件的编号。
+	如果此时没有文件可以打印，请输出”NULL“。
+	文件的编号定义为”IN P NUM”事件发生第 x 次，此处待打印文件的编号为x。编号从1开始。
+	示例1 输入输出示例仅供调试，后台判断数据一般不包含示例
+- 输入：
+	7
+	IN 1 1
+	IN 1 2
+	IN 1 3
+	IN 2 1
+	OUT 1
+	OUT 2
+	OUT 2
+- 输出：
+	3
+	4
+	NULL
 
-		return id > other.id;
-	}
-};
+- 输入：
+	5
+	IN 1 1
+	IN 1 2
+	IN 1 3
+	OUT 1
+	OUT 1
+- 输出：
+	3
+	2
 
-struct Document {
-	int eventIndex;
+- 输入：
+	10
+	IN 1 1
+	IN 1 2
+	IN 1 3
+	IN 2 1
+	IN 2 2
+	IN 3 1
+	IN 3 2
+	IN 4 1
+	OUT 2
+	OUT 3
+- 输出：
+	5
+	7
+
+- Q2:
+- 题目描述：
+	游戏里面，队伍通多匹配实力相近的对手进行对战。但是如果匹配的队伍实力相差太大，
+	对于双方游戏体验都不会太好。给定n个队伍的实力值，对其进行两两实力匹配，
+	两支队伍实例差距允许的最大差距d内，则可以匹配。要求在匹配队伍最多的情况下，
+	匹配出的各组实例差距的总和最小。
+- 输入描述：
+	第一行，n，d。队伍个数n。允许的最大实力差距d。
+	第二行，n个队伍的实力值，空格分隔。
+- 输出描述：
+	匹配后，各组对战的实力差值的综合。若没有队伍可以匹配输出-1。
+*/
+
+struct Q1_PrintJob {
+	int id;
 	int priority;
+	int timestamp;
+
+	Q1_PrintJob(int _id, int _priority, int _timestamp) : id(_id), priority(_priority), timestamp(_timestamp) {}
+
+	bool operator<(const Q1_PrintJob& other) const {
+		if (priority != other.priority) {
+			return priority < other.priority;
+		}
+		else {
+			return timestamp < other.timestamp;
+		}
+	}
 };
 
 class Huawei_2022Q4_20230503 {
 public:
 	void Q1() {
-		//map<int, priority_queue<int>> print_queues;
+		int n;
+		cin >> n;
+		cin.ignore();
 
-		//int num_events;
-		//cin >> num_events;
+		vector<priority_queue<Q1_PrintJob>> printers(5);
+		priority_queue<Q1_PrintJob> jobs;
 
-		//int event_count = 1;
-		//for (int i = 0; i < num_events; i++) {
-		//	string event;
-		//	cin >> event;
-		//	if (event == "IN") {
-		//		int printer, priority;
-		//		cin >> printer >> priority;
-		//		print_queues[printer].push(priority * 10000 + event_count);
-		//		event_count++;
-		//	}
-		//	else if (event == "OUT") {
-		//		int printer;
-		//		cin >> printer;
+		int count = 0;
+		vector<string> res;
 
-		//		if (print_queues[printer].empty()) {
-		//			cout << "NULL";
-		//		}
-		//		else {
-		//			int file_number = print_queues[printer].top() % 10000;
-		//			print_queues[printer].pop();
-		//			cout << file_number << " ";
-		//		}
-		//	}
-		//}
+		for (int i = 0; i < n; i++) {
+			string line;
+			getline(cin, line);
+			stringstream ss(line);
 
+			string action;
+			int p, num;
 
+			ss >> action >> p;
 
+			if (action == "IN") {
+				ss >> num;
 
-
-
-		/*while (cin >> N) {
-			queue<PrintJob> q[5];
-			int currentJob[5] = { 0 };
-
-			int jobCount = 0;
-
-			for (int i = 0; i < N; i++) {
-				string event;
-				cin >> event;
-
-				if (event == "IN") {
-					int printer, priority;
-					cin >> printer >> priority;
-					PrintJob job = { ++jobCount, priority, printer - 1 };
-					q[printer - 1].push(job);
-				}
-				else if (event == "OUT") {
-					int printer;
-					cin >> printer;
-
-					if (currentJob[printer - 1] == 0 && !q[printer - 1].empty()) {
-						PrintJob job = q[printer - 1].front();
-						q[printer - 1].pop();
-						currentJob[printer - 1] = job.id;
-						cout << job.id << " ";
-					}
-					else if (currentJob[printer - 1] > 0) {
-						cout << currentJob[printer - 1] << " ";
-					}
-					else {
-						cout << "NULL";
-					}
-				}
+				Q1_PrintJob job(++count, num, i);
+				jobs.push(job);
+				printers[p - 1].push(job);
 			}
-		}*/
-
-
-		int N;
-		cin >> N;
-
-		vector<priority_queue<Document>> printerQueues(5);// 打印机队列
-		unordered_map<int, Document> printingDocs;
-
-		int eventIndex = 1;
-
-		for (int i = 0; i < N; i++) {
-			string  command;
-			cin >> command;
-
-			if (command == "IN") {
-				int printerIndex, priority;
-				cin >> printerIndex >> priority;
-
-				Document doc = { eventIndex, priority };
-				printerQueues[printerIndex - 1].push(doc);
-				eventIndex++;
-			}
-			else if (command == "OUT") {
-				int printerIndex;
-				cin >> printerIndex;
-
-				if (printerQueues[printerIndex - 1].empty()) {
-					cout << "NULL";
+			else if (action == "OUT") {
+				// 查看打印机任务列表中是否有任务
+				if (!printers[p - 1].empty()) {
+					res.push_back(to_string(printers[p - 1].top().id));//往结果集里面新增结果数据
+					printers[p - 1].pop();
 				}
 				else {
-					Document doc = printerQueues[printerIndex - 1].top();
-					printerQueues[printerIndex - 1].pop();
-					printingDocs[doc.eventIndex] = doc;
-					cout << doc.eventIndex << " ";
+					res.push_back("NULL");
 				}
 			}
 		}
+
+		for (auto it : res) {
+			cout << it << " ";
+		}
+
 	}
 
 	void Q2() {
@@ -1958,35 +1965,6 @@ public:
 		else {
 			cout << sum_diffs << endl;
 		}
-		/*int left = 0, right = 0;
-		int minDiffSum = INT_MAX;
-		int matchedCount = 0;
-
-		while (left < n) {
-			while (right < n && strengths[right] - strengths[left] <= d) {
-				right++;
-				matchedCount++;
-			}
-
-			if (matchedCount >= 2) {
-				int diffSum = 0;
-				for (int i = left; i < right - 1; i++) {
-					for (int j = i + 1; j < right; j++) {
-						diffSum += strengths[j] - strengths[i];
-					}
-				}
-				minDiffSum = min(minDiffSum, diffSum);
-			}
-
-			left++;
-			matchedCount--;
-		}
-		if (minDiffSum == INT_MAX) {
-			cout << -1 << endl;
-		}
-		else {
-			cout << minDiffSum << endl;
-		}*/
 	}
 };
 
