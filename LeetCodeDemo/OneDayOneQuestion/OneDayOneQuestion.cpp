@@ -1781,8 +1781,26 @@ int main() {
 #endif
 
 #if 1
+struct Q1_PrintJob {
+	int id;
+	int priority;
+	int timestamp;
 
-/* 
+	Q1_PrintJob(int _id, int _priority, int _timestamp) : id(_id), priority(_priority), timestamp(_timestamp) {}
+
+	bool operator<(const Q1_PrintJob& other) const {
+		if (priority != other.priority) {
+			return priority < other.priority;
+		}
+		else {
+			return timestamp < other.timestamp;
+		}
+	}
+};
+
+class Huawei_2022Q4_20230503 {
+public:
+/*
 - Q1:
 - 题目描述：
 	有5台打印机打印文件，每台打印机有自己的待打印队列。因为打印的文件内容有轻重缓急之分，
@@ -1841,39 +1859,7 @@ int main() {
 - 输出：
 	5
 	7
-
-- Q2:
-- 题目描述：
-	游戏里面，队伍通多匹配实力相近的对手进行对战。但是如果匹配的队伍实力相差太大，
-	对于双方游戏体验都不会太好。给定n个队伍的实力值，对其进行两两实力匹配，
-	两支队伍实例差距允许的最大差距d内，则可以匹配。要求在匹配队伍最多的情况下，
-	匹配出的各组实例差距的总和最小。
-- 输入描述：
-	第一行，n，d。队伍个数n。允许的最大实力差距d。
-	第二行，n个队伍的实力值，空格分隔。
-- 输出描述：
-	匹配后，各组对战的实力差值的综合。若没有队伍可以匹配输出-1。
 */
-
-struct Q1_PrintJob {
-	int id;
-	int priority;
-	int timestamp;
-
-	Q1_PrintJob(int _id, int _priority, int _timestamp) : id(_id), priority(_priority), timestamp(_timestamp) {}
-
-	bool operator<(const Q1_PrintJob& other) const {
-		if (priority != other.priority) {
-			return priority < other.priority;
-		}
-		else {
-			return timestamp < other.timestamp;
-		}
-	}
-};
-
-class Huawei_2022Q4_20230503 {
-public:
 	void Q1() {
 		int n;
 		cin >> n;
@@ -1920,58 +1906,99 @@ public:
 
 	}
 
+
+/*
+- Q2:
+-题目描述：
+	游戏里面，队伍通多匹配实力相近的对手进行对战。但是如果匹配的队伍实力相差太大，
+	对于双方游戏体验都不会太好。给定n个队伍的实力值，对其进行两两实力匹配，
+	两支队伍实例差距允许的最大差距d内，则可以匹配。要求在匹配队伍最多的情况下，
+	匹配出的各组实例差距的总和最小。
+- 输入描述：
+	第一行，n，d。队伍个数n。允许的最大实力差距d。
+	第二行，n个队伍的实力值，空格分隔。
+- 输出描述：
+	匹配后，各组对战的实力差值的综合。若没有队伍可以匹配输出 - 1。
+
+- 示例1
+- 输入：
+	6 30
+	81 87 47 59 81 18
+- 输出：
+	57
+- 说明：
+	18与47配对，实力差距29；
+	59与81配对，实力差距22；
+	81与87配对，实力差距6。
+	总实力差距29+22+6=57。
+
+- 示例2
+- 输入：
+	6 20
+	81 87 47 59 81 18
+- 输出：
+	12
+- 说明：
+	最多能匹配成功4支队伍。
+	47与59配对，实力差距12；
+	81与81配对，实力差距0。
+	总实力差距12+0=12。
+
+- 示例3
+- 输入：
+	4 10
+	40 51 62 73
+- 输出：
+	-1
+- 说明：
+	实力差距都在10以上，没有队伍可以匹配成功。
+*/
 	void Q2() {
-		int n, d;
+		int n, d; // 队伍规模n 最大差距d
 		cin >> n >> d;
 
+		// 队伍实力集合
 		vector<int> strengths(n);
 		for (int i = 0; i < n; i++) {
 			cin >> strengths[i];
 		}
 
 		sort(strengths.begin(), strengths.end());
-		int max_teams = 0;
-		int sum_diffs = 0;
-		int i = 0, j = 0;
-		while (i < n && j < n) {
-			if (strengths[j] - strengths[i] <= d) {
-				int num_teams = j - i + 1;
-				if (num_teams > max_teams) {
-					max_teams = num_teams;
-					sum_diffs = 0;
-					for (int k = i; k <= j; k++) {
-						for (int l = i; l < k; l++) {
-							sum_diffs += strengths[k] - strengths[l];
-						}
-					}
-				}
-				else if (num_teams == max_teams) {
-					int cur_sum_diffs = 0;
-					for (int k = i; k <= j; k++) {
-						for (int l = i; l < k; l++) {
-							cur_sum_diffs += strengths[k] - strengths[l];
-						}
-					}sum_diffs = min(sum_diffs, cur_sum_diffs);
-				}
-				j++;
-			}
-			else {
-				i++;
-			}
-		}
-		if (max_teams == 0) {
-			cout << -1 << endl;
+		int ans = 0;
+		bool flag = false;
+		vector<int> dp(n);
+		dp[0] = 0;
+		if (strengths[1] - strengths[0] <= d) {
+			dp[1] = strengths[1] - strengths[0];
+			flag = true;
 		}
 		else {
-			cout << sum_diffs << endl;
+			dp[1] = 0;
+		}
+		for (int i = 2; i < n; i++) {
+			if (strengths[i] - strengths[i - 1] <= d) {
+				flag = true;
+				dp[i] = dp[i - 2] + strengths[i] - strengths[i - 1];
+			}
+			else {
+				dp[i] = dp[i - 1];
+			}
+		}
+		if (flag) {
+			cout << dp[n - 1];
+		}
+		else {
+			cout << "-1";
 		}
 	}
 };
 
 int main() {
 	Huawei_2022Q4_20230503* sol = new Huawei_2022Q4_20230503;
-	sol->Q1();
-	//sol->Q2();
+	//sol->Q1();
+	sol->Q2();
+
+
 	return 0;
 }
 #endif
