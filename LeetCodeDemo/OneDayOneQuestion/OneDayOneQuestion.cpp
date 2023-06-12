@@ -2016,7 +2016,7 @@ public:
 		}
 		sort(diffs.begin(), diffs.end());
 		for (int i = 1; i <= k; i++) {
-			ans += diffs[n - 1];
+			ans += diffs[n - i];
 		}
 		return ans;
 	}
