@@ -1780,7 +1780,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 struct Q1_PrintJob {
 	int id;
 	int priority;
@@ -1999,6 +1999,35 @@ int main() {
 	sol->Q2();
 
 
+	return 0;
+}
+#endif
+
+#if 1
+class Solution_2611_day_20230607 {
+public:
+	int miceAndCheese(vector<int>& reward1, vector<int>& reward2, int k) {
+		int ans = 0;
+		int n = reward1.size();
+		vector<int> diffs(n);
+		for (int i = 0; i < n; i++) {
+			ans += reward2[i];
+			diffs[i] = reward1[i] - reward2[i];
+		}
+		sort(diffs.begin(), diffs.end());
+		for (int i = 1; i <= k; i++) {
+			ans += diffs[n - 1];
+		}
+		return ans;
+	}
+};
+
+int main() {
+	vector<int> reward1 = { 1,1,3,4 };
+	vector<int> reward2 = { 4,4,1,1 };
+	int k = 2;
+	Solution_2611_day_20230607* sol = new Solution_2611_day_20230607;
+	cout << sol->miceAndCheese(reward1, reward2, k) <<endl;
 	return 0;
 }
 #endif
