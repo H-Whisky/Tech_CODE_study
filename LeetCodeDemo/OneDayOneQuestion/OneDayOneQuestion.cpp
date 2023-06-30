@@ -2003,7 +2003,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_2611_day_20230607 {
 public:
 	int miceAndCheese(vector<int>& reward1, vector<int>& reward2, int k) {
@@ -2030,4 +2030,28 @@ int main() {
 	cout << sol->miceAndCheese(reward1, reward2, k) <<endl;
 	return 0;
 }
+#endif
+
+#if 1
+class Solution_2490_day_20230630 {
+public:
+	bool isCircularSentence(string sentence) {
+		if (sentence.back() != sentence.front()) return false;
+
+		for (int i = 0; i < sentence.size(); i++) {
+			if (sentence[i] == ' ' && sentence[i + 1] != sentence[i - 1]) {
+				return false;
+			}
+		}
+		return true;
+	}
+};
+
+int main() {
+	Solution_2490_day_20230630* sol = new Solution_2490_day_20230630;
+	cout << sol->isCircularSentence("leetcode exercises sound delightful") << endl;
+	cout << sol->isCircularSentence("Leetcode is cool") << endl;
+	return 0;
+}
+
 #endif
