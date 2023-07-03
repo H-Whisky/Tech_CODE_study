@@ -1780,7 +1780,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 struct Q1_PrintJob {
 	int id;
 	int priority;
@@ -2050,4 +2050,75 @@ int main() {
 	return 0;
 }
 
+#endif
+
+#if 1
+struct ListNode {
+	int val;
+	ListNode* next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode* next) : val(x), next(next) {}
+	
+};
+
+ListNode* CreateListNodesAsc(std::vector<int>& x) {
+	ListNode* head = new ListNode;
+	ListNode* pre = head;
+
+	for (int i = 0; i < x.size(); i++) {
+		ListNode* p = new ListNode(x[i]);
+		pre->next = p;
+		pre = p;
+	}
+	return head->next;
+}
+
+class Solution_445_day_20230703 {
+public:
+	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+		stack<int> s1, s2;
+		while (l1)
+		{
+			s1.push(l1->val);
+			l1 = l1->next;
+		}
+
+		while (l2)
+		{
+			s2.push(l2->val);
+			l2 = l2->next;
+		}
+		int carry = 0;
+		ListNode* ans = nullptr;
+		while (!s1.empty() || !s2.empty() || carry != 0) {
+			int a = s1.empty() ? 0 : s1.top();
+			int b = s2.empty() ? 0 : s2.top();
+			if (!s1.empty()) s1.pop();
+			if (!s2.empty()) s2.pop();
+			int cur = a + b + carry;
+			carry = cur / 10;
+			cur %= 10;
+			auto curnode = new ListNode(cur);
+			curnode->next = ans;
+			ans = curnode;
+		}
+		return ans;
+	}
+};
+
+int main() {
+	vector<int> x1 = { 7, 2, 4, 3 };
+	vector<int> x2 = { 5, 6, 4};
+
+	ListNode* l1 = CreateListNodesAsc(x1);
+	ListNode* l2 = CreateListNodesAsc(x2);
+
+	Solution_445_day_20230703* sol = new Solution_445_day_20230703();
+	ListNode* cur = sol->addTwoNumbers(l1, l2);
+	while (cur) {
+		cout << cur->val << " ";
+		cur = cur->next;
+	}
+}
 #endif
