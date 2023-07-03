@@ -1780,7 +1780,7 @@ int main() {
 }
 #endif
 
-#if 0
+#if 1
 struct Q1_PrintJob {
 	int id;
 	int priority;
@@ -1953,7 +1953,7 @@ public:
 - 说明：
 	实力差距都在10以上，没有队伍可以匹配成功。
 */
-	void Q2() {
+	int Q2() {
 		int n, d; // 队伍规模n 最大差距d
 		cin >> n >> d;
 
@@ -1965,30 +1965,26 @@ public:
 
 		sort(strengths.begin(), strengths.end());
 		int ans = 0;
-		bool flag = false;
 		vector<int> dp(n);
 		dp[0] = 0;
-		if (strengths[1] - strengths[0] <= d) {
-			dp[1] = strengths[1] - strengths[0];
-			flag = true;
-		}
-		else {
-			dp[1] = 0;
-		}
-		for (int i = 2; i < n; i++) {
-			if (strengths[i] - strengths[i - 1] <= d) {
-				flag = true;
-				dp[i] = dp[i - 2] + strengths[i] - strengths[i - 1];
-			}
-			else {
-				dp[i] = dp[i - 1];
+		int res = 0;
+		for (int i = 1; i < strengths.size(); i++) {
+			dp[i] = strengths[i] - strengths[i - 1];
+			if (dp[i] <= d) {
+				i++;
 			}
 		}
-		if (flag) {
-			cout << dp[n - 1];
+		for (auto it : dp) {
+			//cout << it << " ";
+			if (it != 0 && it <= d) {
+				res += it;
+			}
+		}
+		if (res == 0) {
+			return -1;
 		}
 		else {
-			cout << "-1";
+			return res;
 		}
 	}
 };
@@ -1996,7 +1992,7 @@ public:
 int main() {
 	Huawei_2022Q4_20230503* sol = new Huawei_2022Q4_20230503;
 	//sol->Q1();
-	sol->Q2();
+	cout << sol->Q2() << endl;
 
 
 	return 0;
@@ -2032,7 +2028,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_2490_day_20230630 {
 public:
 	bool isCircularSentence(string sentence) {
