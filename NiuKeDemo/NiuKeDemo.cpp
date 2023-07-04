@@ -10,6 +10,7 @@
 #include <regex>
 #include <forward_list>
 #include <set>
+#include <stack>
 using namespace std;
 
 #ifdef DEBUG
@@ -1224,7 +1225,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 /*
 1.
 汽水瓶
@@ -1462,4 +1463,42 @@ int main() {
 	return 0;
 }
 
+#endif
+
+#if 1
+class Solution_HJ55 {
+public:
+	bool ifSev(int num) {
+		while (num > 0) {
+			if (num % 10 == 7) {
+				return true;
+			}
+			num /= 10;
+		}
+		return false;
+	}
+
+	int with7(int n) {
+		int ans = 0;
+		for (int i = 1; i <= n; i++) {
+			if (i % 7 == 0) {
+				ans++;
+				continue;
+			}
+			if (ifSev(i)) {
+				ans++;
+			}
+		}
+		return ans;
+	}
+};
+
+int main() {
+	Solution_HJ55* sol = new Solution_HJ55;
+	int n;
+	while (cin >> n) {
+		cout << sol->with7(n) << endl;
+	}
+	return 0;
+}
 #endif
