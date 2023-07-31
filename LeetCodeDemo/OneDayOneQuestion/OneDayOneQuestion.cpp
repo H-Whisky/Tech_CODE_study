@@ -2052,7 +2052,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 struct ListNode {
 	int val;
 	ListNode* next;
@@ -2120,5 +2120,38 @@ int main() {
 		cout << cur->val << " ";
 		cur = cur->next;
 	}
+}
+#endif
+
+#if 1
+
+class Solution_931_day_20230713 {
+public:
+	int minFallingPathSum(vector<vector<int>>& matrix) {
+		int n = matrix.size();
+		vector<vector<int>> dp(n, vector<int>(n));
+		copy(matrix[0].begin(), matrix[0].end(), dp[0].begin());
+		for (int i = 1; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				int mn = dp[i - 1][j];
+				if (j > 0) {
+					mn = min(mn, dp[i - 1][j - 1]);
+				}
+				if (j < n - 1) {
+					mn = min(mn, dp[i - 1][j + 1]);
+				}
+				dp[i][j] = mn + matrix[i][j];
+			}
+		}
+		return (int)*min_element(dp[n - 1].begin(), dp[n - 1].end());
+	}
+
+};
+
+int main() {
+	vector<vector<int>> matrix = { {2,1,3},{6,5,4},{7,8,9} };
+	Solution_931_day_20230713* sol = new Solution_931_day_20230713();
+	cout << sol->minFallingPathSum(matrix) << endl;
+	return 0;
 }
 #endif
