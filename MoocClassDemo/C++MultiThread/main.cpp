@@ -8,8 +8,9 @@ std::mutex mu;
 
 using std::cout;
 using std::endl;
-using std::thread;
+//using std::thread;
 
+# if 0
 class Factor {
 public:
 	void operator()(std::string& msg) {
@@ -54,3 +55,25 @@ int main() {
 	std::cin.get();
 	return (0);
 }
+#endif
+
+#if 1
+void function_1() {
+	cout << "func_1" << endl;
+}
+
+int main() {
+	std::thread t1(function_1);// t1线程开始执行
+
+	int i = 0;
+	while (i < 100) {
+		cout << i << endl;
+		i++;
+	}
+
+	if (t1.joinable()) {
+		t1.join();
+	}
+	return 0;
+}
+#endif
