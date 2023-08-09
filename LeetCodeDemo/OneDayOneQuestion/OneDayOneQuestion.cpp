@@ -2156,7 +2156,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_344_day20230807 {
 public:
 	void reverseString(vector<char>& s) {
@@ -2175,5 +2175,31 @@ int main() {
 	}
 
 
+}
+#endif
+
+#if 1
+class Solution_1281_day20230809 {
+public:
+	int subtractProductAndSum(int n) {
+		int res_pro = 1;
+		int res_sum = 0;
+		while (n)
+		{
+			int x = n % 10;
+			res_pro *= x;
+			res_sum += x;
+
+			n /= 10;
+
+		}
+		return res_pro - res_sum;
+	}
+
+};
+
+int main() {
+	Solution_1281_day20230809* sol = new Solution_1281_day20230809();
+	cout << sol->subtractProductAndSum(234) << endl;
 }
 #endif
