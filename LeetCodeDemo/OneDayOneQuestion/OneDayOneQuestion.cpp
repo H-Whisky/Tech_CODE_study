@@ -2123,7 +2123,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 
 class Solution_931_day_20230713 {
 public:
@@ -2153,5 +2153,27 @@ int main() {
 	Solution_931_day_20230713* sol = new Solution_931_day_20230713();
 	cout << sol->minFallingPathSum(matrix) << endl;
 	return 0;
+}
+#endif
+
+#if 1
+class Solution_344_day20230807 {
+public:
+	void reverseString(vector<char>& s) {
+		for (int i = 0, j = s.size() - 1; i < s.size() / 2; i++, j--) {
+			swap(s[i], s[j]);
+		}
+	}
+};
+
+int main() {
+	vector<char> s = { 'h','e','l','l','o'};
+	Solution_344_day20230807* sol = new Solution_344_day20230807();
+	sol->reverseString(s);
+	for (auto it : s) {
+		cout << it << " ";
+	}
+
+
 }
 #endif

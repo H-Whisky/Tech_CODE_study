@@ -63,7 +63,7 @@ void function_1() {
 }
 
 int main() {
-	std::thread t1(function_1);// t1线程开始执行
+	std::thread t1(function_1());// t1线程开始执行
 
 	int i = 0;
 	while (i < 100) {
