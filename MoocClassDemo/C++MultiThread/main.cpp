@@ -58,22 +58,71 @@ int main() {
 #endif
 
 #if 1
-void function_1() {
-	cout << "func_1" << endl;
+
+class LogFile {
+public:
+	LogFile() {
+		f.open("log.txt");
+	}
+
+	void shared_print(std::string id, int value) {
+		std::lock(m_mutex, m_mutex2);
+		std::lock_guard<std::mutex> locker(m_mutex,std::adopt_lock);
+		std::lock_guard<std::mutex> locker2(m_mutex2,std::adopt_lock);
+		cout<< "From" << id << ": " << value << endl;
+	}	
+	void shared_print2(std::string id, int value) {
+		std::lock(m_mutex, m_mutex2);
+		std::lock_guard<std::mutex> locker2(m_mutex2, std::adopt_lock);
+		std::lock_guard<std::mutex> locker(m_mutex, std::adopt_lock);
+		cout << "From" << id << ": " << value << endl;
+	}
+	//std::ofstream& GetStream() {
+	//	return f;
+	//}
+	//void processf(void fun(std::ofstream&)) {
+	//	fun(f);
+	//}
+protected:
+private:
+	std::mutex m_mutex;
+	std::mutex m_mutex2;
+	std::ofstream f;
+};
+
+void function_1(LogFile& log) {
+	for (int i = 0; i > -100; i--) {
+		log.shared_print("From func1:", i);
+	}
 }
 
+class Fctor {
+public:
+	void operator()(std::string& msg) {
+		cout <<"From t1: " << msg << endl;
+		msg = "t1 finished...";
+	}
+};
+
 int main() {
-	std::thread t1(function_1());// t1线程开始执行
+	/*
+	//Fctor fct;
+	std::string s = "Main's s";
+	//std::thread t1((Fctor()),s);// t1线程开始执行
+	std::thread t1((Fctor()),std::ref(s));// t1线程开始执行
+	cout << std::this_thread::get_id() << endl;
+	//std::thread t2 = std::move(t1);
+	t1.join();
+	cout << "from main: " << s << endl;
+	cout << std::thread::hardware_concurrency() << endl;
+	*/
 
-	int i = 0;
-	while (i < 100) {
-		cout << i << endl;
-		i++;
+	LogFile log;
+	std::thread t1(function_1, std::ref(log));
+	for (int i = 0; i < 50; i++) {
+		log.shared_print2("From main:", i);
 	}
-
-	if (t1.joinable()) {
-		t1.join();
-	}
+	t1.join();
 	return 0;
 }
 #endif
