@@ -2178,7 +2178,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_1281_day20230809 {
 public:
 	int subtractProductAndSum(int n) {
@@ -2201,5 +2201,54 @@ public:
 int main() {
 	Solution_1281_day20230809* sol = new Solution_1281_day20230809();
 	cout << sol->subtractProductAndSum(234) << endl;
+}
+#endif
+
+#if 1
+class Solution_833_day20230815 {
+public:
+	string findReplaceString(string s, vector<int>& indices, vector<string>& sources, vector<string>& targets) {
+		int n = s.size(), m = indices.size();
+
+		vector<int> ops(m);
+		iota(ops.begin(), ops.end(), 0);
+		sort(ops.begin(), ops.end(), [&](int i, int j) {
+			return indices[i] < indices[j];
+			});
+
+		string ans;
+		int pt = 0;
+		for (int i = 0; i < n;) {
+			while (pt < m && indices[ops[pt]] < i) {
+				++pt;
+			}
+			bool succeed = false;
+			while (pt < m && indices[ops[pt]] == i) {
+				if (s.substr(i, sources[ops[pt]].size()) == sources[ops[pt]]) {
+					succeed = true;
+					break;
+				}
+				++pt;
+			}
+			if (succeed) {
+				ans += targets[ops[pt]];
+				i += sources[ops[pt]].size();
+			}
+			else {
+				ans += s[i];
+				++i;
+			}
+		}
+		return ans;
+	}
+};
+
+int main() {
+	string s = "abcd";
+	vector<int> indices = { 0, 2 };
+	vector<string> sources = { "ab", "ec"};
+	vector<string> targets = { "eee", "fff"};
+	Solution_833_day20230815* sol = new Solution_833_day20230815;
+	cout << sol->findReplaceString(s, indices, sources, targets) << endl;
 }
 #endif
