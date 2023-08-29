@@ -683,3 +683,84 @@ void main() {
 
 }
 #endif
+
+#if 1
+class LeetBook_Array_String {
+public:
+	void setZeroes(vector<vector<int>>& matrix) {
+		set<int> row, col;
+		for (int i = 0; i < matrix.size(); i++) {
+			for (int j = 0; j < matrix[0].size(); j++) {
+				if (matrix[i][j] == 0) {
+					row.insert(i);
+					col.insert(j);
+				}
+			}
+		}
+
+		for (auto it : col) {
+			for (int i = 0; i < matrix.size(); i++) {
+				matrix[i][it] = 0;
+			}
+		}
+
+		for (auto it : row) {
+			for (int j = 0; j < matrix[0].size(); j++) {
+				matrix[it][j] = 0;
+			}
+		}
+
+		for (int i = 0; i < matrix.size(); i++) {
+			for (int j = 0; j < matrix[0].size(); j++) {
+				cout << matrix[i][j] << " ";
+				if (j == matrix[0].size() - 1) {
+					cout << endl;
+				}
+			}
+		}
+	}
+
+	vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+		int row = mat.size();
+		int col = mat[0].size();
+		vector<int> res;
+
+		for (int i = 0, idx = 0; i < row + col - 1; i++) {
+			// 偶数对角线，从下往上遍历
+			if (i % 2 == 0) {
+				for (int x = min(i, row - 1); x >= max(0, i - col + 1); x--) {
+					//res[idx++] = mat[x][i - x];
+					res.push_back(mat[x][i - x]);
+				}
+			}
+			// 奇数对角线，从上往下遍历
+			else {
+				for (int x = max(0, i - col + 1); x <= min(i, row - 1); x++) {
+					//res[idx++] = mat[x][i - x];
+					res.push_back(mat[x][i - x]);
+				}
+			}
+		}
+		return res;
+	}
+};
+
+void main() {
+	vector<vector<int>> matrix = { {1,1,1},{1,0,1},{1,1,1} };
+	vector<vector<int>> matrix1 = { {0,1,2,0} ,{3,4,5,2},{1,3,1,5} };
+	LeetBook_Array_String* sol = new LeetBook_Array_String;
+	/*
+	sol->setZeroes(matrix);
+	sol->setZeroes(matrix1);
+	*/
+	for (auto it : sol->findDiagonalOrder(matrix)) {
+		cout << it << " ";
+	}
+	
+
+
+
+
+
+}
+#endif
