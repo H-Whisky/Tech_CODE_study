@@ -743,24 +743,249 @@ public:
 		}
 		return res;
 	}
+
+	void comareString() {
+		string s1 = "Hello World";
+		cout << "s1 is \"Hello World\"" << endl;
+		string s2 = s1;
+		cout << "s2 is initialized by s1" << endl;
+		string s3(s1);
+		cout << "s3 is initialized by s1" << endl;
+		// compare by '=='
+		cout << "Compared by '==':" << endl;
+		cout << "s1 and \"Hello World\": " << (s1 == "Hello World") << endl;
+		cout << "s1 and s2: " << (s1 == s2) << endl;
+		cout << "s1 and s3: " << (s1 == s3) << endl;
+		// compare by 'compare'
+		cout << "Compared by 'compare':" << endl;
+		cout << "s1 and \"Hello World\": " << !s1.compare("Hello World") << endl;
+		cout << "s1 and s2: " << !s1.compare(s2) << endl;
+		cout << "s1 and s3: " << !s1.compare(s3) << endl;
+	}
+
+	void conectString_1() {
+		string s1 = "Hello World";
+		s1[5] = ',';
+		cout << s1 << endl;
+	}
+
+	void connectString_2() {
+		string s = "";
+		int n = 10000;
+		for (int i = 0; i < n; i++) {
+			s += "hello";
+		}
+		cout << s << endl;
+	}
+
+	string longestCommonPrefix_1(vector<string>& strs)  {
+		string same;
+		same = strs[0];
+		for (int i = 1; i < strs.size(); i++) {
+			for (int j = 0; j < same.size(); j++) {
+				if (same[j] != strs[i][j]) {
+					same.erase(j);
+				}
+			}
+		}
+		return same;
+	}
+
+	string longestCommonPrefix_2(vector<string>& strs) {
+		string out;
+		if (strs.empty()) return out;
+
+		// 最小长度，与str[0]比较j
+		for (int j = 0; j < strs[0].size(); j++) {
+			for (int i = 1; i < strs.size(); i++) {
+				if (j > strs[i].size() - 1 || strs[i][j] != strs[0][j]) {
+					return out;
+				}
+			}
+			out.append(1, strs[0][j]);
+		}
+		return out;
+	}
+
+	string longestPalindrome_1(string s) {
+		if (s.size() < 2) return s;
+		int start = 0; // 记录最长回文串的开始
+		int end = 0;
+		int i, j; // 记录每个回文串的中心区间[i,j]
+		int length1 = 1; // 不断更新的回文长度，和length2比较
+		int length2 = 1; // 记录最长的回文长度
+		int left = 0; // 找出回文中心，用双指针扩散
+		int right = 0;
+		for (int i = 0; i < s.size(); ++i) {
+			length1 = 1;
+			left = i;
+			right = i;
+			j = i;
+			if (s[i] == s[i + 1]) { // 如果当前和下一个相等，说明回文中心长度 > 1
+				++j;
+				for (; j < s.size() && s[i] == s[j]; ++j) { // 找到回文中心
+					++length1;
+				}
+				right = j - 1;// 回文中心长度大于1时的回文中心长度寻找结束，用双指针准备两边扩散
+				left = i;
+			}
+			for (; left - 1 > 0 && right + 1 < s.size() && s[left - 1] == s[right + 1];) { // 在数组范围内扩散
+				length1 += 2;
+				--left;
+				++right;
+			}
+			if (length1 > length2) { // 如果当前的长度 > 记录的最长回文串长度则更新
+				start = left;
+				end = right;
+				length2 = length1;
+			}
+		}
+		return s.substr(start, length2);
+	}
+
+	int MAX = 0;
+	string ret = "";
+	void spread(string& s, int left, int right) {
+		int L = left, R = right;
+		while (L >= 0 && R < s.size() && s[L] == s[R]) { // 向左向右扩散
+			if (R - L + 1 > MAX) {
+				MAX = R - L + 1;
+				ret = s.substr(L, R - L + 1);
+			}
+			L--, R++;
+		}
+	}
+
+
+	string longestPalindrome_2(string s) {
+		if (s.size() <= 1) return s;
+		for (int i = 0; i < s.size(); i++) {
+			spread(s, i, i); // 从单个字符开始扩散
+			spread(s, i, i + 1); // 从相邻的两个字符开始扩散
+		}
+		return ret;
+	}	
+
+	void reverse(char* s, int i, int j)
+	{
+		while (i < j) // whatever s_len is odd or even
+		{
+			s[i] = s[i] ^ s[j];
+			s[j] = s[i] ^ s[j];
+			s[i] = s[i] ^ s[j];
+			i++, j--; // the priority: ++ > ^
+		}
+	}
+
+	string reverseWords(string s) {
+		string str = "";
+		vector<string> res;
+		for (int i = 0; i < s.length(); i++) {
+			if (s[i] != ' ') {
+				str += s[i];
+			}
+			else if (str != "") {
+				res.push_back(str);
+				str = "";
+			}
+		}
+		if (str != "") {
+			res.push_back(str);
+			str = "";
+		}
+		int cnt = 0;
+		for (int i = res.size() - 1; i >= 0; i--) {
+			if (cnt == 0) {
+				str += res[i];
+				cnt = 2;
+			}
+			else {
+				str += " " + res[i];
+			}
+		}
+		return str;
+	}
+
+	vector<int> build_next(string patt) {
+		vector<int> next;
+		next.push_back(0); // next数组（初值元素一个0）
+		int prefix_len = 0; // 当前共同前后缀的长度
+		int i = 1;
+		while (i < patt.size()) {
+			if (patt[prefix_len] == patt[i]) {
+				prefix_len++;
+				next.push_back(prefix_len);
+				i++;
+			}
+			else {
+				if (prefix_len == 0) {
+					next.push_back(0);
+					i++;
+				}
+				else {
+					prefix_len = next[prefix_len - 1];
+				}
+			}
+		}
+		return next;
+	}
+
+	int KMP_search(string S, string patt) {
+		vector<int> next = build_next(patt);
+
+		int i = 0; // 主串中的指针
+		int j = 0; // 子串中的指针
+		while (i < S.size()) {
+			if (S[i] == patt[j]) { // 字符匹配，指针后移
+				i++;
+				j++;
+			}
+			else if (j > 0) { // 字符失配，根据next跳过子串前面的一些字符
+				j = next[j - 1];
+			}
+			else { // 子串第一个字符就失配
+				i++;
+			}
+
+			if (j == patt.size()) { // 匹配成功
+				return i - j;
+			}
+		}
+	}
+ 
 };
 
 void main() {
-	vector<vector<int>> matrix = { {1,1,1},{1,0,1},{1,1,1} };
-	vector<vector<int>> matrix1 = { {0,1,2,0} ,{3,4,5,2},{1,3,1,5} };
 	LeetBook_Array_String* sol = new LeetBook_Array_String;
-	/*
-	sol->setZeroes(matrix);
-	sol->setZeroes(matrix1);
-	*/
-	for (auto it : sol->findDiagonalOrder(matrix)) {
-		cout << it << " ";
-	}
 	
+	//vector<vector<int>> matrix = { {1,1,1},{1,0,1},{1,1,1} };
+	//vector<vector<int>> matrix1 = { {0,1,2,0} ,{3,4,5,2},{1,3,1,5} };
+	//sol->setZeroes(matrix);
+	//sol->setZeroes(matrix1);
 
+	//for (auto it : sol->findDiagonalOrder(matrix)) {
+	//	cout << it << " ";
+	//}
+	
+	//sol->comareString();
+	
+	//sol->conectString_1();
+	//sol->connectString_2();
 
+	//vector<string> strs =  { "flower", "flow", "flight" };
+	//cout << sol->longestCommonPrefix_1(strs) << endl;
+	//cout << sol->longestCommonPrefix_2(strs) << endl;
 
+	//string s1 = "babad";
+	//string s2 = "cbbd";
+	//cout << sol->longestPalindrome_1(s1) << endl;
+	//cout << sol->longestPalindrome_2(s1) << endl;
 
+	//string s1 = "the sky is blue";
+	//cout << sol->reverseWords(s1) << endl;
 
+	string s1 = "AAAAAAAG";
+	string s2 = "AAAAG";
+	cout << sol->KMP_search(s1, s2) << endl;
 }
 #endif
