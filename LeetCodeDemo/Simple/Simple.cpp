@@ -952,6 +952,15 @@ public:
 			}
 		}
 	}
+
+	int strStr(string haystack, string needle) {
+		int n = haystack.length(), m = needle.length();
+		for (int i = 0; i < n - m + 1; i++) {
+			string sub = haystack.substr(i, i + m);
+			if (sub._Equal(needle)) return i;
+		}
+		return -1;
+	}
  
 };
 
@@ -984,8 +993,13 @@ void main() {
 	//string s1 = "the sky is blue";
 	//cout << sol->reverseWords(s1) << endl;
 
-	string s1 = "AAAAAAAG";
-	string s2 = "AAAAG";
-	cout << sol->KMP_search(s1, s2) << endl;
+	//string s1 = "AAAAAAAG";
+	//string s2 = "AAAAG";
+	//cout << sol->KMP_search(s1, s2) << endl;
+	
+	//string haystack = "sadbutsad", needle = "sad";
+	string haystack = "leetcode", needle = "leeto";
+	cout << sol->strStr(haystack, needle) << endl;
+
 }
 #endif
