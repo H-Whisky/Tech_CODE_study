@@ -953,11 +953,36 @@ public:
 		}
 	}
 
-	int strStr(string haystack, string needle) {
+	int strStr_1(string haystack, string needle) {
 		int n = haystack.length(), m = needle.length();
 		for (int i = 0; i < n - m + 1; i++) {
 			string sub = haystack.substr(i, i + m);
 			if (sub._Equal(needle)) return i;
+		}
+		return -1;
+	}
+
+	int strStr_2(string haystack, string needle) {
+		if (needle.size() == 0) return 0;
+		vector<int> needle_next = build_next(needle);
+		// 指向主串
+		int n = haystack.size(), i = 0;
+		// 指向模式串
+		int m = needle_next.size(), j = 0;
+		while (i < n && j < m) {
+			// j < 0 说明j == -1要从头开始匹配了
+			if (j < 0 || haystack[i] == needle_next[j]) {
+				i++;
+				j++;
+			}
+			else {
+				// haystack[i] 和 needle_next[j]不匹配，要从模式串下标为next[j]的继续匹配，也就是最长公共前缀后缀的长度
+				j = needle_next[j];
+			}
+		}
+		// 如果j == 证明模式串普配完毕，在主串中找到模式串，范围模式串在主串中出现的第一个下标准，i - j
+		if (j == m) {
+			return i - j;
 		}
 		return -1;
 	}
@@ -999,7 +1024,7 @@ void main() {
 	
 	//string haystack = "sadbutsad", needle = "sad";
 	string haystack = "leetcode", needle = "leeto";
-	cout << sol->strStr(haystack, needle) << endl;
+	cout << sol->strStr_1(haystack, needle) << endl;
 
 }
 #endif
