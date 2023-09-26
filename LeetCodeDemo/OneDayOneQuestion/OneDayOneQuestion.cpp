@@ -2204,7 +2204,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_833_day20230815 {
 public:
 	string findReplaceString(string s, vector<int>& indices, vector<string>& sources, vector<string>& targets) {
@@ -2250,5 +2250,43 @@ int main() {
 	vector<string> targets = { "eee", "fff"};
 	Solution_833_day20230815* sol = new Solution_833_day20230815;
 	cout << sol->findReplaceString(s, indices, sources, targets) << endl;
+}
+#endif
+
+#if 1
+class Solution_2582_day20230926 {
+public:
+	int passThePillow_1(int n, int time) {
+		time %= (n - 1) * 2;
+		return time < n ? time + 1 : n * 2 - time - 1;
+	}
+
+	int passThePillow_2(int n, int time) {
+		// 从头开始的情况
+		if (time < n) {
+			return time + 1;
+		}
+		else {
+			int r = n - 1; // 传递一轮所花的时间
+			int count = time / r; // 需要传递几次
+			int rTime = time % r; // 剩余时间
+
+			if (count % 2 == 0) {
+				// 偶数轮次
+				return rTime + 1;
+			}
+			else {
+				// 奇数轮次
+				return n - rTime;
+			}
+		}
+	}
+};
+
+int main() {
+	Solution_2582_day20230926* sol = new Solution_2582_day20230926;
+	cout << sol->passThePillow_1(4, 5) << endl;
+	cout << sol->passThePillow_2(4, 5) << endl;
+	return 0;
 }
 #endif
