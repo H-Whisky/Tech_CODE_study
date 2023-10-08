@@ -986,6 +986,25 @@ public:
 		}
 		return -1;
 	}
+
+	void reverseString(vector<char>& s) {
+		int head = 0;
+		int tail = s.size() - 1;
+		while (head < tail) {
+			swap(s[head], s[tail]);
+			head++;
+			tail--;
+		}
+	}
+
+	int arrayPairSum(vector<int>& nums) {
+		sort(nums.begin(), nums.end());
+		int n = nums.size(), sum = 0;
+		for (int i = 0; i < n; i += 2) {
+			sum += nums[i];
+		}
+		return sum;
+	}
  
 };
 
@@ -1023,8 +1042,19 @@ void main() {
 	//cout << sol->KMP_search(s1, s2) << endl;
 	
 	//string haystack = "sadbutsad", needle = "sad";
-	string haystack = "leetcode", needle = "leeto";
-	cout << sol->strStr_1(haystack, needle) << endl;
+	//string haystack = "leetcode", needle = "leeto";
+	//cout << sol->strStr_1(haystack, needle) << endl;
+
+	//vector<char> s = { 'h','e','l','l','o' };
+	//sol->reverseString(s);
+	//for (auto it : s) {
+	//	cout << it << " ";
+	//}
+
+	vector<int> nums = { 6,2,6,5,1,2 };
+	cout << sol->arrayPairSum(nums);
+
+
 
 }
 #endif
