@@ -2253,7 +2253,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_2582_day20230926 {
 public:
 	int passThePillow_1(int n, int time) {
@@ -2289,4 +2289,32 @@ int main() {
 	cout << sol->passThePillow_2(4, 5) << endl;
 	return 0;
 }
+#endif
+
+#if 1
+class Solution_2578_day20231009 {
+public:
+	int splitNum(int num) {
+		string strnum = to_string(num);
+		sort(strnum.begin(), strnum.end());
+		int num1 = 0, num2 = 0;
+		for (int i = 0; i < strnum.size(); ++i) {
+			if (i % 2 == 0) {
+				num1 = num1 * 10 + (strnum[i] - '0');
+			}
+			else {
+				num2 = num2 * 10 + (strnum[i] - '0');
+			}
+		}
+		return num1 + num2;
+	}
+};
+
+int main() {
+	int num = 4235;
+	Solution_2578_day20231009* sol = new Solution_2578_day20231009;
+	cout << sol->splitNum(num) << endl;
+	return 0;
+}
+
 #endif
