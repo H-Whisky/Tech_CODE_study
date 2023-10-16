@@ -2291,7 +2291,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_2578_day20231009 {
 public:
 	int splitNum(int num) {
@@ -2317,4 +2317,32 @@ int main() {
 	return 0;
 }
 
+#endif
+
+#if 1
+class Solution_260_day20231016 {
+public:
+	vector<int> singleNumber(vector<int>& nums) {
+		unsigned int xor_all = 0;
+		for (int x : nums) {
+			xor_all ^= x;
+		}
+
+		int lowbit = xor_all & (xor_all * -1);
+		vector<int> ans(2);
+		for (int x : nums) {
+			ans[(x & lowbit) != 0] ^= x; // 分组异或
+		}
+		return ans;
+	}
+};
+
+int main() {
+	vector<int> nums = { 1, 2, 1, 3, 2, 5 };
+	Solution_260_day20231016* sol = new Solution_260_day20231016;
+	for (auto it : sol->singleNumber(nums)) {
+		cout << it << " ";
+	}
+	return (0);
+}
 #endif
