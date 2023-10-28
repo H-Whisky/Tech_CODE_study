@@ -2319,7 +2319,7 @@ int main() {
 
 #endif
 
-#if 1
+#if 0
 class Solution_260_day20231016 {
 public:
 	vector<int> singleNumber(vector<int>& nums) {
@@ -2343,6 +2343,64 @@ int main() {
 	for (auto it : sol->singleNumber(nums)) {
 		cout << it << " ";
 	}
+	return (0);
+}
+#endif
+
+#if 1
+class Solution_2558_day20231028 {
+	int heap[1010];
+	int sz = 0;
+
+	void up(int u) {
+		int fa = u / 2;
+		if (fa && heap[fa] >= heap[u]) {
+			swap(heap[fa], heap[u]);
+			up(fa);
+		}
+	}
+
+	void down(int u) {
+		int cur = u;
+		int l = cur * 2, r = cur * 2 + 1;
+		if (l <= sz && heap[l] < heap[cur]) cur = l;
+		if (r <= sz && heap[r] < heap[cur]) cur = r;
+		if (cur != u) {
+			swap(heap[cur], heap[u]);
+			down(cur);
+		}
+	}
+
+	void add(int x) {
+		heap[++sz] = x;
+		up(sz);
+	}
+
+	int peek() {
+		return heap[1];
+	}
+
+	int poll() {
+		int ans = peek();
+		heap[1] = heap[sz--];
+		down(1);
+		return ans;
+	}
+public:
+	long long pickGifts(vector<int>& gifts, int k) {
+		for (int x : gifts) add(-x);
+		while (k--) add(-sqrt(-poll()));
+		long ans = 0;
+		while (sz != 0) ans += -heap[sz--];
+		return ans;
+	}
+};
+
+int main() {
+	vector<int> gifts = { 25,64,9,4,100 };
+	int k = 4;
+	Solution_2558_day20231028* sol = new Solution_2558_day20231028;
+	cout << sol->pickGifts(gifts, k) << endl;
 	return (0);
 }
 #endif
