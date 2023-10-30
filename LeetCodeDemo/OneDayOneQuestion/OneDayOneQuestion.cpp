@@ -2353,21 +2353,21 @@ class Solution_2558_day20231028 {
 	int sz = 0;
 
 	void up(int u) {
-		int fa = u / 2;
-		if (fa && heap[fa] >= heap[u]) {
+		int fa = u / 2; // 父节点
+		if (fa && heap[fa] >= heap[u]) { // 父节点更大，则两者需要互换
 			swap(heap[fa], heap[u]);
-			up(fa);
+			up(fa); // 递归处理父节点
 		}
 	}
 
 	void down(int u) {
-		int cur = u;
-		int l = cur * 2, r = cur * 2 + 1;
+		int cur = u; // 当前节点
+		int l = cur * 2, r = cur * 2 + 1; //左右节点
 		if (l <= sz && heap[l] < heap[cur]) cur = l;
 		if (r <= sz && heap[r] < heap[cur]) cur = r;
-		if (cur != u) {
+		if (cur != u) { // 当前节点并非 三者 最小，互换。
 			swap(heap[cur], heap[u]);
-			down(cur);
+			down(cur); // 处理子节点 
 		}
 	}
 
@@ -2397,7 +2397,7 @@ public:
 };
 
 int main() {
-	vector<int> gifts = { 25,64,9,4,100 };
+	vector<int> gifts = { 25,64,9,4,100 };	
 	int k = 4;
 	Solution_2558_day20231028* sol = new Solution_2558_day20231028;
 	cout << sol->pickGifts(gifts, k) << endl;
