@@ -2347,7 +2347,7 @@ int main() {
 }
 #endif
 
-#if 1
+#if 0
 class Solution_2558_day20231028 {
 	int heap[1010];
 	int sz = 0;
@@ -2401,6 +2401,41 @@ int main() {
 	int k = 4;
 	Solution_2558_day20231028* sol = new Solution_2558_day20231028;
 	cout << sol->pickGifts(gifts, k) << endl;
+	return (0);
+}
+#endif
+
+#if 1
+class Solution_275_day20231030 {
+public:
+	int hIndex(vector<int>& citations) {
+		// 在区间 [left, right]内询问
+		int n = citations.size();
+		int left = 1;
+		int right = n;
+		while (left <= right) { // 区间不为空
+			// 循环不变量；
+			// left-1 的回答一定为 是
+			// right+1  的回答一定为 否
+			int mid = (left + right) / 2;// left + (right - left) / 2
+			// 引用次数最多的mid篇论文，引用次数均 >= mid
+			if (citations[n - mid] >= mid) {
+				left = mid + 1; // 询问范围缩小到 [mid + 1. right]
+			}
+			else {
+				right = mid - 1; // 询问范围缩小到 [left, mid - 1]
+			}
+		}
+		// 循环结束后 right 等于 left - 1，回答一定为 是
+		// 根据循环不变量，right现在是最大的回答为 是 的数
+		return right;
+	}
+};
+
+int main() {
+	Solution_275_day20231030* sol = new Solution_275_day20231030;
+	vector<int> citations = { 0, 1, 3, 5, 6 };
+	cout << sol->hIndex(citations) << endl;
 	return (0);
 }
 #endif
